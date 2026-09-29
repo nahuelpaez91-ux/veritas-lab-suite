@@ -3,6 +3,8 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import '../globals.css';
+import { SiteFooter } from '@/components/layout/SiteFooter';
+import { SiteHeader } from '@/components/layout/SiteHeader';
 import { isLocale, locales } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
 
@@ -34,10 +36,13 @@ export default async function LangLayout({
 }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
+  const dict = getDictionary(lang);
   return (
     <html lang={lang} className={`${sans.variable} ${mono.variable}`}>
       <body className="min-h-screen antialiased">
+        <SiteHeader lang={lang} dict={dict} />
         <main>{children}</main>
+        <SiteFooter dict={dict} />
       </body>
     </html>
   );
