@@ -11,6 +11,16 @@ Un portfolio web + CV que posicione a Andrés como **desarrollador de software p
 3. Analista de datos de QC en laboratorios acreditados e institutos (INTI, INTA, CONICET).
 4. Mercado regional NOA/Cuyo: INV, La Riojana, UNdeC, Aguas Riojanas, CRILAR, SGS San Juan, laboratorios geoquímicos.
 
+**Audiencias de envío (cada una con su versión de CV y su texto de disponibilidad):**
+
+| Audiencia | Modalidad | Idioma | Énfasis normativo | Destinatarios típicos |
+|---|---|---|---|---|
+| **Nacional** | Remoto (UTC−3), viajes | ES | ANMAT Disp. 4159/2023, OAA / ISO 17025, ISO 15189 | Software LIS/LIMS AR, farmas, INTI/INTA/CONICET |
+| **Local** | Remoto o presencial en La Rioja / NOA / Cuyo | ES | Las mismas + CAA, INV | INV, La Riojana, UNLaR/UNdeC, CRILAR, Aguas Riojanas, labs mineros San Juan/Catamarca |
+| **Mundial** | Remoto (UTC−3, solapamiento con EU y US) | EN (y ES para España/LATAM) | FDA 21 CFR Part 11, EU GMP Annex 11/22, GAMP 5, ISO 17025 | Vendors LIMS (Veeva, LabVantage, Thermo), consultoras CSV, España |
+
+El portfolio es único y bilingüe. El CV se genera en 3 audiencias × 2 idiomas, como PDF estático listo para adjuntar (`/cv/<audiencia>-<idioma>.pdf`).
+
 **Mensaje central:** *"Construyo software de laboratorio con IA sabiendo dónde no ponerla."* Los cálculos que deciden son deterministas y están verificados contra referencias publicadas. La IA solo asiste (explica, redacta borradores, extrae datos) con revisión humana y audit trail.
 
 **Fuera de alcance de este spec:** la herramienta de envío de mails (sub-proyecto posterior, cuando portfolio y CV estén confirmados).
@@ -38,7 +48,8 @@ Un portfolio web + CV que posicione a Andrés como **desarrollador de software p
 - **i18n:** ES/EN con rutas `/es/...` y `/en/...` (next-intl). Español por defecto.
 - **Estilo visual:** claro, estilo laboratorio: fondo blanco/gris muy claro, acento verde azulado, tipografía sans legible y mono para valores. Soporta modo oscuro vía `prefers-color-scheme`.
 - **Lógica científica:** paquete interno `lib/science/*`, TypeScript puro sin dependencias de UI. Cada archivo es una unidad testeable (`westgard.ts`, `calibration.ts`, `uncertainty.ts`, `astm.ts`, `hl7.ts`, `mkt.ts`, `geochem.ts`, `enology.ts`, `water.ts`).
-- **Backend (Fase 1):** Supabase Postgres.
+- **Datos en la demo pública:** cada visitante trabaja en su propio sandbox, persistido en el navegador y reiniciable. Así nadie ensucia los datos de otro. La lógica LIMS (audit trail con hash, estados, firmas, bloqueo de liberación) es TypeScript puro y testeado.
+- **Backend (Fase 1):** esquema Postgres/Supabase real en el repo, con los triggers de append-only y la cadena de hash testeados con PGlite (Postgres en WASM) en la CI. La conexión en vivo a un proyecto Supabase es opcional y se activa por variables de entorno cuando Andrés cree la cuenta. Detalle del esquema:
   - Tablas `samples`, `results`, `qc_runs`, `audit_log`, `signatures`, `users_demo`.
   - `audit_log` append-only con triggers y encadenamiento por hash (cada fila guarda el hash de la anterior).
   - RLS por rol: analista, validador, admin.
@@ -138,7 +149,13 @@ El flujo integrado es la pieza central de la home:
 
 - Los parsers devuelven errores legibles con línea/segmento, nunca excepciones crudas.
 - Las entradas numéricas se validan (zod): n mínimo para estadística, valores no negativos donde corresponde, unidades explícitas.
-- Si falla la IA (sin key, rate limit), el módulo funciona igual y el botón muestra "Asistente no disponible".
+- **Sin API key de Anthropic (situación inicial):** el asistente cae a un **modo sin conexión**.
+  - Genera la explicación o el borrador de CAPA con plantillas deterministas a partir de las reglas violadas.
+  - Se etiqueta "Explicación automática por reglas (sin IA)".
+  - Si más adelante se configura `ANTHROPIC_API_KEY` en Vercel, se usa la IA real sin cambiar código.
+  - Con rate limit o error de la API se usa el mismo modo.
+- **Sin cuenta de Supabase:** todas las demos funcionan en el navegador con datos de ejemplo. El esquema SQL vive en el repo y se prueba con PGlite; no hay conexión a ningún servicio.
+- **Sin LinkedIn ni certificación MCER:** el CV declara "Inglés intermedio (Técnico en Idioma Inglés, 2015)" y no muestra LinkedIn.
 - Si Supabase no está disponible, se usa un modo local de solo lectura con datos precargados, avisado en la barra.
 
 ## 8. Criterios de éxito (Fase 1)
