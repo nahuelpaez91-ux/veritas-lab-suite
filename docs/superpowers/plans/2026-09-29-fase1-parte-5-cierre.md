@@ -568,6 +568,8 @@ export const URS: Urs[] = [
   { id: 'QC-URS-09', es: 'Datos en control → corrida aceptada', en: 'In-control data → accepted run', s: 3, p: 1, d: 2 },
   { id: 'QC-URS-10', es: 'Métrica Sigma', en: 'Sigma metric', s: 1, p: 1, d: 1 },
   { id: 'QC-URS-11', es: 'Datos semilla coherentes con las reglas', en: 'Seed data consistent with the rules', s: 1, p: 1, d: 1 },
+  { id: 'QC-URS-12', es: 'Valores faltantes y objetivos duplicados se rechazan', en: 'Missing values and duplicate targets are rejected', s: 3, p: 2, d: 2 },
+  { id: 'QC-URS-13', es: '4-1s y 10x entre niveles (materiales)', en: '4-1s and 10x across levels (materials)', s: 3, p: 2, d: 2 },
   { id: 'CAL-URS-01', es: 'Regresión igual a los valores certificados NIST Norris', en: 'Regression matches NIST Norris certified values', s: 3, p: 1, d: 2 },
   { id: 'CAL-URS-02', es: 'Pendiente, ordenada, R² y s y/x del ejemplo resuelto', en: 'Slope, intercept, R² and s y/x of the worked example', s: 3, p: 1, d: 2 },
   { id: 'CAL-URS-03', es: 'LOD y LOQ según ICH Q2', en: 'LOD and LOQ per ICH Q2', s: 2, p: 1, d: 2 },
@@ -579,7 +581,9 @@ export const URS: Urs[] = [
   { id: 'UNC-URS-03', es: 'Presupuesto GUM igual a EURACHEM A1', en: 'GUM budget matches EURACHEM A1', s: 3, p: 1, d: 2 },
   { id: 'UNC-URS-04', es: 'Monte Carlo coincide con la GUM', en: 'Monte Carlo agrees with the GUM', s: 2, p: 1, d: 2 },
   { id: 'UNC-URS-05', es: 'Generador aleatorio reproducible', en: 'Reproducible random generator', s: 1, p: 1, d: 1 },
+  { id: 'UNC-URS-06', es: 'Monte Carlo valida las entradas', en: 'Monte Carlo validates its inputs', s: 2, p: 1, d: 2 },
   { id: 'EXP-URS-01', es: 'Exportación CSV sin pérdida de datos', en: 'Lossless CSV export', s: 2, p: 1, d: 2 },
+  { id: 'EXP-URS-02', es: 'CSV neutraliza fórmulas (inyección)', en: 'CSV neutralizes formulas (injection)', s: 2, p: 1, d: 2 },
   { id: 'CRY-URS-01', es: 'SHA-256 estándar y JSON canónico', en: 'Standard SHA-256 and canonical JSON', s: 3, p: 1, d: 3 },
   { id: 'ENL-URS-01', es: 'Interpretación de registros ASTM', en: 'ASTM record parsing', s: 3, p: 2, d: 2 },
   { id: 'ENL-URS-02', es: 'Checksum LIS1-A correcto', en: 'Correct LIS1-A checksum', s: 3, p: 1, d: 2 },
@@ -901,7 +905,7 @@ La tabla une URS, riesgo y matriz de trazabilidad (requisito → test → result
 - [ ] **Step 6: Activar el build con trazabilidad**
 
 Run: `npm run build`
-Esperado: corre toda la suite, escribe el JSON y compila. En `/es/validacion`, las 50 filas deben figurar como **aprobado**. Si alguna dice «sin evidencia», falta el ID en el título del test correspondiente: corregir el test, no la URS.
+Esperado: corre toda la suite, escribe el JSON y compila. En `/es/validacion`, todas las filas deben figurar como **aprobado**. Si alguna dice «sin evidencia», falta el ID en el título del test correspondiente: corregir el test, no la URS.
 
 - [ ] **Step 7: Commit**
 
@@ -2532,7 +2536,7 @@ Con la URL de producción, comprobar:
 - `/` → redirige a `/es`.
 - Recorrer el flujo completo a mano (T24 Step 4 más la descarga del informe).
 - Descargar los 6 PDF del CV desde `/es/cv/*` y `/en/cv/*`.
-- `/es/validacion` → 50/50 aprobados con fecha y commit.
+- `/es/validacion` → todos los requisitos aprobados con fecha y commit.
 - `/en` completo en inglés.
 - Modo oscuro del sistema: contraste legible.
 - Lighthouse, con Performance y Accessibility ≥ 90:

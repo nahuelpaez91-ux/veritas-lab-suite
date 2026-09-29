@@ -158,7 +158,7 @@ export const qc: LocalizedModule = {
       'Aplicar las reglas de Westgard a mano es lento y propenso a errores. Usada sola, la regla 1-2s rechaza entre 9 y 18 % de corridas buenas, y las reglas entre niveles se pasan por alto. Este módulo evalúa cada corrida con las multirreglas y la marca como aceptada, en advertencia o rechazada. El sistema no deja liberar resultados de una corrida rechazada hasta documentar la acción correctiva.',
     howItWorks: [
       'Convierte cada valor de control a unidades z = (x − media) / DE con los valores objetivo del lote.',
-      'Evalúa 1-2s (advertencia) y las reglas de rechazo 1-3s, 2-2s, R-4s, 4-1s y 10x, dentro de cada nivel y entre niveles de una misma corrida.',
+      'Evalúa 1-2s (advertencia) y las reglas de rechazo 1-3s, 2-2s, R-4s, 4-1s y 10x, dentro de cada nivel y entre niveles (materiales). Como es habitual en implementaciones por computadora, las reglas de rechazo se evalúan en todas las corridas, sin esperar a que 1-2s dispare la inspección.',
       'El estado de la corrida lo decide código determinista y testeado. La IA solo puede explicar o redactar un borrador.',
       'Si la corrida anterior fue rechazada, exige documentar la acción correctiva para registrar la siguiente.',
       'Calcula la métrica Sigma para decidir cuántas reglas conviene usar según el desempeño del método.',
@@ -208,7 +208,7 @@ export const qc: LocalizedModule = {
       'Applying Westgard rules by hand is slow and error-prone. Used alone, the 1-2s rule rejects 9–18 % of good runs, and across-level rules get missed. This module evaluates every run with the multirules and marks it accepted, warning or rejected. The system will not release results from a rejected run until the corrective action is documented.',
     howItWorks: [
       'Converts each control value to z units = (x − mean) / SD using the lot’s target values.',
-      'Evaluates 1-2s (warning) and the rejection rules 1-3s, 2-2s, R-4s, 4-1s and 10x, within each level and across levels of the same run.',
+      'Evaluates 1-2s (warning) and the rejection rules 1-3s, 2-2s, R-4s, 4-1s and 10x, within each level and across levels (materials). As usual in computer implementations, rejection rules are checked on every run instead of waiting for a 1-2s warning.',
       'The run status is decided by deterministic, tested code. AI can only explain or draft.',
       'If the previous run was rejected, a documented corrective action is required before logging the next one.',
       'Computes the Sigma metric to decide how many rules the method’s performance calls for.',
@@ -481,7 +481,7 @@ export const curva: LocalizedModule = {
     howItWorks: [
       'Ajusta y = a + b·x por mínimos cuadrados. Opcionalmente pondera por 1/x o 1/x² cuando la varianza crece con la concentración.',
       'Informa pendiente, ordenada, R², error estándar de la regresión (s y/x) y errores de a y de b.',
-      'Estima LOD = 3,3·s/b y LOQ = 10·s/b (ICH Q2).',
+      'Estima LOD = 3,3·s/b y LOQ = 10·s/b (ICH Q2), solo en regresión sin ponderar: con ponderación, s y/x no representa el desvío del blanco.',
       'Para una muestra calcula x₀ = (y₀ − a)/b, su desvío y el intervalo de confianza del 95 % (t de Student).',
       'El cálculo está verificado contra el conjunto certificado Norris del NIST (StRD).',
     ],
@@ -532,7 +532,7 @@ export const curva: LocalizedModule = {
     howItWorks: [
       'Fits y = a + b·x by least squares. It can optionally weight by 1/x or 1/x² when variance grows with concentration.',
       'Reports slope, intercept, R², the regression standard error (s y/x) and the errors of a and b.',
-      'Estimates LOD = 3.3·s/b and LOQ = 10·s/b (ICH Q2).',
+      'Estimates LOD = 3.3·s/b and LOQ = 10·s/b (ICH Q2), for unweighted regression only: with weighting, s y/x does not represent the blank SD.',
       'For a sample it computes x₀ = (y₀ − a)/b, its standard deviation and the 95 % confidence interval (Student’s t).',
       'The calculation is verified against NIST’s certified Norris dataset (StRD).',
     ],
@@ -2569,6 +2569,7 @@ export const curva = {
   sx0: 's x₀',
   ci: 'IC 95 %',
   ciWeighted: 'El IC por predicción inversa se informa solo para regresión sin ponderar.',
+  lodWeighted: 'solo sin ponderar',
   outOfRange: 'Fuera del rango calibrado: no extrapolar.',
   parseError: 'Revisá los datos: cada línea debe tener dos números y se necesitan al menos 3 puntos con x distintos (x > 0 si se pondera).',
   export: 'Exportar datos y residuos (CSV)',
@@ -2601,6 +2602,7 @@ export const curva: typeof esCurva = {
   sx0: 's x₀',
   ci: '95 % CI',
   ciWeighted: 'The inverse-prediction CI is reported for unweighted regression only.',
+  lodWeighted: 'unweighted only',
   outOfRange: 'Outside the calibrated range: do not extrapolate.',
   parseError: 'Check the data: each line needs two numbers, with at least 3 points and distinct x values (x > 0 when weighting).',
   export: 'Export data and residuals (CSV)',
@@ -2656,7 +2658,7 @@ export function CurvaTool({ dict }: ToolProps) {
     if (!pairs) return null;
     try {
       const fit = fitCalibration(pairs.x, pairs.y, weighting);
-      return { fit, limits: detectionLimits(fit) };
+      return { fit, limits: detectionLimits(fit) }; // limits = null en regresión ponderada
     } catch {
       return null;
     }
@@ -2715,8 +2717,8 @@ export function CurvaTool({ dict }: ToolProps) {
                 [t.intercept, `${fmt(result.fit.intercept)} ± ${fmt(result.fit.seIntercept)}`],
                 [t.r2, result.fit.r2.toFixed(6)],
                 [t.syx, fmt(result.fit.syx)],
-                [t.lod, fmt(result.limits.lod)],
-                [t.loq, fmt(result.limits.loq)],
+                [t.lod, result.limits ? fmt(result.limits.lod) : t.lodWeighted],
+                [t.loq, result.limits ? fmt(result.limits.loq) : t.lodWeighted],
               ].map(([k, v]) => (
                 <div key={k} className="rounded-md border border-line p-2">
                   <dt className="text-xs text-muted">{k}</dt>
