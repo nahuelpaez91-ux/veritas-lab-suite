@@ -5,6 +5,7 @@ import { base } from './base';
 import { curva } from './curva';
 import { custodia } from './custodia';
 import { enlace } from './enlace';
+import { home } from './home';
 import { informe } from './informe';
 import { margen } from './margen';
 import { qc } from './qc';
@@ -16,5 +17,6 @@ export const es = {
   validation,
   aiPolicy,
   about,
+  home,
   tools: { enlace, qc, custodia, informe, curva, margen },
 };
