@@ -47,6 +47,11 @@
     --color-line: #cccccc;
     --color-accent: #0e5e5d;
   }
+
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
 }
 
 html {
