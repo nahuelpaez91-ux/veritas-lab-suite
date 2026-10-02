@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T11:39:08.772Z",
-  "commit": "d100523",
+  "generatedAt": "2026-10-02T12:04:53.996Z",
+  "commit": "af978ea",
   "tests": [
     {
       "ids": [
@@ -16,22 +16,6 @@
       ],
       "title": "JSON canónico rechaza objetos no planos y números no finitos",
       "file": "src/lib/crypto.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "AI-URS-01"
-      ],
-      "title": "el modo sin conexión explica cada regla, se declara sin IA y no cambia la decisión",
-      "file": "src/lib/ai/offline.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "AI-URS-02"
-      ],
-      "title": "el prompt entrega la decisión ya calculada como dato y pide un borrador acotado",
-      "file": "src/lib/ai/offline.test.ts",
       "status": "passed"
     },
     {
@@ -60,18 +44,226 @@
     },
     {
       "ids": [
-        "EXP-URS-01"
+        "AI-URS-01"
       ],
-      "title": "CSV con escape de comillas, comas, saltos de línea y celdas vacías",
-      "file": "src/lib/export/csv.test.ts",
+      "title": "el modo sin conexión explica cada regla, se declara sin IA y no cambia la decisión",
+      "file": "src/lib/ai/offline.test.ts",
       "status": "passed"
     },
     {
       "ids": [
-        "EXP-URS-02"
+        "AI-URS-02"
       ],
-      "title": "neutraliza fórmulas pero no números negativos",
-      "file": "src/lib/export/csv.test.ts",
+      "title": "el prompt entrega la decisión ya calculada como dato y pide un borrador acotado",
+      "file": "src/lib/ai/offline.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-04"
+      ],
+      "title": "importar resultados registra muestras, asigna la última corrida y audita",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-05"
+      ],
+      "title": "la firma exige re-autenticación",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-06"
+      ],
+      "title": "solo el rol validador puede aprobar",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-07"
+      ],
+      "title": "segregación de funciones: quien revisó no aprueba la misma revisión",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-08"
+      ],
+      "title": "la liberación se bloquea si la corrida de control está rechazada",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-09"
+      ],
+      "title": "flujo completo: acción correctiva, repetición, revisión y aprobación",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-10"
+      ],
+      "title": "tras una corrida rechazada, la siguiente exige acción correctiva; valores inválidos se rechazan",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-11"
+      ],
+      "title": "la firma queda ligada al contenido; la IA solo se registra como borrador aprobado",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-12"
+      ],
+      "title": "un resultado de otro paciente no se asocia a la muestra",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-13"
+      ],
+      "title": "resultados no finales (P, X) bloquean la liberación",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-14"
+      ],
+      "title": "los intentos de firma fallidos quedan auditados",
+      "file": "src/lib/lims/actions.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-01"
+      ],
+      "title": "cada registro guarda el hash del anterior (cadena desde el génesis)",
+      "file": "src/lib/lims/audit.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-02"
+      ],
+      "title": "detecta la alteración de un registro",
+      "file": "src/lib/lims/audit.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-03"
+      ],
+      "title": "detecta el borrado de un registro",
+      "file": "src/lib/lims/audit.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "CUS-URS-15"
+      ],
+      "title": "con la cabeza esperada se detecta el truncado del final",
+      "file": "src/lib/lims/audit.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "INF-URS-01"
+      ],
+      "title": "solo se genera para muestras liberadas, con firmas de la revisión vigente y estado QC",
+      "file": "src/lib/lims/report.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "QC-URS-11"
+      ],
+      "title": "semilla: 20 corridas en control; GLU-R021 rechazada por 2-2s; CHOL-R021 aceptada",
+      "file": "src/lib/lims/seed.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-01"
+      ],
+      "title": "interpreta registros H, P, O, R y L del ejemplo",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-02"
+      ],
+      "title": "checksum LIS1-A: suma de bytes módulo 256 en hexadecimal",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-03"
+      ],
+      "title": "quita tramas STX/ETX, valida checksums y detecta tramas corruptas",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-04"
+      ],
+      "title": "reporta errores de estructura y conserva valores no numéricos",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-07"
+      ],
+      "title": "tramas con checksum inválido se descartan y se controla la secuencia",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-08"
+      ],
+      "title": "el código de prueba es el componente 4 de R.3",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-05"
+      ],
+      "title": "interpreta MSH, PID, OBR y OBX; mapea LOINC a código local",
+      "file": "src/lib/lis/hl7.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-06"
+      ],
+      "title": "valida el tipo de mensaje y detecta el formato automáticamente",
+      "file": "src/lib/lis/hl7.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-09"
+      ],
+      "title": "HL7 con marco MLLP y varios pacientes",
+      "file": "src/lib/lis/hl7.test.ts",
       "status": "passed"
     },
     {
@@ -292,210 +484,18 @@
     },
     {
       "ids": [
-        "CUS-URS-04"
+        "EXP-URS-01"
       ],
-      "title": "importar resultados registra muestras, asigna la última corrida y audita",
-      "file": "src/lib/lims/actions.test.ts",
+      "title": "CSV con escape de comillas, comas, saltos de línea y celdas vacías",
+      "file": "src/lib/export/csv.test.ts",
       "status": "passed"
     },
     {
       "ids": [
-        "CUS-URS-05"
+        "EXP-URS-02"
       ],
-      "title": "la firma exige re-autenticación",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-06"
-      ],
-      "title": "solo el rol validador puede aprobar",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-07"
-      ],
-      "title": "segregación de funciones: quien revisó no aprueba la misma revisión",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-08"
-      ],
-      "title": "la liberación se bloquea si la corrida de control está rechazada",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-09"
-      ],
-      "title": "flujo completo: acción correctiva, repetición, revisión y aprobación",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-10"
-      ],
-      "title": "tras una corrida rechazada, la siguiente exige acción correctiva; valores inválidos se rechazan",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-11"
-      ],
-      "title": "la firma queda ligada al contenido; la IA solo se registra como borrador aprobado",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-12"
-      ],
-      "title": "un resultado de otro paciente no se asocia a la muestra",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-13"
-      ],
-      "title": "resultados no finales (P, X) bloquean la liberación",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-14"
-      ],
-      "title": "los intentos de firma fallidos quedan auditados",
-      "file": "src/lib/lims/actions.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-01"
-      ],
-      "title": "cada registro guarda el hash del anterior (cadena desde el génesis)",
-      "file": "src/lib/lims/audit.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-02"
-      ],
-      "title": "detecta la alteración de un registro",
-      "file": "src/lib/lims/audit.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-03"
-      ],
-      "title": "detecta el borrado de un registro",
-      "file": "src/lib/lims/audit.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "CUS-URS-15"
-      ],
-      "title": "con la cabeza esperada se detecta el truncado del final",
-      "file": "src/lib/lims/audit.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "INF-URS-01"
-      ],
-      "title": "solo se genera para muestras liberadas, con firmas de la revisión vigente y estado QC",
-      "file": "src/lib/lims/report.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "QC-URS-11"
-      ],
-      "title": "semilla: 20 corridas en control; GLU-R021 rechazada por 2-2s; CHOL-R021 aceptada",
-      "file": "src/lib/lims/seed.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-01"
-      ],
-      "title": "interpreta registros H, P, O, R y L del ejemplo",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-02"
-      ],
-      "title": "checksum LIS1-A: suma de bytes módulo 256 en hexadecimal",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-03"
-      ],
-      "title": "quita tramas STX/ETX, valida checksums y detecta tramas corruptas",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-04"
-      ],
-      "title": "reporta errores de estructura y conserva valores no numéricos",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-07"
-      ],
-      "title": "tramas con checksum inválido se descartan y se controla la secuencia",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-08"
-      ],
-      "title": "el código de prueba es el componente 4 de R.3",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-05"
-      ],
-      "title": "interpreta MSH, PID, OBR y OBX; mapea LOINC a código local",
-      "file": "src/lib/lis/hl7.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-06"
-      ],
-      "title": "valida el tipo de mensaje y detecta el formato automáticamente",
-      "file": "src/lib/lis/hl7.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-09"
-      ],
-      "title": "HL7 con marco MLLP y varios pacientes",
-      "file": "src/lib/lis/hl7.test.ts",
+      "title": "neutraliza fórmulas pero no números negativos",
+      "file": "src/lib/export/csv.test.ts",
       "status": "passed"
     }
   ]
