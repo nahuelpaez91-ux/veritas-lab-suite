@@ -9,6 +9,6 @@ export const profile = {
   timezone: 'UTC−3',
   github: 'https://github.com/nahuelpaez91-ux',
   repo: 'https://github.com/nahuelpaez91-ux/veritas-lab-suite',
-  siteUrl: 'https://veritas-lab-suite.vercel.app',
+  siteUrl: 'https://andresnahuelpaez-portfolio-laboratorios.vercel.app',
   linkedin: null as string | null,
 };

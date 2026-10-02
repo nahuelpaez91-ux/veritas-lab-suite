@@ -14,6 +14,7 @@ export const enlace: LocalizedModule = {
       'Toma los delimitadores del propio encabezado y extrae muestra, paciente, prueba, valor, unidades, rango, marca y estado.',
       'Conserva el valor crudo tal como llegó (ALCOA+: original) y, por separado, el numérico interpretado.',
       'Al ingresar, cada resultado queda asociado a la última corrida de control del analito y registrado en el audit trail.',
+      'Pacientes y mensajes ficticios.',
     ],
     dataSources: [
       { variable: 'Mensaje ASTM', source: 'Puerto serie RS-232 o TCP/IP del analizador, vía middleware o conector del LIS' },
@@ -65,6 +66,7 @@ export const enlace: LocalizedModule = {
       'Reads delimiters from the header itself and extracts specimen, patient, test, value, units, range, flag and status.',
       'Keeps the raw value exactly as received (ALCOA+: original) and, separately, the parsed number.',
       'On import, each result is linked to the latest control run for its analyte and recorded in the audit trail.',
+      'Fictitious patients and messages.',
     ],
     dataSources: [
       { variable: 'ASTM message', source: 'Analyzer RS-232 serial port or TCP/IP, via middleware or LIS connector' },

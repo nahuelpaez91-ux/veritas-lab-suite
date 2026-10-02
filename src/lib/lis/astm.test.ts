@@ -11,7 +11,7 @@ describe('ASTM E1394', () => {
   it('[ENL-URS-01] interpreta registros H, P, O, R y L del ejemplo', () => {
     const out = parseAstm(ASTM_EXAMPLE);
     expect(out.format).toBe('astm');
-    expect(out.sender).toBe('cobas-demo 1.0');
+    expect(out.sender).toBe('analizador-demo 1.0');
     expect(out.issues).toEqual([]);
     expect(out.results).toHaveLength(4);
     expect(out.results[0]).toEqual({

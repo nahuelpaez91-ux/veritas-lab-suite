@@ -14,6 +14,7 @@ export const qc: LocalizedModule = {
       'El estado de la corrida lo decide código determinista y testeado. La IA solo puede explicar o redactar un borrador.',
       'Si la corrida anterior fue rechazada, exige documentar la acción correctiva para registrar la siguiente.',
       'Calcula la métrica Sigma para decidir cuántas reglas conviene usar según el desempeño del método.',
+      'Corridas sintéticas.',
     ],
     dataSources: [
       { variable: 'Valores de control', source: 'Corridas del analizador con material de control de 2 niveles (vía Enlace)' },
@@ -64,6 +65,7 @@ export const qc: LocalizedModule = {
       'The run status is decided by deterministic, tested code. AI can only explain or draft.',
       'If the previous run was rejected, a documented corrective action is required before logging the next one.',
       'Computes the Sigma metric to decide how many rules the method’s performance calls for.',
+      'Synthetic runs.',
     ],
     dataSources: [
       { variable: 'Control values', source: 'Analyzer runs with 2-level control material (via Enlace)' },

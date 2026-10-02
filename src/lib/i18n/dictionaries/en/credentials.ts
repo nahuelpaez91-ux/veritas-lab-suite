@@ -11,7 +11,7 @@ export const credentials: typeof esCredentials = {
     document: 'Document',
     code: 'Code',
     revision: 'Revision',
-    effective: 'Effective',
+    effective: 'Effective from',
     contents: 'Contents',
   },
   contentsValue: '{t} degrees · {a} transcripts · {c} certificates',

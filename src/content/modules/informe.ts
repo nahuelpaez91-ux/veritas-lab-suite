@@ -12,6 +12,7 @@ export const informe: LocalizedModule = {
       'Incluye los resultados con unidades, rango y marca, y el estado de la corrida de control de cada prueba.',
       'Lista las firmas electrónicas con nombre, rol, significado y fecha UTC.',
       'Imprime el hash del registro firmado y el último hash del audit trail. Prueban que el informe coincide con la base; el archivo PDF en sí no lleva firma digital.',
+      'Datos de la demo, ficticios.',
     ],
     dataSources: [
       { variable: 'Resultados liberados', source: 'Base de datos del LIMS / LIS' },
@@ -45,7 +46,7 @@ export const informe: LocalizedModule = {
     verifiedAgainst: { label: 'regla de liberación y datos del informe', testPath: 'src/lib/lims/report.test.ts' },
   },
   en: {
-    name: 'Report',
+    name: 'Informe (Report)',
     area: 'Traceability & integration',
     tagline: 'Generates the PDF results report with quality-control status, signatures and integrity fingerprints.',
     whatSolves:
@@ -55,6 +56,7 @@ export const informe: LocalizedModule = {
       'Includes results with units, range and flag, plus the control-run status of each test.',
       'Lists electronic signatures with name, role, meaning and UTC date.',
       'Prints the signed-record hash and the latest audit-trail hash. They prove the report matches the database; the PDF file itself is not digitally signed.',
+      'Demo data, fictitious.',
     ],
     dataSources: [
       { variable: 'Released results', source: 'LIMS / LIS database' },

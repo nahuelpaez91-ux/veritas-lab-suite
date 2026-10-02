@@ -54,7 +54,7 @@ export const URS: Urs[] = [
   { id: 'CUS-URS-03', es: 'Detección de borrados', en: 'Deletion detection', s: 3, p: 2, d: 3 },
   { id: 'CUS-URS-04', es: 'Importación con registro de muestra y corrida', en: 'Import with sample registration and run linking', s: 3, p: 2, d: 2 },
   { id: 'CUS-URS-05', es: 'Firma con re-autenticación', en: 'Signature with re-authentication', s: 3, p: 2, d: 2 },
-  { id: 'CUS-URS-06', es: 'Solo el validador aprueba', en: 'Only the approver approves', s: 3, p: 2, d: 2 },
+  { id: 'CUS-URS-06', es: 'Solo el rol Validador/a aprueba', en: 'Only the approver approves', s: 3, p: 2, d: 2 },
   { id: 'CUS-URS-07', es: 'Segregación de funciones', en: 'Segregation of duties', s: 3, p: 2, d: 2 },
   { id: 'CUS-URS-08', es: 'Bloqueo de liberación por QC rechazado', en: 'Release blocked by rejected QC', s: 3, p: 2, d: 2 },
   { id: 'CUS-URS-09', es: 'Flujo completo hasta la liberación', en: 'Complete flow to release', s: 3, p: 2, d: 2 },

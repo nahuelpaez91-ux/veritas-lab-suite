@@ -2,11 +2,13 @@ import type { Locale } from '@/lib/i18n/config';
 
 type Localized = Record<Locale, string>;
 
-export const education: { title: Localized; org: string; year: string; detail: Localized }[] = [
+/** `yearLabel`: texto de fecha localizado cuando el año solo no alcanza (p. ej. egreso y expedición). */
+export const education: { title: Localized; org: string; year: string; yearLabel?: Localized; detail: Localized }[] = [
   {
     title: { es: 'Profesor en Geografía', en: 'Teaching Degree in Geography' },
     org: 'I.S.F.D. Albino G. Sánchez Barros, La Rioja',
     year: '2014',
+    yearLabel: { es: 'Egreso 2014 · expedido 2016', en: 'Completed 2014 · issued 2016' },
     detail: {
       es: 'Estadística e informática aplicada, cartografía y fotogrametría, geología y geomorfología, climatología e hidrología, investigación cuantitativa.',
       en: 'Applied statistics and computing, cartography and photogrammetry, geology and geomorphology, climatology and hydrology, quantitative research.',
@@ -25,13 +27,16 @@ export const education: { title: Localized; org: string; year: string; detail: L
     title: { es: 'Técnico en Idioma Inglés', en: 'English Language Technician' },
     org: 'Instituto English School, La Rioja',
     year: '2015',
-    detail: { es: 'Inglés técnico, nivel intermedio.', en: 'Technical English, intermediate level.' },
+    detail: {
+      es: 'Tecnicatura en Idioma Inglés (2012–2014); nivel intermedio.',
+      en: 'English Language Technician program (2012–2014); intermediate level.',
+    },
   },
 ];
 
 export const certifications: { issuer: string; year: string; name: Localized; url?: string }[] = [
   { issuer: 'Anthropic', year: '2026', name: { es: 'Claude Code in Action', en: 'Claude Code in Action' }, url: 'https://verify.skilljar.com/c/x6kitfnb74fd' },
-  { issuer: 'Anthropic', year: '2026', name: { es: 'Building with the Claude API', en: 'Building with the Claude API' }, url: 'https://verify.skilljar.com/c/x43yh64wf9tw' },
+  { issuer: 'Anthropic', year: '2026', name: { es: 'Claude with the Anthropic API', en: 'Claude with the Anthropic API' }, url: 'https://verify.skilljar.com/c/x43yh64wf9tw' },
   { issuer: 'Anthropic', year: '2026', name: { es: 'Introduction to Model Context Protocol', en: 'Introduction to Model Context Protocol' }, url: 'https://verify.skilljar.com/c/hck97yofrzpd' },
   { issuer: 'Anthropic', year: '2026', name: { es: 'AI Fluency: Framework & Foundations', en: 'AI Fluency: Framework & Foundations' }, url: 'https://verify.skilljar.com/c/ooauw3vzqwr9' },
   { issuer: 'Fundación YPF', year: '2026', name: { es: 'Instrumentación Industrial (16 h)', en: 'Industrial Instrumentation (16 h)' } },
@@ -58,6 +63,8 @@ export interface CredentialDoc {
   title: Localized;
   issuer: Localized;
   year: number;
+  /** Fecha localizada para mostrar en lugar de `year` cuando hace falta (p. ej. egreso y expedición). */
+  yearLabel?: Localized;
   hours?: number;
   /** Rutas públicas de las páginas (WebP), en orden. */
   pages: string[];
@@ -108,11 +115,11 @@ function ypf(slug: string, title: Localized, hours: number, height: number): Cre
   };
 }
 
-function anthropic(slug: string, name: string, code: string): CredentialDoc {
+function anthropic(slug: string, name: string, code: string, note?: Localized): CredentialDoc {
   return {
     slug: `anthropic-${slug}`,
     kind: 'certificado',
-    title: { es: name, en: name },
+    title: note ? { es: `${name} ${note.es}`, en: `${name} ${note.en}` } : { es: name, en: name },
     issuer: issuers.anthropic,
     year: 2026,
     pages: [img(`anthropic-${slug}.webp`, [1600, 1236])],
@@ -132,10 +139,11 @@ export const credentialDocs: CredentialDoc[] = [
     kind: 'titulo',
     title: {
       es: 'Profesor de Tercer Ciclo de la EGB y de la Educación Polimodal en Geografía',
-      en: 'Teacher’s Degree in Geography (lower and upper secondary)',
+      en: 'Teaching Degree in Geography (lower and upper secondary)',
     },
     issuer: issuers.isfd,
     year: 2016,
+    yearLabel: { es: 'Egreso 2014 · expedido 2016', en: 'Completed 2014 · issued 2016' },
     pages: [
       img('titulo-profesorado-geografia-p1.webp', LAND),
       img('titulo-profesorado-geografia-p2.webp', LAND),
@@ -145,7 +153,7 @@ export const credentialDocs: CredentialDoc[] = [
     pdf: `${DIR}/titulo-profesorado-geografia.pdf`,
     alt: {
       es: 'Título de Profesor en Geografía otorgado en La Rioja en 2016, con firmas, legalización y constancia del Registro Provincial de Títulos',
-      en: 'Geography teacher’s degree issued in La Rioja in 2016, with signatures, legalization and the provincial registry record',
+      en: 'Teaching Degree in Geography issued in La Rioja in 2016, with signatures, legalization and the provincial registry record',
     },
   },
   {
@@ -182,15 +190,16 @@ export const credentialDocs: CredentialDoc[] = [
   {
     slug: 'profesorado-geografia-analitico',
     kind: 'analitico',
-    title: { es: 'Analítico · Profesorado en Geografía', en: 'Academic transcript · Teacher’s Degree in Geography' },
+    title: { es: 'Analítico · Profesorado en Geografía', en: 'Academic transcript · Teaching Degree in Geography' },
     issuer: issuers.isfd,
     year: 2016,
+    yearLabel: { es: 'Egreso 2014 · expedido 2016', en: 'Completed 2014 · issued 2016' },
     pages: [img('titulo-profesorado-geografia-p4.webp', PORT), img('titulo-profesorado-geografia-p5.webp', PORT)],
     thumb: img('titulo-profesorado-geografia-analitico-thumb.webp', [480, 679]),
     pdf: `${DIR}/titulo-profesorado-geografia.pdf`,
     alt: {
       es: 'Analítico del Profesorado en Geografía: espacios curriculares de 1.º a 4.º año (2010-2014) con sus notas; promedio general 7,35',
-      en: 'Transcript of the Geography teacher’s degree: courses from 1st to 4th year (2010-2014) with grades; overall average 7.35',
+      en: 'Transcript of the Teaching Degree in Geography: courses from 1st to 4th year (2010-2014) with grades; overall average 7.35',
     },
   },
   {
@@ -222,7 +231,10 @@ export const credentialDocs: CredentialDoc[] = [
     },
   },
   anthropic('claude-code-in-action', 'Claude Code in Action', 'x6kitfnb74fd'),
-  anthropic('building-with-the-claude-api', 'Building with the Claude API', 'x43yh64wf9tw'),
+  anthropic('building-with-the-claude-api', 'Claude with the Anthropic API', 'x43yh64wf9tw', {
+    es: '(hoy se ofrece como «Building with the Claude API»)',
+    en: '(now offered as “Building with the Claude API”)',
+  }),
   anthropic('introduction-to-mcp', 'Introduction to Model Context Protocol', 'hck97yofrzpd'),
   anthropic('ai-fluency-framework-foundations', 'AI Fluency: Framework & Foundations', 'ooauw3vzqwr9'),
   ypf('instrumentacion-industrial', { es: 'Instrumentación Industrial', en: 'Industrial Instrumentation' }, 16, 1130),

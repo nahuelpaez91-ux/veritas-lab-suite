@@ -7,9 +7,9 @@ export const home = {
     revision: 'Revisión',
     effective: 'Vigente desde',
     marginLabel: 'Metadatos del documento',
-    photoLabel: 'Foto de legajo',
+    photoLabel: 'Foto',
     photoAlt: 'Andrés Nahuel Páez en el campus del MIT, en Cambridge',
-    photoCaption: 'A. N. Páez · campus del MIT, Cambridge (EE. UU.)',
+    photoCaption: 'A. N. Páez · de visita en el campus del MIT, Cambridge (EE. UU.)',
     margin: [
       { k: 'Autor', v: 'A. N. Páez' },
       { k: 'Origen', v: 'La Rioja, AR' },
@@ -37,7 +37,7 @@ export const home = {
     references: 'Referencias',
     framework: 'Marco',
     frameworkValue: '21 CFR 11 · Anexo 11',
-    frameworkNote: 'diseñado considerando; no certificado',
+    frameworkNote: 'pensado según estas normas; no validado',
     sealLabel: 'Sello ANP · Andrés Nahuel Páez · revisión',
     sealNote: 'Revisión del último reporte de pruebas',
   },
@@ -76,7 +76,7 @@ export const home = {
     pillars: [
       {
         title: 'Expedientes y plazos',
-        text: 'Quién firmó, cuándo y con qué norma. No es un laboratorio, pero el hábito se traslada: es lo que piden ALCOA+ y la ISO/IEC 17025 §8.3.',
+        text: 'Quién firmó, cuándo y con qué norma. No es un laboratorio, pero el hábito se traslada: es lo que piden ALCOA+ y la ISO/IEC 17025 §7.5 y §8.4.',
       },
       {
         title: 'Mapas y datos',
@@ -84,7 +84,7 @@ export const home = {
       },
       {
         title: 'Software con tests, e IA solo como borrador',
-        text: 'Next.js, TypeScript y SQL, con tests e integración continua. La IA (Claude API) redacta; el resultado lo calcula el código.',
+        text: 'Next.js, TypeScript y SQL, con tests e integración continua. La IA (Claude API, opcional) solo redacta borradores; el resultado lo calcula el código.',
       },
     ],
   },
@@ -96,7 +96,7 @@ export const home = {
     availability: [
       { scope: 'Nacional', text: 'Remoto para toda Argentina (UTC−3).' },
       { scope: 'Local', text: 'Presencial o remoto en La Rioja, NOA y Cuyo.' },
-      { scope: 'Mundial', text: 'Remoto. UTC−3 se superpone con la tarde de Europa y la jornada completa de América.' },
+      { scope: 'Mundial', text: 'Remoto. UTC−3 se superpone con la tarde de Europa y buena parte de la jornada en América.' },
     ],
     roadmapTitle: 'Hoja de ruta',
     roadmapStatus: 'EN DESARROLLO',

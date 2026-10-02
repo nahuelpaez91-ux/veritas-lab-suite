@@ -21,6 +21,7 @@ export const aiPolicy = {
     {
       title: 'Modo sin conexión',
       items: [
+        'Hoy la demo pública no tiene clave de API: todo texto del asistente sale de reglas, sin IA.',
         'Si el servidor no tiene credenciales de IA configuradas, o la IA falla, se usa un texto automático por reglas.',
         'Ese texto se etiqueta «sin IA» y queda registrado como modelo «offline-rules».',
       ],

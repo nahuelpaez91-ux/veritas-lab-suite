@@ -41,8 +41,8 @@ const headline: L<string> = {
 };
 
 const summary: L<string> = {
-  es: 'Desarrollador de software y datos orientado a laboratorios. Construyo herramientas con cálculos deterministas verificados contra referencias publicadas (NIST StRD, EURACHEM/GUM, reglas de Westgard), audit trail encadenado por hash, firma electrónica con re-autenticación e integración de equipos por ASTM E1394 y HL7 v2. Uso IA (Claude API) solo fuera del camino crítico, con revisión humana y registro. Aporto más de 8 años de gestión administrativa y de expedientes en instituciones educativas (información sensible, plazos y normativa), y formación en estadística, geología e hidrología.',
-  en: 'Software and data developer focused on laboratories. I build tools with deterministic calculations verified against published references (NIST StRD, EURACHEM/GUM, Westgard rules), hash-chained audit trails, electronic signatures with re-authentication, and instrument integration via ASTM E1394 and HL7 v2. I use AI (Claude API) only off the critical path, with human review and logging. I bring 8+ years of administrative and records management at educational institutions (sensitive files, deadlines and regulations), plus training in statistics, geology and hydrology.',
+  es: 'Desarrollador de software y datos orientado a laboratorios. Construyo herramientas con cálculos deterministas verificados contra referencias publicadas (NIST StRD, EURACHEM/GUM, reglas de Westgard), audit trail encadenado por hash, firma electrónica con re-autenticación e integración de equipos por ASTM E1394 y HL7 v2. Uso IA (Claude API) solo fuera del camino crítico, con revisión humana y registro. Aporto 8 años de gestión administrativa y de expedientes en instituciones educativas (información sensible, plazos y normativa), y formación en estadística, geología e hidrología.',
+  en: 'Software and data developer focused on laboratories. I build tools with deterministic calculations verified against published references (NIST StRD, EURACHEM/GUM, Westgard rules), hash-chained audit trails, electronic signatures with re-authentication, and instrument integration via ASTM E1394 and HL7 v2. I use AI (Claude API) only off the critical path, with human review and logging. I bring 8 years of administrative and records management at educational institutions (sensitive files, deadlines and regulations), plus training in statistics, geology and hydrology.',
 };
 
 const availability: Record<Audience, L<string>> = {
@@ -55,8 +55,8 @@ const availability: Record<Audience, L<string>> = {
     en: 'Availability: on-site in La Rioja and the region (Northwest Argentina / Cuyo) or remote. Immediate start.',
   },
   global: {
-    es: 'Disponibilidad: remoto internacional (UTC−3: se superpone con la tarde de Europa y la jornada completa de América). Abierto a reubicación. Incorporación inmediata.',
-    en: 'Availability: remote worldwide (UTC−3: overlaps the European afternoon and the full working day across the Americas). Open to relocation. Immediate start.',
+    es: 'Disponibilidad: remoto internacional (UTC−3: se superpone con la tarde de Europa y buena parte de la jornada en América). Abierto a reubicación. Incorporación inmediata.',
+    en: 'Availability: remote worldwide (UTC−3: overlaps the European afternoon and most of the working day in the Americas). Open to relocation. Immediate start.',
   },
 };
 
@@ -105,13 +105,13 @@ const suite: L<string[]> = {
     'Flujo integrado Enlace → Control de calidad → Custodia → Informe: parser ASTM E1394 / HL7 v2 con mapeo LOINC, multirreglas de Westgard que bloquean la liberación, audit trail SHA-256 y firma electrónica con segregación de funciones.',
     'Calibración (mínimos cuadrados ponderados, LOD/LOQ, predicción inversa con IC 95 %) verificada contra NIST StRD Norris; incertidumbre GUM + Monte Carlo verificada contra EURACHEM A1.',
     'Dossier de validación estilo GAMP 5: URS, análisis de riesgo y matriz de trazabilidad generada automáticamente desde los tests (Vitest + Playwright, CI en GitHub Actions).',
-    'Esquema PostgreSQL con audit trail solo-agregado por triggers, probado con PGlite; asistente con Claude API bajo una política de uso de IA (EU GMP Anexo 22, borrador).',
+    'Esquema PostgreSQL con audit trail de solo agregado (append-only) por triggers, probado con PGlite; asistente con Claude API bajo una política de uso de IA (EU GMP Anexo 22, borrador; en la demo pública funciona en modo sin conexión por reglas).',
   ],
   en: [
     'Integrated flow Enlace → Quality control → Custodia → Report: ASTM E1394 / HL7 v2 parser with LOINC mapping, Westgard multirules that block release, SHA-256 audit trail and electronic signatures with segregation of duties.',
     'Calibration (weighted least squares, LOD/LOQ, inverse prediction with 95 % CI) verified against NIST StRD Norris; GUM + Monte Carlo uncertainty verified against EURACHEM A1.',
     'GAMP 5-style validation dossier: URS, risk assessment and a traceability matrix generated automatically from the tests (Vitest + Playwright, CI on GitHub Actions).',
-    'PostgreSQL schema with a trigger-enforced append-only audit trail, tested with PGlite; Claude API assistant under an AI use policy (draft EU GMP Annex 22).',
+    'PostgreSQL schema with a trigger-enforced append-only audit trail, tested with PGlite; Claude API assistant under an AI use policy (draft EU GMP Annex 22; the public demo runs in rule-based offline mode).',
   ],
 };
 
@@ -168,15 +168,15 @@ const skills: L<string[]> = {
   es: [
     'Lenguajes y datos: Python (pandas, NumPy, scikit-learn, matplotlib), SQL (PostgreSQL, SQLite, Supabase), TypeScript.',
     'Web y calidad de software: Next.js, React, Tailwind, Vitest, Playwright, Git, GitHub Actions, Vercel.',
-    'Laboratorio e integración: ASTM E1394 / LIS2-A2, HL7 v2 (ORU^R01), LOINC, Westgard, SPC, calibración, incertidumbre GUM.',
-    'IA: Claude API, RAG con citas, Model Context Protocol (MCP), text-to-SQL, IA con barandas GxP.',
+    'Laboratorio e integración: ASTM E1394 / LIS2-A2, HL7 v2 (ORU^R01), LOINC, Westgard, SPC, calibración, incertidumbre GUM, LIMS/LIS (núcleo demo), integridad de datos (ALCOA+), validación de sistemas computarizados (GAMP 5, GxP).',
+    'IA: Claude API, RAG con citas, Model Context Protocol (MCP), text-to-SQL, IA con controles GxP (borrador, revisión humana, registro).',
     'GIS: PostGIS, GeoPandas, MapLibre, Leaflet.',
   ],
   en: [
     'Languages and data: Python (pandas, NumPy, scikit-learn, matplotlib), SQL (PostgreSQL, SQLite, Supabase), TypeScript.',
     'Web and software quality: Next.js, React, Tailwind, Vitest, Playwright, Git, GitHub Actions, Vercel.',
-    'Laboratory and integration: ASTM E1394 / LIS2-A2, HL7 v2 (ORU^R01), LOINC, Westgard, SPC, calibration, GUM uncertainty.',
-    'AI: Claude API, RAG with citations, Model Context Protocol (MCP), text-to-SQL, AI with GxP guardrails.',
+    'Laboratory and integration: ASTM E1394 / LIS2-A2, HL7 v2 (ORU^R01), LOINC, Westgard, SPC, calibration, GUM uncertainty, LIMS/LIS (demo core), data integrity (ALCOA+), computer system validation (CSV, GAMP 5, GxP).',
+    'AI: Claude API, RAG with citations, Model Context Protocol (MCP), text-to-SQL, AI with GxP controls (draft, human review, logging).',
     'GIS: PostGIS, GeoPandas, MapLibre, Leaflet.',
   ],
 };
@@ -187,7 +187,7 @@ const experience: L<CvEntry[]> = {
       title: 'Desarrollador independiente de software y datos',
       meta: 'La Rioja, Argentina (remoto) · 2025 – actualidad',
       bullets: [
-        'Desarrollé un portfolio de software para laboratorios, NormaMina (RAG sobre normativa minera) y proyectos de datos y machine learning para minería, energía y finanzas.',
+        'Desarrollé un portfolio de software para laboratorios, NormaMina (RAG sobre normativa minera) y proyectos propios de datos y machine learning sobre minería, energía y finanzas.',
         'Next.js/TypeScript, Python, SQL y Claude API, con tests automatizados, integración continua y despliegue en Vercel.',
       ],
     },
@@ -215,7 +215,7 @@ const experience: L<CvEntry[]> = {
       title: 'Independent software and data developer',
       meta: 'La Rioja, Argentina (remote) · 2025 – present',
       bullets: [
-        'Built a laboratory software portfolio, NormaMina (RAG over mining regulations) and data/machine-learning projects for mining, energy and finance.',
+        'Built a laboratory software portfolio, NormaMina (RAG over mining regulations) and personal data and machine-learning projects in mining, energy and finance.',
         'Next.js/TypeScript, Python, SQL and Claude API, with automated tests, continuous integration and deployment on Vercel.',
       ],
     },
@@ -300,7 +300,7 @@ export function getCv(lang: Locale, audience: Audience): Cv {
       {
         id: 'education',
         title: t.education,
-        entries: education.map((e) => ({ title: e.title[lang], meta: `${e.org} · ${e.year}`, bullets: [e.detail[lang]] })),
+        entries: education.map((e) => ({ title: e.title[lang], meta: `${e.org} · ${e.yearLabel?.[lang] ?? e.year}`, bullets: [e.detail[lang]] })),
       },
       {
         id: 'certifications',

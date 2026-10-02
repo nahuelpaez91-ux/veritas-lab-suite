@@ -9,9 +9,9 @@ export const home: typeof esHome = {
     revision: 'Revision',
     effective: 'Effective from',
     marginLabel: 'Document metadata',
-    photoLabel: 'ID photo',
+    photoLabel: 'Photo',
     photoAlt: 'Andrés Nahuel Páez on the MIT campus in Cambridge',
-    photoCaption: 'A. N. Páez · MIT campus, Cambridge (USA)',
+    photoCaption: 'A. N. Páez · visiting the MIT campus, Cambridge (USA)',
     margin: [
       { k: 'Author', v: 'A. N. Páez' },
       { k: 'Origin', v: 'La Rioja, AR' },
@@ -39,7 +39,7 @@ export const home: typeof esHome = {
     references: 'References',
     framework: 'Framework',
     frameworkValue: '21 CFR 11 · Annex 11',
-    frameworkNote: 'designed with these in mind; not certified',
+    frameworkNote: 'designed with these in mind; not validated',
     sealLabel: 'ANP seal · Andrés Nahuel Páez · revision',
     sealNote: 'Revision of the latest test report',
   },
@@ -78,7 +78,7 @@ export const home: typeof esHome = {
     pillars: [
       {
         title: 'Records and deadlines',
-        text: 'Who signed, when, and under which rule. A school isn’t a lab, but the habit carries over: it’s what ALCOA+ and ISO/IEC 17025 §8.3 ask for.',
+        text: 'Who signed, when, and under which rule. A school isn’t a lab, but the habit carries over: it’s what ALCOA+ and ISO/IEC 17025 §7.5 and §8.4 ask for.',
       },
       {
         title: 'Maps and data',
@@ -86,7 +86,7 @@ export const home: typeof esHome = {
       },
       {
         title: 'Software with tests, and AI only as a draft',
-        text: 'Next.js, TypeScript and SQL, with tests and continuous integration. AI (Claude API) drafts; the code calculates the result.',
+        text: 'Next.js, TypeScript and SQL, with tests and continuous integration. AI (Claude API, optional) only drafts; the code calculates the result.',
       },
     ],
   },
@@ -98,7 +98,7 @@ export const home: typeof esHome = {
     availability: [
       { scope: 'National', text: 'Remote anywhere in Argentina (UTC−3).' },
       { scope: 'Local', text: 'On-site or remote in La Rioja, Northwest Argentina and Cuyo.' },
-      { scope: 'Worldwide', text: 'Remote. UTC−3 overlaps with the European afternoon and the full working day in the Americas.' },
+      { scope: 'Worldwide', text: 'Remote. UTC−3 overlaps with the European afternoon and most of the working day in the Americas.' },
     ],
     roadmapTitle: 'Roadmap',
     roadmapStatus: 'IN DEVELOPMENT',

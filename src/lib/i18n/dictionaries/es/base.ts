@@ -27,7 +27,7 @@ export const base = {
     no: 'Cancelar',
     loading: 'Cargando datos de laboratorio…',
     disclaimer:
-      'Demo educativa, no validada para uso GxP. Diseñada considerando 21 CFR Part 11, EU GMP Anexo 11 y ANMAT Disp. 4159/2023 (Anexo 6). Funciona en tu navegador con datos de ejemplo o sintéticos, declarados en cada módulo.',
+      'Demo educativa, no validada para uso GxP. Diseñada considerando 21 CFR Part 11, EU GMP Anexo 11 y ANMAT Disp. 4159/2023 (Anexo 6). Funciona en tu navegador con datos ficticios o tomados de ejemplos publicados.',
   },
   signature: {
     signedBy: 'Firmado por',

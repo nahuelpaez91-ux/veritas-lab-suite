@@ -10,15 +10,16 @@ export const custodia: LocalizedModule = {
       'La integridad de datos es una de las observaciones más frecuentes en inspecciones: registros editables sin rastro, firmas sin significado y resultados liberados sin revisión. Custodia implementa un núcleo mínimo de LIMS. Cada cambio queda en un audit trail que no se puede alterar sin que se note. Cada firma exige contraseña y declara su significado. La liberación se bloquea si el control de calidad no la permite.',
     howItWorks: [
       'Cada muestra pasa por los estados recibida → en análisis → revisada → liberada, y cada transición queda auditada.',
-      'El audit trail es solo-agregado y a prueba de manipulaciones (tamper-evident): cada registro guarda el hash SHA-256 del anterior. Si alguien edita, inserta, reordena o borra un registro, la verificación marca dónde se rompió la cadena. El truncado del final se detecta guardando aparte el último hash, como hace el esquema de base de datos.',
+      'El audit trail es de solo agregado (append-only) y a prueba de manipulaciones (tamper-evident): cada registro guarda el hash SHA-256 del anterior. Si alguien edita, inserta, reordena o borra un registro, la verificación marca dónde se rompió la cadena. El truncado del final se detecta guardando aparte el último hash, como hace el esquema de base de datos.',
       'La firma electrónica pide volver a ingresar la contraseña y registra quién firmó, cuándo y con qué significado (revisado / aprobado). Queda ligada al hash del contenido firmado.',
-      'Segregación de funciones: quien revisó una versión no puede aprobarla, y solo el rol validador aprueba.',
+      'Segregación de funciones: quien revisó una revisión no puede aprobarla, y solo el rol Validador/a aprueba.',
       'Antes de aprobar se consulta el estado de las corridas de control: si alguna está rechazada, la muestra no se libera.',
+      'Pacientes y mensajes ficticios.',
     ],
     dataSources: [
       { variable: 'Muestras', source: 'Recepción con lector de código de barras / QR y órdenes del sistema de gestión' },
       { variable: 'Usuarios y roles', source: 'Directorio corporativo (SSO) con los roles del laboratorio' },
-      { variable: 'Audit trail', source: 'Tabla solo-agregado en PostgreSQL con triggers (supabase/migrations en el repo)' },
+      { variable: 'Audit trail', source: 'Tabla de solo agregado (append-only) en PostgreSQL con triggers (supabase/migrations en el repo)' },
       { variable: 'Firmas', source: 'Módulo de firma con re-autenticación y política de contraseñas' },
     ],
     whereElse: [
@@ -29,7 +30,7 @@ export const custodia: LocalizedModule = {
     steps: [
       'Seleccioná la muestra M-2026-0101 (llega desde Enlace).',
       'Como Analista, firmá «revisado» con la contraseña que muestra la barra de demo.',
-      'Cambiá a la Validadora e intentá aprobar: el sistema bloquea por la corrida GLU-R021.',
+      'Cambiá al usuario Validador/a (L. Herrera) e intentá aprobar: el sistema bloquea por la corrida GLU-R021.',
       'Registrá una corrida aceptada en Control de calidad, repetí la muestra, revisá y aprobá con dos usuarios distintos.',
     ],
     science: {
@@ -65,6 +66,7 @@ export const custodia: LocalizedModule = {
       'The electronic signature asks for the password again and records who signed, when and with what meaning (reviewed / approved). It is bound to the hash of the signed content.',
       'Segregation of duties: whoever reviewed a revision cannot approve it, and only the approver role approves.',
       'Before approval, the control-run status is checked: if any run is rejected, the sample is not released.',
+      'Fictitious patients and messages.',
     ],
     dataSources: [
       { variable: 'Samples', source: 'Receipt with barcode / QR reader and orders from the management system' },
@@ -80,7 +82,7 @@ export const custodia: LocalizedModule = {
     steps: [
       'Select sample M-2026-0101 (it comes from Enlace).',
       'As the Analyst, sign “reviewed” with the password shown in the demo bar.',
-      'Switch to the Approver and try to approve: the system blocks it because of run GLU-R021.',
+      'Switch to the Approver (L. Herrera) and try to approve: the system blocks it because of run GLU-R021.',
       'Log an accepted run in Quality control, repeat the sample, then review and approve with two different users.',
     ],
     science: {

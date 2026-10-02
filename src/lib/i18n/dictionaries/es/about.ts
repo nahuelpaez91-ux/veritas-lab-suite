@@ -1,8 +1,8 @@
 export const about = {
   title: 'Quién firma este portfolio',
   eyebrow: 'Acerca · Andrés Nahuel Páez',
-  photoAlt: 'Andrés Nahuel Páez en el campus del MIT, en Cambridge, con el Gran Domo de fondo',
-  photoCaption: 'A. N. Páez · campus del MIT, Cambridge (EE. UU.)',
+  photoAlt: 'Andrés Nahuel Páez en el campus del MIT, en Cambridge, con la Gran Cúpula (Great Dome) de fondo',
+  photoCaption: 'A. N. Páez · de visita en el campus del MIT, Cambridge (EE. UU.)',
   paragraphs: [
     'Soy Andrés Nahuel Páez y vivo en La Rioja, Argentina. Entre 2017 y 2025 trabajé en la gestión administrativa de escuelas: expedientes, plazos, normativa y coordinación. Ahí aprendí que un registro vale lo que vale su rastro.',
     'Me formé como Profesor en Geografía, con estadística, cartografía, geología, climatología e hidrología, y después como Licenciado en Educación. Datos que tienen que cerrar y papeles que tienen que estar en regla.',

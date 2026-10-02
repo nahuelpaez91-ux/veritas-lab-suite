@@ -38,7 +38,7 @@ export const curva: LocalizedModule = {
       standard:
         'ICH Q2(R2) Validación de procedimientos analíticos; Miller & Miller, Statistics and Chemometrics for Analytical Chemistry; NIST StRD (Norris).',
       workedExample:
-        'x = 0, 1, 2, 3, 4      y = 0,1  2,1  3,9  6,1  7,9\nb = 19,6 / 10 = 1,96     a = 4,02 − 1,96·2 = 0,10\ns y/x = √(0,032 / 3) = 0,1033      R² = 0,99917\nLOD = 3,3·0,1033 / 1,96 = 0,174     LOQ = 0,527\ny₀ = 5 → x₀ = (5 − 0,10) / 1,96 = 2,50   (s x₀ = 0,058)',
+        'x = 0, 1, 2, 3, 4      y = 0,1  2,1  3,9  6,1  7,9\nb = 19,6 / 10 = 1,96     a = 4,02 − 1,96·2 = 0,10\ns y/x = √(0,032 / 3) = 0,1033      R² = 0,99917\nLOD = 3,3·0,1033 / 1,96 = 0,174     LOQ = 0,527\ny₀ = 5 → x₀ = (5 − 0,10) / 1,96 = 2,50   (s x₀ = 0,058; m = 1)',
     },
     glossary: [
       { term: 'LOD', definition: 'Límite de detección: menor concentración distinguible del blanco.' },
@@ -89,7 +89,7 @@ export const curva: LocalizedModule = {
       standard:
         'ICH Q2(R2) Validation of analytical procedures; Miller & Miller, Statistics and Chemometrics for Analytical Chemistry; NIST StRD (Norris).',
       workedExample:
-        'x = 0, 1, 2, 3, 4      y = 0.1  2.1  3.9  6.1  7.9\nb = 19.6 / 10 = 1.96     a = 4.02 − 1.96·2 = 0.10\ns y/x = √(0.032 / 3) = 0.1033      R² = 0.99917\nLOD = 3.3·0.1033 / 1.96 = 0.174     LOQ = 0.527\ny₀ = 5 → x₀ = (5 − 0.10) / 1.96 = 2.50   (s x₀ = 0.058)',
+        'x = 0, 1, 2, 3, 4      y = 0.1  2.1  3.9  6.1  7.9\nb = 19.6 / 10 = 1.96     a = 4.02 − 1.96·2 = 0.10\ns y/x = √(0.032 / 3) = 0.1033      R² = 0.99917\nLOD = 3.3·0.1033 / 1.96 = 0.174     LOQ = 0.527\ny₀ = 5 → x₀ = (5 − 0.10) / 1.96 = 2.50   (s x₀ = 0.058; m = 1)',
     },
     glossary: [
       { term: 'LOD', definition: 'Limit of detection: lowest concentration distinguishable from the blank.' },

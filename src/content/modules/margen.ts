@@ -13,6 +13,7 @@ export const margen: LocalizedModule = {
       'Combina las contribuciones con u_c = √Σ(cᵢ·uᵢ)² y expande con k = 2 (≈ 95 % si el resultado se distribuye aproximadamente normal; el Monte Carlo lo comprueba).',
       'Simula 100 000 valores con la distribución de cada entrada (GUM Suplemento 1) y compara el intervalo con el de la GUM.',
       'Incluye una calculadora tipo A a partir de réplicas.',
+      'Datos del ejemplo A1 de EURACHEM/CITAC QUAM.',
     ],
     dataSources: [
       { variable: 'Masa', source: 'Certificado de calibración de la balanza (incertidumbre y deriva)' },
@@ -37,7 +38,7 @@ export const margen: LocalizedModule = {
       standard:
         'JCGM 100:2008 (GUM); JCGM 101:2008 (Suplemento 1, Monte Carlo); EURACHEM/CITAC Guide CG4 (QUAM), ejemplo A1.',
       workedExample:
-        'c = 1000·m·P/V = 1000·100,28·0,9999 / 100,0 = 1002,7 mg/L\nu(m) = 0,05 mg    u(P) = 0,000058    u(V) = 0,07 mL\nu_c = √(0,49995² + 0,05816² + 0,70189²) = 0,864 mg/L\nU (k = 2) = 1,7 mg/L   →   c = (1002,7 ± 1,7) mg/L\nLa mayor contribución es el volumen (≈ 66 % de u²).',
+        'c = 1000·m·P/V = 1000·100,28·0,9999 / 100,0 = 1002,7 mg/L\nu(m) = 0,05 mg    u(P) = 0,000058    u(V) = 0,07 mL\nu_c = √(0,49995² + 0,05816² + 0,70189²) = 0,864 mg/L\nU (k = 2) = 1,7 mg/L   →   c = (1002,7 ± 1,7) mg/L  (sin redondeo intermedio; QUAM informa U = 1,8 mg/L)\nLa mayor contribución es el volumen (≈ 66 % de u²).',
     },
     glossary: [
       { term: 'Incertidumbre estándar', definition: 'Incertidumbre expresada como un desvío estándar.' },
@@ -62,6 +63,7 @@ export const margen: LocalizedModule = {
       'Combines contributions as u_c = √Σ(cᵢ·uᵢ)² and expands with k = 2 (≈ 95 % when the output is approximately normal; Monte Carlo checks this).',
       'Simulates 100,000 values from each input distribution (GUM Supplement 1) and compares the interval with the GUM one.',
       'Includes a Type A calculator from replicates.',
+      'Data from EURACHEM/CITAC QUAM example A1.',
     ],
     dataSources: [
       { variable: 'Mass', source: 'Balance calibration certificate (uncertainty and drift)' },
@@ -86,7 +88,7 @@ export const margen: LocalizedModule = {
       standard:
         'JCGM 100:2008 (GUM); JCGM 101:2008 (Supplement 1, Monte Carlo); EURACHEM/CITAC Guide CG4 (QUAM), example A1.',
       workedExample:
-        'c = 1000·m·P/V = 1000·100.28·0.9999 / 100.0 = 1002.7 mg/L\nu(m) = 0.05 mg    u(P) = 0.000058    u(V) = 0.07 mL\nu_c = √(0.49995² + 0.05816² + 0.70189²) = 0.864 mg/L\nU (k = 2) = 1.7 mg/L   →   c = (1002.7 ± 1.7) mg/L\nThe largest contribution is the volume (≈ 66 % of u²).',
+        'c = 1000·m·P/V = 1000·100.28·0.9999 / 100.0 = 1002.7 mg/L\nu(m) = 0.05 mg    u(P) = 0.000058    u(V) = 0.07 mL\nu_c = √(0.49995² + 0.05816² + 0.70189²) = 0.864 mg/L\nU (k = 2) = 1.7 mg/L   →   c = (1002.7 ± 1.7) mg/L  (no intermediate rounding; QUAM reports U = 1.8 mg/L)\nThe largest contribution is the volume (≈ 66 % of u²).',
     },
     glossary: [
       { term: 'Standard uncertainty', definition: 'Uncertainty expressed as a standard deviation.' },

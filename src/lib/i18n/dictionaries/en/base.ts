@@ -18,7 +18,7 @@ export const base: typeof esBase = {
     credentials: 'Credentials',
     language: 'Switch language to Spanish',
   },
-  roles: { analyst: 'Analyst', validator: 'Reviewer/Approver', admin: 'Administrator' },
+  roles: { analyst: 'Analyst', validator: 'Approver', admin: 'Administrator' },
   demoBar: {
     env: 'DEMO ENVIRONMENT',
     user: 'User',
@@ -29,7 +29,7 @@ export const base: typeof esBase = {
     no: 'Cancel',
     loading: 'Loading laboratory data…',
     disclaimer:
-      'Educational demo, not validated for GxP use. Designed with 21 CFR Part 11, EU GMP Annex 11 and ANMAT Disp. 4159/2023 (Annex 6) in mind. Runs in your browser with example or synthetic data, declared in each module.',
+      'Educational demo, not validated for GxP use. Designed with 21 CFR Part 11, EU GMP Annex 11 and ANMAT Disp. 4159/2023 (Annex 6) in mind. Runs in your browser with fictitious data or data from published examples.',
   },
   signature: {
     signedBy: 'Signed by',

@@ -31,6 +31,7 @@ export const validation = {
   change: 'Cada cambio queda en el historial de Git con su commit. La integración continua (GitHub Actions) ejecuta pruebas unitarias, de tipos y de punta a punta en cada cambio, y la publicación vuelve a correr las pruebas unitarias y la matriz de trazabilidad antes de compilar.',
   changeLink: 'Ver historial de cambios',
   print: 'Imprimir o guardar como PDF',
+  testNamesNote: 'Los nombres de las pruebas están en español, como en el código.',
   passed: 'aprobado',
   failed: 'fallido',
   docTitle: 'Dossier de validación · OQ',

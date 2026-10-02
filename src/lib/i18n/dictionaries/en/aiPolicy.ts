@@ -3,7 +3,7 @@ import type { aiPolicy as esAiPolicy } from '../es/aiPolicy';
 export const aiPolicy: typeof esAiPolicy = {
   title: 'AI use policy',
   intro:
-    'In this portfolio AI assists and never decides. It applies to a demo the principles of the draft EU GMP Annex 22 (AI in critical applications) and the ISPE GAMP guide on AI.',
+    'In this portfolio AI assists and never decides. It applies the principles of the draft EU GMP Annex 22 (AI in critical applications) and the ISPE GAMP guide on AI to a demo.',
   sections: [
     {
       title: 'Where there is NO AI',
@@ -23,6 +23,7 @@ export const aiPolicy: typeof esAiPolicy = {
     {
       title: 'Offline mode',
       items: [
+        'The public demo currently has no API key: every assistant text is rule-based, with no AI.',
         'If the server has no AI credentials configured, or the AI fails, a rule-based automatic text is used.',
         'That text is labeled “no AI” and recorded as model “offline-rules”.',
       ],
