@@ -1,0 +1,926 @@
+<title>Direcciones visuales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&family=Alegreya:ital,wght@0,400..800;1,400..800&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans+SC:wght@500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&family=Red+Hat+Mono:wght@400;500;600&display=swap">
+<style>
+/* =====================================================================
+   WRAPPER (neutral review shell)
+   ===================================================================== */
+:root{
+  --w-bg:#ECEEEC; --w-ink:#16191B; --w-muted:#555B60; --w-line:#C9CDCB; --w-chip:#FFFFFF; --w-on:#16191B; --w-on-ink:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){color-scheme:dark;--w-bg:#0B0D0E;--w-ink:#E4E6E4;--w-muted:#9CA2A6;--w-line:#2A2F32;--w-chip:#16191B;--w-on:#E4E6E4;--w-on-ink:#0B0D0E;}
+}
+:root[data-theme="dark"]{color-scheme:dark;--w-bg:#0B0D0E;--w-ink:#E4E6E4;--w-muted:#9CA2A6;--w-line:#2A2F32;--w-chip:#16191B;--w-on:#E4E6E4;--w-on-ink:#0B0D0E;}
+
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--w-bg);color:var(--w-ink);font:14px/1.5 ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;}
+.shell{padding-inline:clamp(16px,3vw,32px);padding-block:20px 48px;max-width:1360px;margin-inline:auto;display:grid;gap:18px}
+.bar{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 24px}
+.bar h1{margin:0;font-size:20px;letter-spacing:-.01em;font-weight:650}
+.bar p{margin:2px 0 0;color:var(--w-muted);max-width:62ch}
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.seg{display:inline-flex;border:1px solid var(--w-line);border-radius:999px;padding:3px;background:var(--w-chip);flex-wrap:wrap}
+.seg button{font:inherit;font-size:13px;border:0;background:transparent;color:var(--w-ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-selected="true"],.seg button[aria-pressed="true"]{background:var(--w-on);color:var(--w-on-ink)}
+.seg button:focus-visible{outline:2px solid var(--w-ink);outline-offset:2px}
+.stage{border-radius:4px;overflow:hidden;border:1px solid var(--w-line)}
+.panel[hidden]{display:none!important}
+
+/* spec sheet (shared structure, styled by each direction's tokens) */
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:28px;padding-block:28px;border-top:1px solid var(--line)}
+.spec h4{margin:0 0 10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.spec p,.spec li{font-size:13.5px;line-height:1.55;color:var(--ink)}
+.spec ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.sw{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:4px 10px;font-size:12.5px;padding-block:4px;border-bottom:1px dotted var(--line)}
+.sw i{width:28px;height:20px;border:1px solid var(--line);display:block}
+.sw code{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.sw b{font-weight:600;font-variant-numeric:tabular-nums;font-size:12px}
+.swgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.swgrid h5{margin:6px 0 2px;font-size:11px;color:var(--muted);font-weight:500}
+
+/* L-J chart shared geometry */
+.lj svg{display:block;width:100%;height:auto;overflow:visible}
+.lj .lab{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.lj .s1{fill:none;stroke:var(--c1);stroke-width:1.6}
+.lj .s2{fill:none;stroke:var(--c2);stroke-width:1.6}
+.lj .p1{fill:var(--surface);stroke:var(--c1);stroke-width:1.6}
+.lj .p2{fill:var(--c2);stroke:var(--c2)}
+.lj .mean{stroke:var(--ink);stroke-width:1}
+.lj .sd2{stroke:var(--warn);stroke-width:1;stroke-dasharray:4 3}
+.lj .sd3{stroke:var(--bad);stroke-width:1.2}
+.lj .band{fill:var(--band)}
+.lj .flag{fill:none;stroke:var(--bad);stroke-width:1.6}
+.lj .flagt{font-family:var(--mono);font-size:11px;fill:var(--bad);font-weight:600}
+.lj .gridl{stroke:var(--line);stroke-width:.6}
+.lj-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:8px}
+.lj-legend span{display:inline-flex;align-items:center;gap:6px}
+.lj-legend svg{width:22px;height:10px}
+
+/* =====================================================================
+   A — CUADERNO / INSTRUMENTO
+   ===================================================================== */
+.dA{
+  --bg:#F4F6F1; --surface:#FBFCF9; --ink:#191C21; --muted:#545A60; --line:#C3D3BE; --grid:#DDE6D8;
+  --sig:#2342B5; --sig-ink:#FFFFFF; --bad:#B3261E; --ok:#1D6B3A; --warn:#8A5A00;
+  --c1:#191C21; --c2:#2342B5; --band:rgba(35,66,181,.07);
+  --display:"Archivo",ui-sans-serif,system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+.dB{
+  --bg:#E9ECE4; --surface:#F4F5EF; --ink:#1F2421; --muted:#4F5750; --line:#C5CBBF; --contour:#B98A5E; --contour-idx:#9A6438;
+  --sig:#8A3B17; --sig-ink:#FFFFFF; --hydro:#1D5689; --ok:#2F6A45; --bad:#9E1F1F; --warn:#8A5A00;
+  --c1:#1D5689; --c2:#8A3B17; --band:rgba(185,138,94,.16); --band2:rgba(185,138,94,.08);
+  --display:"Alegreya",Georgia,"Times New Roman",serif; --body:"Alegreya Sans",ui-sans-serif,system-ui,sans-serif; --mono:"Alegreya Sans",ui-sans-serif,system-ui,sans-serif;
+}
+.dC{
+  --bg:#F4F3EE; --surface:#FFFFFC; --ink:#15171A; --muted:#55595F; --line:#BDBBB2; --rule:#15171A;
+  --sig:#7A1E2C; --sig-ink:#FFFFFF; --ok:#1E5B45; --bad:#B3261E; --warn:#8A5A00;
+  --c1:#15171A; --c2:#7A1E2C; --band:rgba(21,23,26,.05);
+  --display:"Source Serif 4",Georgia,serif; --mono:"Red Hat Mono",ui-monospace,Consolas,monospace;
+}
+/* dark tokens: system (auto), viewer toggle, and local review toggle */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .stage[data-mode="auto"] .dA{color-scheme:dark;--bg:#0E1113;--surface:#151A1D;--ink:#E6E8E3;--muted:#9AA3A8;--line:#2C3A40;--grid:#182024;--sig:#8FA3FF;--sig-ink:#0E1113;--bad:#FF8A80;--ok:#7BD9A0;--warn:#E8B860;--c1:#E6E8E3;--c2:#8FA3FF;--band:rgba(143,163,255,.08)}
+  :root:not([data-theme="light"]) .stage[data-mode="auto"] .dB{color-scheme:dark;--bg:#141815;--surface:#1C211D;--ink:#E6E9E1;--muted:#A3ABA2;--line:#323A33;--contour:#5E4A36;--contour-idx:#8A6A48;--sig:#E39A6E;--sig-ink:#141815;--hydro:#8DBBE6;--ok:#93C9A3;--bad:#FF8F7A;--warn:#E8B860;--c1:#8DBBE6;--c2:#E39A6E;--band:rgba(138,106,72,.22);--band2:rgba(138,106,72,.10)}
+  :root:not([data-theme="light"]) .stage[data-mode="auto"] .dC{color-scheme:dark;--bg:#121417;--surface:#181B1F;--ink:#E8E5DD;--muted:#A0A3A8;--line:#33373D;--rule:#E8E5DD;--sig:#E8909B;--sig-ink:#121417;--ok:#86CFAE;--bad:#FF8A80;--warn:#E8B860;--c1:#E8E5DD;--c2:#E8909B;--band:rgba(232,229,221,.05)}
+}
+:root[data-theme="dark"] .stage[data-mode="auto"] .dA,.stage[data-mode="dark"] .dA{color-scheme:dark;--bg:#0E1113;--surface:#151A1D;--ink:#E6E8E3;--muted:#9AA3A8;--line:#2C3A40;--grid:#182024;--sig:#8FA3FF;--sig-ink:#0E1113;--bad:#FF8A80;--ok:#7BD9A0;--warn:#E8B860;--c1:#E6E8E3;--c2:#8FA3FF;--band:rgba(143,163,255,.08)}
+:root[data-theme="dark"] .stage[data-mode="auto"] .dB,.stage[data-mode="dark"] .dB{color-scheme:dark;--bg:#141815;--surface:#1C211D;--ink:#E6E9E1;--muted:#A3ABA2;--line:#323A33;--contour:#5E4A36;--contour-idx:#8A6A48;--sig:#E39A6E;--sig-ink:#141815;--hydro:#8DBBE6;--ok:#93C9A3;--bad:#FF8F7A;--warn:#E8B860;--c1:#8DBBE6;--c2:#E39A6E;--band:rgba(138,106,72,.22);--band2:rgba(138,106,72,.10)}
+:root[data-theme="dark"] .stage[data-mode="auto"] .dC,.stage[data-mode="dark"] .dC{color-scheme:dark;--bg:#121417;--surface:#181B1F;--ink:#E8E5DD;--muted:#A0A3A8;--line:#33373D;--rule:#E8E5DD;--sig:#E8909B;--sig-ink:#121417;--ok:#86CFAE;--bad:#FF8A80;--warn:#E8B860;--c1:#E8E5DD;--c2:#E8909B;--band:rgba(232,229,221,.05)}
+
+.dir{background:var(--bg);color:var(--ink)}
+.wrap{padding-inline:clamp(16px,4vw,56px);max-width:1240px;margin-inline:auto}
+.dir a{color:inherit}
+.dir :focus-visible{outline:2px solid var(--sig);outline-offset:3px}
+
+/* ---------- A ---------- */
+.dA{font-family:var(--display);font-stretch:100%;
+  background-color:var(--bg);
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),
+    linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px,40px 40px,8px 8px,8px 8px;background-position:-1px -1px;}
+.dA .nb-head{display:grid;grid-template-columns:auto 1fr auto auto;gap:0;border-bottom:2px solid var(--ink);font-family:var(--mono);font-size:11.5px;background:var(--surface)}
+.dA .nb-head > *{padding:10px 14px;border-right:1px solid var(--ink);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.dA .nb-head > *:last-child{border-right:0}
+.dA .nb-head .brand{font-family:var(--display);font-stretch:125%;font-weight:750;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.dA .nb-head nav{gap:18px;justify-content:flex-end}
+.dA .nb-head nav a{text-decoration:none}
+.dA .nb-head nav a:hover{color:var(--sig)}
+.dA .k{color:var(--muted)}
+.dA .hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;padding-block:56px 48px;align-items:start}
+.dA .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--sig);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dA .eyebrow::before{content:"";width:28px;height:2px;background:currentColor}
+.dA h2.h1{font-stretch:68%;font-weight:780;font-size:clamp(46px,7.4vw,96px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase;margin:18px 0 22px;text-wrap:balance}
+.dA h2.h1 em{font-style:normal;color:var(--sig)}
+.dA .lede{font-size:18px;line-height:1.55;max-width:56ch;margin:0 0 28px;font-stretch:96%}
+.dA .lede b{font-weight:650}
+.dA .btns{display:flex;flex-wrap:wrap;gap:12px}
+.dA .btn{font-family:var(--mono);font-size:13px;font-weight:600;padding:13px 18px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);text-decoration:none;display:inline-flex;gap:10px;align-items:center;letter-spacing:.02em}
+.dA .btn.pri{background:var(--sig);border-color:var(--sig);color:var(--sig-ink)}
+.dA .btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.dA .panel-i{background:var(--surface);border:2px solid var(--ink)}
+.dA .panel-i header{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;border-bottom:1px solid var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.dA .panel-i header .dot{display:inline-flex;align-items:center;gap:6px;color:var(--ok)}
+.dA .panel-i header .dot::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.dA .ro{display:grid;grid-template-columns:1fr 1fr}
+.dA .ro > div{padding:14px 14px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;gap:4px}
+.dA .ro > div:nth-child(2n){border-right:0}
+.dA .ro .v{font-family:var(--mono);font-weight:600;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.dA .ro .v small{font-size:15px;color:var(--muted);font-weight:400}
+.dA .ro .l{font-stretch:125%;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dA .stamp-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 14px;flex-wrap:wrap}
+.dA .stamp-row p{margin:0;font-family:var(--mono);font-size:11px;color:var(--muted);max-width:30ch}
+.dA .stamp{width:190px;max-width:100%;transform:rotate(-4deg);color:var(--sig)}
+.dA .sect{display:flex;justify-content:space-between;align-items:end;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:0;flex-wrap:wrap}
+.dA .sect h3{margin:0;font-stretch:125%;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:750}
+.dA .sect span{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.dA .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-left:1px solid var(--ink)}
+.dA .card{background:var(--surface);border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:18px 18px 16px;display:grid;grid-template-rows:auto auto 1fr auto;gap:10px;text-decoration:none;position:relative}
+.dA .card:hover{background:var(--bg)}
+.dA .card .id{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dA .card h4{margin:0;font-stretch:80%;font-size:30px;line-height:1;font-weight:760;text-transform:uppercase}
+.dA .card p{margin:0;font-size:14.5px;line-height:1.5;font-stretch:96%}
+.dA .card .ev{font-family:var(--mono);font-size:11.5px;border-top:1px dashed var(--line);padding-top:10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.dA .card .ev b{color:var(--ok);font-weight:600}
+.dA .card .ev .vt{color:var(--sig);text-decoration:underline;text-underline-offset:3px}
+.dA .chips{display:flex;flex-wrap:wrap;gap:6px}
+.dA .chip{font-family:var(--mono);font-size:11px;padding:2px 6px;border:1px solid var(--line);color:var(--muted);background:var(--bg)}
+.dA .chartrow{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:0;border:1px solid var(--ink);border-top:0;background:var(--surface)}
+.dA .chartrow > div{padding:18px}
+.dA .chartrow > div + div{border-left:1px solid var(--ink)}
+.dA .figcap{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:0 0 8px}
+.dA .figcap b{color:var(--ink)}
+.dA table.runs{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.dA table.runs th{font-weight:600;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--ink);padding:6px 4px}
+.dA table.runs td{padding:7px 4px;border-bottom:1px dotted var(--line)}
+.dA .st{display:inline-block;padding:1px 6px;border:1.5px solid currentColor;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.dA .st.ok{color:var(--ok)}.dA .st.bad{color:var(--bad)}
+.dA .lj .gridl{stroke:var(--grid)}
+.dA footer{margin-top:48px;border-top:2px solid var(--ink);background:var(--surface)}
+.dA footer .wrap{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;padding-block:24px}
+.dA .sig{display:grid;gap:2px}
+.dA .sig .line{width:min(260px,100%);border-bottom:1px solid var(--ink);height:34px;position:relative}
+.dA .sig .line svg{position:absolute;left:4px;bottom:-4px;width:170px;height:44px;color:var(--sig)}
+.dA .sig small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dA .sig strong{font-stretch:110%;font-size:14px}
+.dA .disc{font-family:var(--mono);font-size:11px;color:var(--muted);max-width:52ch;margin:0;justify-self:end}
+.dA .coord{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}
+
+/* ---------- B ---------- */
+.dB{font-family:var(--body)}
+.dB .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dB .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:20px}
+.dB .brand svg{width:40px;height:40px;color:var(--sig)}
+.dB nav{display:flex;gap:22px;font-size:15px;flex-wrap:wrap}
+.dB nav a{text-decoration:none;border-bottom:1px solid transparent}
+.dB nav a:hover{border-color:var(--sig)}
+.dB .hero{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;padding-block:56px 40px;align-items:center}
+.dB .contours{position:absolute;inset:0 -6% 0 38%;pointer-events:none;z-index:0}
+.dB .contours svg{width:100%;height:100%}
+.dB .contours .c{fill:none;stroke:var(--contour);stroke-opacity:.55;stroke-width:1;vector-effect:non-scaling-stroke}
+.dB .contours .ci{fill:none;stroke:var(--contour-idx);stroke-opacity:.8;stroke-width:1.6;vector-effect:non-scaling-stroke}
+.dB .contours .riv{fill:none;stroke:var(--hydro);stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-dasharray:6 3 1 3;opacity:.8}
+.dB .contours text{font-family:"Alegreya",serif;font-style:italic;font-size:13px;fill:var(--contour-idx)}
+.dB .hero > :not(.contours){position:relative;z-index:1}
+.dB .eyebrow{font-family:"Alegreya Sans SC",var(--body);font-weight:700;font-size:15px;letter-spacing:.08em;color:var(--sig);margin:0}
+.dB h2.h1{font-family:var(--display);font-weight:800;font-size:clamp(44px,6.6vw,88px);line-height:.95;letter-spacing:-.015em;margin:14px 0 22px;text-wrap:balance}
+.dB h2.h1 em{font-weight:500;color:var(--sig)}
+.dB .lede{font-size:19px;line-height:1.55;max-width:50ch;margin:0 0 28px}
+.dB .btns{display:flex;flex-wrap:wrap;gap:12px}
+.dB .btn{font:500 16px/1 var(--body);padding:14px 20px;border:1.5px solid var(--ink);color:var(--ink);text-decoration:none;border-radius:2px;background:var(--surface)}
+.dB .btn.pri{background:var(--sig);border-color:var(--sig);color:var(--sig-ink)}
+.dB .btn:hover{border-color:var(--sig)}
+.dB .legend{background:color-mix(in srgb,var(--surface) 92%,transparent);border:1.5px solid var(--ink);padding:16px 18px;justify-self:end;width:min(360px,100%);display:grid;gap:12px}
+.dB .legend h4{margin:0;font-family:"Alegreya Sans SC",var(--body);font-size:14px;letter-spacing:.1em;font-weight:700;border-bottom:1px solid var(--ink);padding-bottom:6px;display:flex;justify-content:space-between}
+.dB .legend ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:15px}
+.dB .legend li{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center}
+.dB .legend li b{font-variant-numeric:tabular-nums;font-weight:700}
+.dB .legend svg{width:34px;height:14px}
+.dB .scale{display:grid;gap:4px;font-size:12px;color:var(--muted)}
+.dB .scale .sbar{display:grid;grid-template-columns:repeat(3,1fr);height:7px;border:1px solid var(--ink)}
+.dB .scale .sbar i:nth-child(odd){background:var(--ink)}
+.dB .scale .ticks{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.dB .coordline{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin-top:22px;font-variant-numeric:tabular-nums}
+.dB .coordline b{color:var(--ink);font-weight:500}
+.dB .sect{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:24px 0 18px;flex-wrap:wrap}
+.dB .sect h3{margin:0;font-family:var(--display);font-size:32px;font-weight:700;letter-spacing:-.01em}
+.dB .sect span{color:var(--muted);font-size:15px;font-style:italic}
+.dB .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.dB .card{background:var(--surface);border:1px solid var(--line);display:grid;grid-template-rows:auto auto auto 1fr auto;gap:12px;padding:0 0 18px;text-decoration:none}
+.dB .card:hover{border-color:var(--ink)}
+.dB .card .map{height:96px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;background:var(--band2)}
+.dB .card .map svg{position:absolute;inset:0;width:100%;height:100%}
+.dB .card .map .c{fill:none;stroke:var(--contour);stroke-width:1;vector-effect:non-scaling-stroke}
+.dB .card .map .ci{fill:none;stroke:var(--contour-idx);stroke-width:1.6;vector-effect:non-scaling-stroke}
+.dB .card .map .tag{position:absolute;left:14px;bottom:10px;font-size:12px;background:var(--surface);border:1px solid var(--ink);padding:2px 8px;font-variant-numeric:tabular-nums}
+.dB .card > :not(.map){padding-inline:20px}
+.dB .card .kind{font-family:"Alegreya Sans SC",var(--body);font-weight:700;letter-spacing:.08em;font-size:13px;color:var(--hydro)}
+.dB .card h4{margin:-6px 0 0;font-family:var(--display);font-size:28px;font-weight:700;line-height:1.05}
+.dB .card p{margin:0;font-size:16px;line-height:1.5}
+.dB .card .ev{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:baseline;border-top:1px solid var(--line);padding-top:12px;margin-inline:20px;padding-inline:0}
+.dB .card .ev svg{flex:none;width:14px;height:14px;color:var(--ok);transform:translateY(2px)}
+.dB .chartrow{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:22px;margin-top:22px}
+.dB .chartbox{background:var(--surface);border:1px solid var(--line);padding:20px}
+.dB .chartbox h5{margin:0 0 4px;font-family:var(--display);font-size:20px;font-weight:700}
+.dB .chartbox p{margin:0 0 10px;color:var(--muted);font-size:14.5px}
+.dB .lj .band2{fill:var(--band2)}
+.dB .lj .lab,.dB .lj .flagt,.dB .lj-legend{font-family:var(--body)}
+.dB .lj .lab{font-size:12px}
+.dB .lj .flagt{font-size:12.5px}
+.dB .lj-legend{font-size:13px}
+.dB .note{font-family:var(--display);font-style:italic;font-size:21px;line-height:1.4;margin:0 0 14px}
+.dB dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14.5px}
+.dB dt{color:var(--muted)}
+.dB dd{margin:0;font-variant-numeric:tabular-nums}
+.dB footer{margin-top:56px;border-top:1.5px solid var(--ink)}
+.dB footer .wrap{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;padding-block:26px}
+.dB .vertex{width:86px;height:86px;color:var(--sig)}
+.dB footer .who strong{font-family:var(--display);font-size:22px;font-weight:700;display:block}
+.dB footer .who span{color:var(--muted);font-size:14.5px}
+.dB footer .disc{font-size:13px;color:var(--muted);max-width:46ch;margin:0}
+
+/* ---------- C ---------- */
+.dC{font-family:var(--display)}
+.dC .docbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:14px;font-family:var(--mono);font-size:12px;flex-wrap:wrap}
+.dC .docbar .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:650;font-size:17px}
+.dC .docbar .brand svg{width:34px;height:34px;color:var(--sig)}
+.dC .docbar nav{display:flex;gap:18px;flex-wrap:wrap}
+.dC .docbar nav a{text-decoration:none}
+.dC .docbar nav a:hover{text-decoration:underline;text-decoration-color:var(--sig)}
+.dC .sheet{background:var(--surface);border:1px solid var(--rule);margin-block:8px 0;position:relative}
+.dC .dochead{display:grid;grid-template-columns:1.4fr repeat(4,1fr);border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:11.5px}
+.dC .dochead > div{padding:9px 12px;border-right:1px solid var(--rule);display:grid;gap:2px}
+.dC .dochead > div:last-child{border-right:0}
+.dC .dochead span{color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.dC .dochead b{font-weight:600;font-variant-numeric:tabular-nums}
+.dC .dochead .ttl{font-family:var(--display);font-size:14px;font-weight:600}
+.dC .body{display:grid;grid-template-columns:150px minmax(0,1fr) 300px;gap:0}
+.dC .margin{border-right:1px solid var(--line);padding:28px 16px;font-family:var(--mono);font-size:11px;color:var(--muted);display:grid;align-content:start;gap:18px}
+.dC .margin b{display:block;color:var(--ink);font-weight:600}
+.dC .main{padding:40px 40px 36px}
+.dC .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--sig);margin:0}
+.dC h2.h1{font-weight:600;font-size:clamp(40px,5.6vw,76px);line-height:1.02;letter-spacing:-.02em;margin:14px 0 20px;font-variation-settings:"opsz" 60;text-wrap:balance}
+.dC h2.h1 .u{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.12em;text-decoration-color:var(--sig)}
+.dC .lede{font-size:19px;line-height:1.6;max-width:54ch;margin:0 0 26px;font-variation-settings:"opsz" 18}
+.dC .btns{display:flex;flex-wrap:wrap;gap:12px}
+.dC .btn{font:500 13px/1 var(--mono);padding:13px 18px;border:1px solid var(--rule);color:var(--ink);text-decoration:none;background:transparent;letter-spacing:.02em}
+.dC .btn.pri{background:var(--ink);color:var(--surface)}
+.dC .btn:hover{background:var(--sig);border-color:var(--sig);color:var(--sig-ink)}
+.dC .hashline{margin-top:28px;font-family:var(--mono);font-size:11px;color:var(--muted);word-break:break-all;border-top:1px dashed var(--line);padding-top:10px}
+.dC .side{border-left:1px solid var(--rule);display:grid;align-content:start}
+.dC .side h4{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;border-bottom:1px solid var(--rule);font-weight:600}
+.dC .kv{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid var(--line);padding:10px 14px;gap:8px;font-size:14px}
+.dC .kv b{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;font-size:13px}
+.dC .kv b.okv{color:var(--ok)}
+.dC .seal-box{padding:18px 14px;display:grid;justify-items:center;gap:6px;border-bottom:1px solid var(--rule)}
+.dC .seal{width:132px;height:132px;color:var(--sig)}
+.dC .seal-box small{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-align:center}
+.dC .sect{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:14px;margin:40px 0 0;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.dC .sect .n{font-family:var(--mono);font-size:13px;color:var(--sig);font-weight:600}
+.dC .sect h3{margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em}
+.dC .sect span{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.dC .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-left:1px solid var(--line)}
+.dC .card{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 20px 16px;display:grid;grid-template-rows:auto auto 1fr auto;gap:10px;text-decoration:none;background:var(--surface)}
+.dC .card:hover h4{text-decoration:underline;text-decoration-color:var(--sig);text-underline-offset:4px}
+.dC .card .id{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dC .card .id b{color:var(--sig);font-weight:600}
+.dC .card h4{margin:0;font-size:24px;font-weight:600;line-height:1.1}
+.dC .card p{margin:0;font-size:16px;line-height:1.55}
+.dC .card .ev{font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;border-top:1px solid var(--line);padding-top:10px;color:var(--muted)}
+.dC .card .ev b{color:var(--ink);font-weight:500}
+.dC .card .ev .okv{color:var(--ok);font-weight:600}
+.dC .chartrow{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);border:1px solid var(--line);border-top:0;background:var(--surface)}
+.dC .chartrow > div{padding:20px}
+.dC .chartrow > div + div{border-left:1px solid var(--line)}
+.dC .figcap{font-size:15px;margin:0 0 6px}
+.dC .figcap b{font-family:var(--mono);font-size:12px;color:var(--sig);margin-right:6px}
+.dC .rev{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px;font-variant-numeric:tabular-nums}
+.dC .rev th{text-align:left;font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule);padding:6px 6px 6px 0}
+.dC .rev td{border-bottom:1px solid var(--line);padding:7px 6px 7px 0;vertical-align:top}
+.dC .rev td.okv{color:var(--ok);font-weight:600}
+.dC .rev td.bad{color:var(--bad);font-weight:600}
+.dC .stampc{position:absolute;right:316px;top:124px;transform:rotate(-8deg);border:2px solid var(--sig);color:var(--sig);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;padding:6px 10px;text-transform:uppercase;opacity:.85;pointer-events:none}
+.dC footer{margin-top:40px;border-top:1px solid var(--rule)}
+.dC .signs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;padding-block:26px 18px}
+.dC .signs > div{display:grid;gap:4px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dC .signs .line{height:42px;border-bottom:1px solid var(--rule);position:relative}
+.dC .signs .line svg{position:absolute;left:0;bottom:-2px;width:180px;height:46px;color:var(--ink)}
+.dC .signs strong{font-family:var(--display);font-size:15px;color:var(--ink);font-weight:600}
+.dC .foot2{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-block:12px 26px}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .dA .hero,.dB .hero{grid-template-columns:1fr}
+  .dB .legend{justify-self:start}
+  .dB .contours{inset:0 -20% 40% 20%;opacity:.7}
+  .dC .body{grid-template-columns:1fr}
+  .dC .margin{display:none}
+  .dC .side{border-left:0;border-top:1px solid var(--rule)}
+  .dC .stampc{right:24px;top:auto;bottom:auto;display:none}
+  .dA .cards,.dB .cards,.dC .cards{grid-template-columns:1fr}
+  .dA .chartrow,.dB .chartrow,.dC .chartrow{grid-template-columns:1fr}
+  .dA .chartrow > div + div,.dC .chartrow > div + div{border-left:0;border-top:1px solid var(--line)}
+  .dA .chartrow > div + div{border-top-color:var(--ink)}
+  .dC .dochead{grid-template-columns:1fr 1fr}
+  .dC .dochead > div{border-bottom:1px solid var(--line)}
+  .dC .dochead > div:first-child{grid-column:1/-1}
+  .dC .signs{grid-template-columns:1fr}
+  .dA footer .wrap,.dB footer .wrap{grid-template-columns:auto 1fr}
+  .dA .disc,.dB footer .disc{grid-column:1/-1;justify-self:start}
+  .dA .coord{text-align:left}
+}
+@media (max-width:640px){
+  .dA .nb-head{grid-template-columns:1fr auto}
+  .dA .nb-head .pg{display:none}
+  .dA .nb-head nav{grid-column:1/-1;border-right:0;border-top:1px solid var(--ink);justify-content:flex-start;overflow-x:auto}
+  .dA .ro .v{font-size:26px}
+  .dA .card h4{font-size:26px}
+  .dC .main{padding:28px 18px}
+  .dC .docbar nav{display:none}
+  .dB nav{display:none}
+  .dA footer .wrap,.dB footer .wrap{grid-template-columns:1fr}
+  .dA .coord{text-align:left}
+  .swgrid{grid-template-columns:1fr}
+  .lj .lab,.lj .flagt,.dB .lj .lab,.dB .lj .flagt{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.dA .btn{transition:transform .12s,box-shadow .12s}
+</style>
+
+<!-- shared SVG defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="ring" d="M-100,-10 C-96,-58 -44,-86 8,-79 C58,-72 104,-46 110,-2 C116,40 84,74 32,83 C-18,92 -58,72 -84,47 C-100,31 -104,14 -100,-10 Z"/>
+    <path id="ring2" d="M-70,-20 C-60,-55 -10,-62 30,-50 C68,-38 84,-6 72,24 C60,52 20,62 -14,56 C-48,50 -80,18 -70,-20 Z"/>
+    <path id="sigpath" d="M4,34 C10,10 18,6 20,22 C22,36 14,40 16,28 C19,12 30,8 32,24 C33,32 36,34 40,24 C44,14 48,14 50,26 C52,36 58,30 62,20 C66,10 70,12 70,24 C70,34 78,30 84,22 C92,12 100,16 104,24 C110,34 122,24 132,18 C142,12 150,14 164,20"/>
+  </defs>
+</svg>
+
+<div class="shell">
+  <div class="bar">
+    <div>
+      <h1>Veritas Lab Suite · tres direcciones visuales</h1>
+      <p>La misma portada en tres identidades. Cambiá de pestaña para comparar y probá claro y oscuro. Debajo de cada maqueta está la ficha: paleta con contraste medido, tipografías, motivos y componentes.</p>
+    </div>
+    <div class="controls">
+      <div class="seg" role="tablist" aria-label="Dirección">
+        <button role="tab" id="t-a" aria-controls="p-a" aria-selected="true">A · Cuaderno</button>
+        <button role="tab" id="t-b" aria-controls="p-b" aria-selected="false">B · Territorio</button>
+        <button role="tab" id="t-c" aria-controls="p-c" aria-selected="false">C · Documento controlado</button>
+      </div>
+      <div class="seg" aria-label="Tema de la maqueta">
+        <button data-mode="auto" aria-pressed="true">Auto</button>
+        <button data-mode="light" aria-pressed="false">Claro</button>
+        <button data-mode="dark" aria-pressed="false">Oscuro</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage" data-mode="auto">
+
+<!-- =================================================================== A -->
+<section class="panel dir dA" id="p-a" role="tabpanel" aria-labelledby="t-a">
+  <div class="nb-head">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="1" y="1" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 16 L6 6 L8.5 16 M4.5 12.5 H7.5 M10 16 V6 L13.5 16 V6 M15.5 16 V6 H17 A2.5 2.5 0 0 1 17 11 H15.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+      Veritas Lab Suite
+    </div>
+    <nav aria-label="Principal (A)"><a href="#">Módulos</a><a href="#">Validación</a><a href="#">Uso de IA</a><a href="#">CV</a><a href="#">EN</a></nav>
+    <div class="pg"><span class="k">CUADERNO</span> N.º 01</div>
+    <div class="pg"><span class="k">PÁG.</span> 001</div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Software para laboratorios · La Rioja, Argentina</p>
+        <h2 class="h1">Cada resultado, <em>con su evidencia.</em></h2>
+        <p class="lede">Seis módulos que corren en el navegador: del mensaje del analizador al informe firmado. Los cálculos son deterministas y <b>cada uno enlaza al test que lo verifica</b>. La IA explica y redacta, nunca decide.</p>
+        <div class="btns">
+          <a class="btn pri" href="#">Recorrer el flujo →</a>
+          <a class="btn" href="#">Dossier de validación</a>
+          <a class="btn" href="#">CV</a>
+        </div>
+      </div>
+      <div class="panel-i" aria-label="Lecturas del sistema">
+        <header><span>Estado del sistema</span><span class="dot">En línea</span></header>
+        <div class="ro">
+          <div><span class="v">62<small>/62</small></span><span class="l">Tests de validación</span></div>
+          <div><span class="v">6</span><span class="l">Módulos funcionales</span></div>
+          <div><span class="v">±3<small>DE</small></span><span class="l">Westgard · 6 reglas</span></div>
+          <div><span class="v">256</span><span class="l">SHA · audit trail</span></div>
+        </div>
+        <div class="stamp-row">
+          <p>Cálculos contrastados con NIST StRD, EURACHEM A1 y Westgard 1981.</p>
+          <svg class="stamp" viewBox="0 0 220 100" role="img" aria-label="Sello: A. N. Páez, verificado 62 de 62">
+            <defs><mask id="wornA"><rect width="220" height="100" fill="#fff"/><g fill="#000"><circle cx="34" cy="20" r="1.4"/><circle cx="120" cy="80" r="1.8"/><circle cx="170" cy="24" r="1.2"/><circle cx="64" cy="70" r="1"/><circle cx="190" cy="66" r="1.5"/><circle cx="96" cy="16" r="1"/><rect x="140" y="44" width="14" height="1.2"/><rect x="20" y="50" width="9" height="1"/></g></mask></defs>
+            <g mask="url(#wornA)" fill="none" stroke="currentColor">
+              <rect x="3" y="3" width="214" height="94" stroke-width="3"/>
+              <rect x="9" y="9" width="202" height="82" stroke-width="1"/>
+              <line x1="9" y1="64" x2="211" y2="64" stroke-width="1"/>
+              <text x="110" y="32" text-anchor="middle" fill="currentColor" stroke="none" style="font:700 12px 'JetBrains Mono',monospace;letter-spacing:.3em">VERIFICADO</text>
+              <text x="110" y="56" text-anchor="middle" fill="currentColor" stroke="none" style="font:800 24px Archivo,sans-serif;font-stretch:125%;letter-spacing:.06em">A·N·PÁEZ</text>
+              <text x="110" y="82" text-anchor="middle" fill="currentColor" stroke="none" style="font:600 11px 'JetBrains Mono',monospace;letter-spacing:.08em">62/62 · 2026-09-29</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="sect"><h3>Módulos · Exp. 01–06</h3><span>3 de 6 · cada uno con su test</span></div>
+    <div class="cards">
+      <a class="card" href="#">
+        <div class="id"><span>EXP-02</span><span>Calidad analítica</span></div>
+        <h4>Control de calidad</h4>
+        <p>Cartas de Levey-Jennings y multirreglas de Westgard. Una corrida rechazada bloquea la liberación de resultados.</p>
+        <div class="chips"><span class="chip">1-3s</span><span class="chip">2-2s</span><span class="chip">R-4s</span><span class="chip">Sigma</span></div>
+        <div class="ev"><span><b>✓ 6/6</b> reglas, Clin Chem 1981</span><span class="vt">ver test →</span></div>
+      </a>
+      <a class="card" href="#">
+        <div class="id"><span>EXP-03</span><span>Trazabilidad</span></div>
+        <h4>Custodia</h4>
+        <p>Recepción, estados y liberación de muestras con audit trail encadenado por hash y firma electrónica con re-autenticación.</p>
+        <div class="chips"><span class="chip">SHA-256</span><span class="chip">21 CFR 11</span><span class="chip">ALCOA+</span></div>
+        <div class="ev"><span><b>✓</b> alteración y borrado detectados</span><span class="vt">ver test →</span></div>
+      </a>
+      <a class="card" href="#">
+        <div class="id"><span>EXP-06</span><span>Calidad analítica</span></div>
+        <h4>Margen</h4>
+        <p>Incertidumbre de medición: presupuesto GUM con coeficientes de sensibilidad, verificado por Monte Carlo.</p>
+        <div class="chips"><span class="chip">GUM</span><span class="chip">Monte Carlo</span><span class="chip">k = 2</span></div>
+        <div class="ev"><span><b>✓</b> EURACHEM/CITAC, ejemplo A1</span><span class="vt">ver test →</span></div>
+      </a>
+    </div>
+    <div class="chartrow">
+      <div class="lj">
+        <p class="figcap"><b>Fig. 2.1</b> · Levey-Jennings, glucosa · unidades z · R01–R21</p>
+        <div data-lj="A"></div>
+        <div class="lj-legend"><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--c1)" stroke-width="1.6"/><circle cx="11" cy="5" r="3" fill="var(--surface)" stroke="var(--c1)" stroke-width="1.6"/></svg>N1 · 95 mg/dL</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--c2)" stroke-width="1.6"/><rect x="8" y="2" width="6" height="6" fill="var(--c2)"/></svg>N2 · 250 mg/dL</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--warn)" stroke-dasharray="4 3"/></svg>±2 DE</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--bad)" stroke-width="1.2"/></svg>±3 DE</span></div>
+      </div>
+      <div>
+        <p class="figcap"><b>Tabla 2.1</b> · últimas corridas</p>
+        <table class="runs">
+          <thead><tr><th>Corrida</th><th>N1 z</th><th>N2 z</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>R21</td><td>+2.40</td><td>+2.33</td><td><span class="st bad">2-2s</span></td></tr>
+            <tr><td>R20</td><td>+0.80</td><td>−0.50</td><td><span class="st ok">OK</span></td></tr>
+            <tr><td>R19</td><td>−0.60</td><td>+0.30</td><td><span class="st ok">OK</span></td></tr>
+            <tr><td>R18</td><td>+0.50</td><td>−0.20</td><td><span class="st ok">OK</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <svg width="58" height="58" viewBox="0 0 58 58" aria-hidden="true" style="color:var(--ink)"><rect x="2" y="2" width="54" height="54" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M8 40 L13 16 L18 40 M9.8 32 H16.2 M22 40 V16 L32 40 V16 M37 40 V16 H42.5 A6 6 0 0 1 42.5 28 H37" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M8 47 H50" stroke="var(--sig)" stroke-width="2.6"/></svg>
+      <div class="sig">
+        <small>Diseñado, desarrollado y firmado por</small>
+        <div class="line"><svg viewBox="0 0 170 44" aria-hidden="true"><use href="#sigpath" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <strong>Andrés Nahuel Páez</strong>
+        <small>Desarrollador de software para laboratorios</small>
+      </div>
+      <div class="coord">29°24′S 66°51′W<br>La Rioja · UTC−3<br>Demo educativa, no validada para uso GxP</div>
+    </div>
+  </footer>
+
+  <div class="wrap">
+    <div class="spec">
+      <div>
+        <h4>Paleta y contraste (sobre fondo)</h4>
+        <div class="swgrid">
+          <div>
+            <h5>Claro</h5>
+            <div class="sw"><i style="background:#F4F6F1"></i><span>Papel cuadriculado <code>#F4F6F1</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#191C21"></i><span>Tinta <code>#191C21</code></span><b>15.7</b></div>
+            <div class="sw"><i style="background:#545A60"></i><span>Lápiz <code>#545A60</code></span><b>6.4</b></div>
+            <div class="sw"><i style="background:#2342B5"></i><span>Tinta de sello <code>#2342B5</code></span><b>7.7</b></div>
+            <div class="sw"><i style="background:#B3261E"></i><span>Rechazo <code>#B3261E</code></span><b>6.0</b></div>
+            <div class="sw"><i style="background:#1D6B3A"></i><span>Aceptado <code>#1D6B3A</code></span><b>6.0</b></div>
+          </div>
+          <div>
+            <h5>Oscuro (panel de instrumento)</h5>
+            <div class="sw"><i style="background:#0E1113"></i><span>Panel <code>#0E1113</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#E6E8E3"></i><span>Tinta <code>#E6E8E3</code></span><b>15.4</b></div>
+            <div class="sw"><i style="background:#9AA3A8"></i><span>Lápiz <code>#9AA3A8</code></span><b>7.4</b></div>
+            <div class="sw"><i style="background:#8FA3FF"></i><span>Señal <code>#8FA3FF</code></span><b>8.0</b></div>
+            <div class="sw"><i style="background:#FF8A80"></i><span>Rechazo <code>#FF8A80</code></span><b>8.3</b></div>
+            <div class="sw"><i style="background:#7BD9A0"></i><span>Aceptado <code>#7BD9A0</code></span><b>11.1</b></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4>Tipografía</h4>
+        <ul>
+          <li><b>Archivo</b> (eje de ancho 62–125): titulares comprimidos al 68 % en mayúsculas, como rótulos de equipo; etiquetas expandidas al 125 %; texto al 96 %.</li>
+          <li><b>JetBrains Mono</b>: lecturas, IDs de corrida, valores z, evidencias. Cifras tabulares.</li>
+        </ul>
+        <h4 style="margin-top:18px">Monograma</h4>
+        <p>ANP como placa de equipo: recuadro cuadrado con A y P trazadas a línea y un guion de señal. El sello de goma “VERIFICADO · A·N·PÁEZ · 62/62” va en tinta azul, girado 4° y con desgaste.</p>
+      </div>
+      <div>
+        <h4>Motivos y componentes</h4>
+        <ul>
+          <li>Fondo de papel milimetrado de 8/40 px, hecho en CSS sin imágenes.</li>
+          <li>Encabezado de cuaderno con N.º y página. Figuras y tablas numeradas (Fig. 2.1).</li>
+          <li>Tarjetas sin radio que comparten bordes como celdas de una tabla. Cada una se identifica como EXP-0n.</li>
+          <li>Botones cuadrados con borde de 2 px y sombra dura de 3 px al pasar el cursor. Chips monoespaciados.</li>
+          <li>Gráficos: N1 en tinta con círculo hueco y N2 en azul con cuadrado. La forma también distingue la serie.</li>
+          <li>Imprime casi igual: se quita la cuadrícula y queda la tinta.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================== B -->
+<section class="panel dir dB" id="p-b" role="tabpanel" aria-labelledby="t-b" hidden>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 L35 32 H5 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="23" r="2.6" fill="currentColor"/></svg>
+        Veritas Lab Suite
+      </div>
+      <nav aria-label="Principal (B)"><a href="#">Módulos</a><a href="#">Validación</a><a href="#">Uso de IA</a><a href="#">CV</a><a href="#">English</a></nav>
+    </div>
+
+    <div class="hero">
+      <div class="contours" aria-hidden="true">
+        <svg viewBox="0 0 700 520" preserveAspectRatio="xMidYMid slice">
+          <g transform="translate(420 250)">
+            <use href="#ring" class="c" transform="translate(30 6) scale(.22)"/>
+            <use href="#ring" class="c" transform="translate(24 4) scale(.44)"/>
+            <use href="#ring" class="c" transform="translate(18 2) scale(.66)"/>
+            <use href="#ring" class="c" transform="translate(12 0) scale(.88)"/>
+            <use href="#ring" class="ci" transform="translate(6 -2) scale(1.1)"/>
+            <use href="#ring" class="c" transform="translate(0 -4) scale(1.34) rotate(-3)"/>
+            <use href="#ring" class="c" transform="translate(-8 -6) scale(1.6) rotate(-5)"/>
+            <use href="#ring" class="c" transform="translate(-16 -8) scale(1.86) rotate(-7)"/>
+            <use href="#ring" class="c" transform="translate(-24 -10) scale(2.12) rotate(-9)"/>
+            <use href="#ring" class="ci" transform="translate(-34 -12) scale(2.4) rotate(-11)"/>
+            <use href="#ring" class="c" transform="translate(-44 -14) scale(2.7) rotate(-13)"/>
+            <use href="#ring" class="c" transform="translate(-56 -16) scale(3.02) rotate(-15)"/>
+            <use href="#ring" class="c" transform="translate(-68 -18) scale(3.36) rotate(-17)"/>
+          </g>
+          <g transform="translate(160 120)">
+            <use href="#ring2" class="c" transform="scale(.3)"/>
+            <use href="#ring2" class="c" transform="translate(-4 2) scale(.62)"/>
+            <use href="#ring2" class="ci" transform="translate(-8 4) scale(.95)"/>
+          </g>
+          <path class="riv" d="M0,470 C80,450 130,410 190,420 C260,432 300,486 380,476 C470,464 520,500 700,488"/>
+          <text x="560" y="128">Famatina</text>
+          <text x="20" y="500">río Bermejo (esquema)</text>
+        </svg>
+      </div>
+      <div>
+        <p class="eyebrow">Software para laboratorios · La Rioja, Argentina</p>
+        <h2 class="h1">Del territorio <em>a la muestra.</em></h2>
+        <p class="lede">Soy profesor de Geografía y aprendí a medir el terreno con error conocido. Hoy hago lo mismo con datos de laboratorio: seis módulos verificados contra referencias publicadas, con audit trail y firma.</p>
+        <div class="btns">
+          <a class="btn pri" href="#">Recorrer el flujo</a>
+          <a class="btn" href="#">Dossier de validación</a>
+        </div>
+        <div class="coordline"><span><b>29°24′S 66°51′W</b></span><span>NOA · Cuyo · remoto</span><span>UTC−3</span></div>
+      </div>
+      <aside class="legend" aria-label="Referencias">
+        <h4><span>Referencias</span><span>Hoja 1</span></h4>
+        <ul>
+          <li><svg viewBox="0 0 34 14"><path d="M17 2 L28 12 H6 Z" fill="none" stroke="var(--sig)" stroke-width="1.6"/><circle cx="17" cy="8.5" r="1.6" fill="var(--sig)"/></svg><span>Módulos funcionales</span><b>6</b></li>
+          <li><svg viewBox="0 0 34 14"><path d="M2 7 H32" stroke="var(--hydro)" stroke-width="1.8" stroke-dasharray="6 3 1 3"/></svg><span>Flujo de datos ASTM / HL7</span><b>4 etapas</b></li>
+          <li><svg viewBox="0 0 34 14"><path d="M2 10 C10 2 22 2 32 9" fill="none" stroke="var(--contour-idx)" stroke-width="1.8"/></svg><span>Tests de validación</span><b>62/62</b></li>
+          <li><svg viewBox="0 0 34 14"><circle cx="17" cy="7" r="4.5" fill="none" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="2 2"/></svg><span>En desarrollo</span><b>6</b></li>
+        </ul>
+        <div class="scale"><div class="sbar"><i></i><i></i><i></i></div><div class="ticks"><span>0</span><span>±1</span><span>±2</span><span>±3 DE</span></div><span>Escala: desvío estándar del material de control</span></div>
+      </aside>
+    </div>
+
+    <div class="sect"><h3>Módulos</h3><span>Hojas 2, 3 y 6 de 6</span></div>
+    <div class="cards">
+      <a class="card" href="#">
+        <div class="map"><svg viewBox="0 0 300 96" preserveAspectRatio="none" aria-hidden="true"><g transform="translate(210 60)"><use href="#ring2" class="c" transform="scale(.4)"/><use href="#ring2" class="c" transform="scale(.8)"/><use href="#ring2" class="ci" transform="scale(1.25)"/><use href="#ring2" class="c" transform="scale(1.75)"/><use href="#ring2" class="c" transform="scale(2.3)"/></g></svg><span class="tag">Hoja 2 · QC</span></div>
+        <span class="kind">Calidad analítica</span>
+        <h4>Control de calidad</h4>
+        <p>Cartas de Levey-Jennings y multirreglas de Westgard. Una corrida rechazada bloquea la liberación.</p>
+        <div class="ev"><svg viewBox="0 0 14 14"><path d="M2 7.5 L5.5 11 L12 3" fill="none" stroke="currentColor" stroke-width="2"/></svg>Reglas de Westgard (Clin Chem 1981), un test por regla</div>
+      </a>
+      <a class="card" href="#">
+        <div class="map"><svg viewBox="0 0 300 96" preserveAspectRatio="none" aria-hidden="true"><g transform="translate(80 30) rotate(20)"><use href="#ring" class="c" transform="scale(.25)"/><use href="#ring" class="c" transform="scale(.5)"/><use href="#ring" class="ci" transform="scale(.8)"/><use href="#ring" class="c" transform="scale(1.15)"/><use href="#ring" class="c" transform="scale(1.55)"/></g><path d="M0 80 C90 70 160 92 300 64" fill="none" stroke="var(--hydro)" stroke-width="1.4" stroke-dasharray="6 3 1 3" vector-effect="non-scaling-stroke"/></svg><span class="tag">Hoja 3 · Custodia</span></div>
+        <span class="kind">Trazabilidad</span>
+        <h4>Custodia</h4>
+        <p>Recepción, estados y liberación con audit trail encadenado por hash y firma electrónica.</p>
+        <div class="ev"><svg viewBox="0 0 14 14"><path d="M2 7.5 L5.5 11 L12 3" fill="none" stroke="currentColor" stroke-width="2"/></svg>Alteración y borrado del registro detectados</div>
+      </a>
+      <a class="card" href="#">
+        <div class="map"><svg viewBox="0 0 300 96" preserveAspectRatio="none" aria-hidden="true"><g transform="translate(150 48) rotate(-12)"><use href="#ring2" class="c" transform="scale(.35)"/><use href="#ring2" class="ci" transform="scale(.7)"/><use href="#ring2" class="c" transform="scale(1.1)"/><use href="#ring2" class="c" transform="scale(1.55)"/><use href="#ring2" class="c" transform="scale(2.05)"/><use href="#ring2" class="c" transform="scale(2.6)"/></g></svg><span class="tag">Hoja 6 · Margen</span></div>
+        <span class="kind">Calidad analítica</span>
+        <h4>Margen</h4>
+        <p>Incertidumbre de medición: presupuesto GUM y verificación por Monte Carlo.</p>
+        <div class="ev"><svg viewBox="0 0 14 14"><path d="M2 7.5 L5.5 11 L12 3" fill="none" stroke="currentColor" stroke-width="2"/></svg>EURACHEM/CITAC QUAM, ejemplo A1</div>
+      </a>
+    </div>
+
+    <div class="chartrow">
+      <div class="chartbox lj">
+        <h5>Glucosa, dos niveles de control</h5>
+        <p>Las franjas de ±1 y ±2 DE se leen como cotas: la corrida R21 sale de la curva.</p>
+        <div data-lj="B"></div>
+        <div class="lj-legend"><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--c1)" stroke-width="1.6"/><circle cx="11" cy="5" r="3" fill="var(--surface)" stroke="var(--c1)" stroke-width="1.6"/></svg>N1 · 95 mg/dL</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--c2)" stroke-width="1.6"/><rect x="8" y="2" width="6" height="6" fill="var(--c2)"/></svg>N2 · 250 mg/dL</span><span><svg viewBox="0 0 22 10"><rect width="22" height="10" fill="var(--band)"/></svg>±1 DE</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--bad)" stroke-width="1.2"/></svg>±3 DE</span></div>
+      </div>
+      <div class="chartbox">
+        <p class="note">“En el campo, un dato sin su error no sirve. En el laboratorio, tampoco.”</p>
+        <dl>
+          <dt>Corrida</dt><dd>GLU-R021</dd>
+          <dt>N1</dt><dd>101 mg/dL · z +2,40</dd>
+          <dt>N2</dt><dd>264 mg/dL · z +2,33</dd>
+          <dt>Regla</dt><dd style="color:var(--bad);font-weight:700">2-2s · rechazada</dd>
+          <dt>Acción</dt><dd>CAPA obligatoria antes de liberar</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <svg class="vertex" viewBox="0 0 86 86" role="img" aria-label="Monograma ANP como vértice geodésico">
+        <g fill="none" stroke="var(--contour)" stroke-width="1"><ellipse cx="43" cy="46" rx="40" ry="36"/><ellipse cx="44" cy="47" rx="31" ry="27"/></g>
+        <path d="M43 12 L71 62 H15 Z" fill="var(--bg)" stroke="currentColor" stroke-width="2"/>
+        <text x="43" y="55" text-anchor="middle" fill="currentColor" style="font:700 15px 'Alegreya Sans SC',sans-serif;letter-spacing:.06em">anp</text>
+        <circle cx="43" cy="34" r="2.4" fill="currentColor"/>
+        <text x="43" y="80" text-anchor="middle" fill="var(--muted)" style="font:500 8.5px 'Alegreya Sans',sans-serif;letter-spacing:.08em">29°24′S 66°51′W</text>
+      </svg>
+      <div class="who"><strong>Andrés Nahuel Páez</strong><span>Profesor de Geografía · desarrollador de software para laboratorios · La Rioja</span></div>
+      <p class="disc">Demo educativa, no validada para uso GxP. Diseñada considerando 21 CFR Part 11, EU GMP Anexo 11 y ANMAT Disp. 4159/2023. Datos de ejemplo o sintéticos.</p>
+    </div>
+  </footer>
+
+  <div class="wrap">
+    <div class="spec">
+      <div>
+        <h4>Paleta y contraste (sobre fondo)</h4>
+        <div class="swgrid">
+          <div>
+            <h5>Claro · hoja topográfica</h5>
+            <div class="sw"><i style="background:#E9ECE4"></i><span>Hoja <code>#E9ECE4</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#1F2421"></i><span>Basalto <code>#1F2421</code></span><b>13.2</b></div>
+            <div class="sw"><i style="background:#8A3B17"></i><span>Arenisca Talampaya <code>#8A3B17</code></span><b>6.5</b></div>
+            <div class="sw"><i style="background:#1D5689"></i><span>Hidrografía <code>#1D5689</code></span><b>6.4</b></div>
+            <div class="sw"><i style="background:#B98A5E"></i><span>Curva de nivel <code>#B98A5E</code></span><b>deco</b></div>
+            <div class="sw"><i style="background:#4F5750"></i><span>Texto secundario <code>#4F5750</code></span><b>6.3</b></div>
+          </div>
+          <div>
+            <h5>Oscuro · noche en la quebrada</h5>
+            <div class="sw"><i style="background:#141815"></i><span>Fondo <code>#141815</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#E6E9E1"></i><span>Texto <code>#E6E9E1</code></span><b>14.6</b></div>
+            <div class="sw"><i style="background:#E39A6E"></i><span>Arenisca <code>#E39A6E</code></span><b>7.8</b></div>
+            <div class="sw"><i style="background:#8DBBE6"></i><span>Hidrografía <code>#8DBBE6</code></span><b>8.9</b></div>
+            <div class="sw"><i style="background:#8A6A48"></i><span>Curva índice <code>#8A6A48</code></span><b>deco</b></div>
+            <div class="sw"><i style="background:#A3ABA2"></i><span>Texto secundario <code>#A3ABA2</code></span><b>7.6</b></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4>Tipografía</h4>
+        <ul>
+          <li><b>Alegreya</b>: titulares editoriales, cursiva para hidrografía y topónimos, como en los mapas.</li>
+          <li><b>Alegreya Sans</b> (con su versión SC): texto, interfaz y versalitas para rótulos. Las dos son de Huerta Tipográfica, una fundición argentina, y forman una sola superfamilia.</li>
+        </ul>
+        <h4 style="margin-top:18px">Monograma</h4>
+        <p>ANP dentro del símbolo de vértice geodésico (△ con punto), sobre dos curvas de nivel y con las coordenadas de La Rioja. Es el punto de referencia desde el que se mide todo lo demás.</p>
+      </div>
+      <div>
+        <h4>Motivos y componentes</h4>
+        <ul>
+          <li>Curvas de nivel en SVG con un trazado base reutilizado y una curva índice gruesa cada cinco, como en la cartografía real. El río va con la línea de trazos y puntos de la hidrografía.</li>
+          <li>Leyenda de mapa como componente: cada métrica tiene su símbolo y su valor. Escala gráfica en DE.</li>
+          <li>Tarjetas como “hojas” con un fragmento topográfico. Botones con radio de 2 px.</li>
+          <li>Gráfico: franjas de ±1 y ±2 DE en tinta hipsométrica. N1 va en azul de hidrografía y N2 en arenisca.</li>
+          <li>Riesgo: con pharma/QA puede leerse como personal o artesanal. Conviene reservarlo para la portada y el “Acerca”.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================== C -->
+<section class="panel dir dC" id="p-c" role="tabpanel" aria-labelledby="t-c" hidden>
+  <div class="wrap">
+    <div class="docbar">
+      <div class="brand">
+        <svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="17" r="12" fill="none" stroke="currentColor" stroke-width=".8"/><text x="17" y="21" text-anchor="middle" fill="currentColor" style="font:600 10px 'Source Serif 4',serif;letter-spacing:.02em">ANP</text></svg>
+        Veritas Lab Suite
+      </div>
+      <nav aria-label="Principal (C)"><a href="#">§1 Módulos</a><a href="#">§2 Validación</a><a href="#">§3 Uso de IA</a><a href="#">§4 CV</a><a href="#">EN</a></nav>
+    </div>
+
+    <div class="sheet">
+      <div class="dochead">
+        <div><span>Documento</span><b class="ttl">Portafolio técnico · Veritas Lab Suite</b></div>
+        <div><span>Código</span><b>VLS-POR-001</b></div>
+        <div><span>Revisión</span><b>03</b></div>
+        <div><span>Vigente desde</span><b>2026-09-29</b></div>
+        <div><span>Página</span><b>1 de 6</b></div>
+      </div>
+      <div class="stampc">Copia controlada</div>
+      <div class="body">
+        <aside class="margin" aria-label="Metadatos del documento">
+          <div><b>Autor</b>A. N. Páez</div>
+          <div><b>Origen</b>La Rioja, AR<br>29°24′S 66°51′W</div>
+          <div><b>Clasificación</b>Público · demo educativa</div>
+          <div><b>Idioma</b>ES · EN</div>
+        </aside>
+        <div class="main">
+          <p class="eyebrow">1. Propósito · Software para laboratorios · La Rioja, Argentina</p>
+          <h2 class="h1">Datos que se <span class="u">pueden auditar.</span></h2>
+          <p class="lede">Este documento presenta seis módulos de software de laboratorio. Cada cálculo se verifica contra una referencia publicada y cada cambio queda en un audit trail encadenado. La IA solo explica y redacta, con revisión humana.</p>
+          <div class="btns">
+            <a class="btn pri" href="#">Recorrer el flujo →</a>
+            <a class="btn" href="#">Dossier de validación</a>
+            <a class="btn" href="#">CV</a>
+          </div>
+          <p class="hashline">sha256 · 9f2c4e71b0a8d35c6e0f1a27c94b8d02e5a31f7c66d4b9a0e18f2c3d7b5a9e41 · registro 000412 → 000413</p>
+        </div>
+        <aside class="side" aria-label="Registro de verificación">
+          <h4>Registro de verificación</h4>
+          <div class="kv"><span>Pruebas del dossier</span><b class="okv">62/62</b></div>
+          <div class="kv"><span>Módulos funcionales</span><b>6</b></div>
+          <div class="kv"><span>Referencias</span><b>NIST · GUM · CLSI</b></div>
+          <div class="kv"><span>Marco</span><b>21 CFR 11 · Anexo 11</b></div>
+          <div class="seal-box">
+            <svg class="seal" viewBox="0 0 132 132" role="img" aria-label="Sello circular ANP, Andrés Nahuel Páez, La Rioja, Argentina">
+              <defs><path id="sealArc" d="M66,66 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"/></defs>
+              <circle cx="66" cy="66" r="63" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <circle cx="66" cy="66" r="58" fill="none" stroke="currentColor" stroke-width=".6"/>
+              <circle cx="66" cy="66" r="39" fill="none" stroke="currentColor" stroke-width="1"/>
+              <text fill="currentColor" style="font:600 9.2px 'Red Hat Mono',monospace;letter-spacing:.18em"><textPath href="#sealArc" startOffset="0">ANDRÉS NAHUEL PÁEZ · LA RIOJA · ARGENTINA ·</textPath></text>
+              <text x="66" y="72" text-anchor="middle" fill="currentColor" style="font:600 25px 'Source Serif 4',serif;letter-spacing:.01em">ANP</text>
+              <line x1="44" y1="80" x2="88" y2="80" stroke="currentColor" stroke-width=".8"/>
+              <text x="66" y="91" text-anchor="middle" fill="currentColor" style="font:500 7.5px 'Red Hat Mono',monospace;letter-spacing:.14em">REV 03</text>
+            </svg>
+            <small>Firma electrónica · re-autenticación<br>2026-09-29 07:30 UTC−3</small>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="sect"><span class="n">§ 4</span><h3>Módulos</h3><span>3 de 6 · Rev 03</span></div>
+    <div class="cards">
+      <a class="card" href="#">
+        <div class="id"><b>MOD-QC</b><span>§ 4.2 · Rev 03</span></div>
+        <h4>Control de calidad</h4>
+        <p>Cartas de Levey-Jennings y multirreglas de Westgard. Una corrida rechazada bloquea la liberación.</p>
+        <div class="ev"><span>Referencia</span><b>Westgard, Clin Chem 1981</b><span>Resultado</span><span class="okv">CONFORME · 6/6</span></div>
+      </a>
+      <a class="card" href="#">
+        <div class="id"><b>MOD-CUS</b><span>§ 4.3 · Rev 03</span></div>
+        <h4>Custodia de muestras</h4>
+        <p>Recepción, estados y liberación con audit trail encadenado por hash y firma electrónica.</p>
+        <div class="ev"><span>Referencia</span><b>21 CFR 11 · ALCOA+</b><span>Resultado</span><span class="okv">CONFORME</span></div>
+      </a>
+      <a class="card" href="#">
+        <div class="id"><b>MOD-INC</b><span>§ 4.6 · Rev 03</span></div>
+        <h4>Incertidumbre</h4>
+        <p>Presupuesto GUM con coeficientes de sensibilidad y verificación por Monte Carlo.</p>
+        <div class="ev"><span>Referencia</span><b>EURACHEM/CITAC A1</b><span>Resultado</span><span class="okv">CONFORME</span></div>
+      </a>
+    </div>
+    <div class="chartrow">
+      <div class="lj">
+        <p class="figcap"><b>Fig. 4.2-a</b>Gráfico de Levey-Jennings · glucosa · unidades z</p>
+        <div data-lj="C"></div>
+        <div class="lj-legend"><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--c1)" stroke-width="1.6"/><circle cx="11" cy="5" r="3" fill="var(--surface)" stroke="var(--c1)" stroke-width="1.6"/></svg>N1 · 95 mg/dL</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--c2)" stroke-width="1.6"/><rect x="8" y="2" width="6" height="6" fill="var(--c2)"/></svg>N2 · 250 mg/dL</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--warn)" stroke-dasharray="4 3"/></svg>±2 DE</span><span><svg viewBox="0 0 22 10"><line x1="0" y1="5" x2="22" y2="5" stroke="var(--bad)" stroke-width="1.2"/></svg>±3 DE</span></div>
+      </div>
+      <div>
+        <p class="figcap"><b>Tabla 4.2-b</b>Registro de corridas</p>
+        <table class="rev">
+          <thead><tr><th>Reg.</th><th>Corrida</th><th>Regla</th><th>Dictamen</th></tr></thead>
+          <tbody>
+            <tr><td>000413</td><td>R21</td><td>2-2s</td><td class="bad">RECHAZADA</td></tr>
+            <tr><td>000412</td><td>R20</td><td>—</td><td class="okv">ACEPTADA</td></tr>
+            <tr><td>000411</td><td>R19</td><td>—</td><td class="okv">ACEPTADA</td></tr>
+            <tr><td>000410</td><td>R18</td><td>—</td><td class="okv">ACEPTADA</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <div class="signs">
+        <div><span>Elaboró y firmó</span><div class="line"><svg viewBox="0 0 170 44" aria-hidden="true"><use href="#sigpath" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><strong>Andrés Nahuel Páez</strong><span>Desarrollador · Prof. en Geografía</span></div>
+        <div><span>Verificación</span><div class="line"></div><strong>62 pruebas automáticas · CI</strong><span>Vitest + Playwright · GitHub Actions</span></div>
+        <div><span>Alcance</span><div class="line"></div><strong>Demo educativa</strong><span>No validada para uso GxP · datos de ejemplo</span></div>
+      </div>
+      <div class="foot2"><span>VLS-POR-001 · Rev 03 · Página 1 de 6</span><span>Cambios de esta revisión: módulo Margen (GUM / Monte Carlo)</span><span>La Rioja · AR · UTC−3</span></div>
+    </footer>
+
+    <div class="spec">
+      <div>
+        <h4>Paleta y contraste (sobre fondo)</h4>
+        <div class="swgrid">
+          <div>
+            <h5>Claro · papel de archivo</h5>
+            <div class="sw"><i style="background:#F4F3EE"></i><span>Papel <code>#F4F3EE</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#FFFFFC"></i><span>Hoja <code>#FFFFFC</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#15171A"></i><span>Tinta <code>#15171A</code></span><b>16.2</b></div>
+            <div class="sw"><i style="background:#7A1E2C"></i><span>Lacre <code>#7A1E2C</code></span><b>9.2</b></div>
+            <div class="sw"><i style="background:#1E5B45"></i><span>Conforme <code>#1E5B45</code></span><b>7.2</b></div>
+            <div class="sw"><i style="background:#55595F"></i><span>Metadato <code>#55595F</code></span><b>6.3</b></div>
+          </div>
+          <div>
+            <h5>Oscuro · visor de documentos</h5>
+            <div class="sw"><i style="background:#121417"></i><span>Fondo <code>#121417</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#181B1F"></i><span>Hoja <code>#181B1F</code></span><b>—</b></div>
+            <div class="sw"><i style="background:#E8E5DD"></i><span>Tinta <code>#E8E5DD</code></span><b>14.7</b></div>
+            <div class="sw"><i style="background:#E8909B"></i><span>Lacre <code>#E8909B</code></span><b>7.8</b></div>
+            <div class="sw"><i style="background:#86CFAE"></i><span>Conforme <code>#86CFAE</code></span><b>10.2</b></div>
+            <div class="sw"><i style="background:#A0A3A8"></i><span>Metadato <code>#A0A3A8</code></span><b>7.3</b></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4>Tipografía</h4>
+        <ul>
+          <li><b>Source Serif 4</b> (eje óptico 8–60): títulos a tamaño 60 y texto a tamaño 18. Tiene la voz de un procedimiento o una norma.</li>
+          <li><b>Red Hat Mono</b>: códigos de documento, hashes, registros y dictámenes.</li>
+        </ul>
+        <h4 style="margin-top:18px">Monograma</h4>
+        <p>Sello circular de doble anillo con el nombre en el contorno, ANP al centro y la revisión debajo. Va en lacre. En el CV impreso pasa a una sola tinta.</p>
+      </div>
+      <div>
+        <h4>Motivos y componentes</h4>
+        <ul>
+          <li>Bloque de encabezado de documento controlado (código, revisión, vigencia, página) en cada página, incluido el CV.</li>
+          <li>Margen izquierdo con metadatos. Panel lateral con el “registro de verificación”.</li>
+          <li>Tarjetas como celdas de una matriz de trazabilidad con referencia y dictamen. Sin radios ni sombras.</li>
+          <li>Hashes, números de registro y bloques de firma reales del sistema usados como textura.</li>
+          <li>Es la que mejor imprime y la que más tranquiliza a QA. Su riesgo es la frialdad, que se compensa con el sello y la firma manuscrita.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  // tabs
+  var tabs=[].slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(t){
+    tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});
+    try{localStorage.setItem('dirTab',t.id)}catch(e){}
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(t)});
+    t.addEventListener('keydown',function(e){
+      if(e.key==='ArrowRight'||e.key==='ArrowLeft'){var n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];select(n);n.focus();}
+    });
+  });
+  var h=(location.hash||'').replace('#','');
+  var start=null; try{start=localStorage.getItem('dirTab')}catch(e){}
+  if(/^t-[abc]$/.test(h))start=h;
+  select(document.getElementById(start&&document.getElementById(start)?start:'t-a'));
+
+  // theme toggle for the mock-ups
+  var stage=document.getElementById('stage');
+  [].forEach.call(document.querySelectorAll('[data-mode]'),function(b){
+    if(b===stage)return;
+    b.addEventListener('click',function(){
+      stage.setAttribute('data-mode',b.getAttribute('data-mode'));
+      [].forEach.call(document.querySelectorAll('button[data-mode]'),function(x){x.setAttribute('aria-pressed',x===b)});
+    });
+  });
+  var m=new URLSearchParams(location.search).get('mode');
+  if(m){var mb=document.querySelector('button[data-mode="'+m+'"]');if(mb)mb.click();}
+
+  // Levey-Jennings
+  var n1=[0.3,-0.8,1.1,-0.4,0.6,-1.2,0.2,0.9,-0.5,0.4,1.4,-0.9,0.4,-0.3,0.7,-1.0,0.1,0.5,-0.6,0.8,2.4];
+  var n2=[-0.2,0.7,-1.1,0.4,-0.6,0.9,-0.3,0.3,1.2,-0.7,0.1,-0.4,-1.3,0.6,0.2,-0.7,0.9,-0.2,0.3,-0.5,2.33];
+  var NS='http://www.w3.org/2000/svg';
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+  [].forEach.call(document.querySelectorAll('[data-lj]'),function(host){
+    var v=host.getAttribute('data-lj');
+    var W=600,H=240,L=52,R=14,T=26,B=30;
+    var x=function(i){return L+i*(W-L-R)/20}, y=function(z){return T+(3.5-z)*(H-T-B)/7};
+    var s=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Gráfico de Levey-Jennings de glucosa, corridas R01 a R21. Ambos niveles dentro de ±2 DE hasta R21, donde N1 = +2,40 y N2 = +2,33 DE: regla 2-2s, corrida rechazada.'},host);
+    if(v==='A'){for(var g=-3.5;g<=3.5;g+=0.5)el('line',{x1:L,x2:W-R,y1:y(g),y2:y(g),class:'gridl'},s);for(var i=0;i<=20;i++)el('line',{x1:x(i),x2:x(i),y1:y(3.5),y2:y(-3.5),class:'gridl'},s);}
+    if(v==='B'){el('rect',{x:L,y:y(2),width:W-L-R,height:y(-2)-y(2),class:'band2'},s);}
+    el('rect',{x:L,y:y(1),width:W-L-R,height:y(-1)-y(1),class:'band'},s);
+    el('line',{x1:L,x2:W-R,y1:y(0),y2:y(0),class:'mean'},s);
+    [2,-2].forEach(function(z){el('line',{x1:L,x2:W-R,y1:y(z),y2:y(z),class:'sd2'},s)});
+    [3,-3].forEach(function(z){el('line',{x1:L,x2:W-R,y1:y(z),y2:y(z),class:'sd3'},s)});
+    [[3,'+3'],[2,'+2'],[1,'+1'],[0,'x̄'],[-1,'−1'],[-2,'−2'],[-3,'−3']].forEach(function(p){var t=el('text',{x:L-10,y:y(p[0])+4,'text-anchor':'end',class:'lab'},s);t.textContent=p[1]+(p[0]===3?' DE':'')});
+    [0,5,10,15,20].forEach(function(i){var t=el('text',{x:x(i),y:H-8,'text-anchor':'middle',class:'lab'},s);t.textContent='R'+String(i+1).padStart(2,'0')});
+    function pts(a){return a.map(function(z,i){return x(i)+','+y(z)}).join(' ')}
+    el('polyline',{points:pts(n1),class:'s1'},s);
+    el('polyline',{points:pts(n2),class:'s2'},s);
+    n1.forEach(function(z,i){el('circle',{cx:x(i),cy:y(z),r:3.4,class:'p1'},s)});
+    n2.forEach(function(z,i){el('rect',{x:x(i)-3,y:y(z)-3,width:6,height:6,class:'p2'},s)});
+    el('circle',{cx:x(20),cy:y(2.37),r:11,class:'flag'},s);
+    var ft=el('text',{x:x(20)-16,y:y(3.0)-6,'text-anchor':'end',class:'flagt'},s);ft.textContent='R21 · 2-2s · rechazada';
+  });
+})();
+</script>
