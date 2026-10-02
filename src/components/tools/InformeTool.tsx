@@ -25,7 +25,8 @@ export function InformeTool({ dict }: ToolProps) {
     try {
       const [{ pdf }, { ReportDocument }] = await Promise.all([import('@react-pdf/renderer'), import('./ReportDocument')]);
       const data = buildReportData(lab, sampleId, nowIso());
-      const blob = await pdf(<ReportDocument data={data} labels={t.pdf} />).toBlob();
+      const matrixLabel = dict.tools.custodia.matrices[data.matrix] ?? data.matrix;
+      const blob = await pdf(<ReportDocument data={data} labels={t.pdf} matrixLabel={matrixLabel} />).toBlob();
       downloadBlob(`informe-${sampleId}.pdf`, blob);
     } catch {
       setError(t.error);

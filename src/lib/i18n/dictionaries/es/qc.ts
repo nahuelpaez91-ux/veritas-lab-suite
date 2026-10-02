@@ -29,6 +29,8 @@ export const qc = {
   sigmaHigh: '≥ 6: clase mundial; alcanza con 1-3s.',
   sigmaMid: '4 a 6: adecuado; usar multirreglas.',
   sigmaLow: '< 4: desempeño pobre; más controles por corrida y revisar el método.',
+  sigmaNote: 'Usa el CV de los valores objetivo de este material; el ejemplo resuelto usa CV 1,5 %, por eso allí da 6,0.',
   export: 'Exportar corridas (CSV)',
   aiTitle: 'Asistente sobre la corrida más reciente',
+  offScale: ' (fuera de escala)',
 };

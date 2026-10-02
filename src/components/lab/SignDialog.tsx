@@ -22,12 +22,16 @@ export function SignDialog({
   const t = dict.tools.custodia;
   const { run, user } = useLab();
   const ref = useRef<HTMLDialogElement>(null);
+  const signedRef = useRef(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     const dialog = ref.current;
-    if (dialog && meaning && !dialog.open) dialog.showModal();
+    if (dialog && meaning && !dialog.open) {
+      signedRef.current = false;
+      dialog.showModal();
+    }
   }, [meaning]);
 
   async function submit(e: FormEvent) {
@@ -35,7 +39,8 @@ export function SignDialog({
     if (!meaning) return;
     const res = await run((s, _u, at) => signSample(s, sampleId, meaning, user.id, password, at));
     if (res.ok) {
-      onClose(true);
+      signedRef.current = true;
+      ref.current?.close();
       return;
     }
     setError(formatLabError(dict, res.error));
@@ -46,7 +51,7 @@ export function SignDialog({
   return (
     <dialog
       ref={ref}
-      onClose={() => onClose(false)}
+      onClose={() => onClose(signedRef.current)}
       aria-label={t.signTitle}
       className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-xl border border-line bg-surface p-0 text-ink"
     >
@@ -74,7 +79,7 @@ export function SignDialog({
           </p>
         )}
         <div className="flex justify-end gap-2">
-          <button type="button" className={btnSecondary} onClick={() => onClose(false)}>
+          <button type="button" className={btnSecondary} onClick={() => ref.current?.close()}>
             {t.cancel}
           </button>
           <button type="submit" data-testid="sign-confirm" className={btnPrimary}>

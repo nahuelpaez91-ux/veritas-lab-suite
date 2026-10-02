@@ -12,6 +12,7 @@ export const informe = {
     revision: 'rev.',
     patient: 'Paciente',
     matrix: 'Matriz',
+    received: 'Recibida',
     test: 'Prueba',
     loinc: 'LOINC',
     value: 'Resultado',

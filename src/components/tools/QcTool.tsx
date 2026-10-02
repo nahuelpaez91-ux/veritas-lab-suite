@@ -32,7 +32,11 @@ export function QcTool({ dict, lang }: ToolProps) {
       const d: LjDatum = { run: r.id.slice(analyte.length + 1) };
       for (const p of r.points) {
         const target = targets.find((x) => x.level === p.level);
-        if (target) d[p.level] = Math.max(-4, Math.min(4, zScore(p.value, target)));
+        if (target) {
+          const z = zScore(p.value, target);
+          d[p.level] = Math.max(-4, Math.min(4, z));
+          d[`${p.level}_real`] = z;
+        }
       }
       return d;
     });
@@ -141,7 +145,12 @@ export function QcTool({ dict, lang }: ToolProps) {
           </div>
         </div>
         <div className={card}>
-          <LeveyJenningsChart data={view.chart} levels={view.targets.map((tg) => tg.level)} title={t.chartTitle} />
+          <LeveyJenningsChart
+            data={view.chart}
+            levels={view.targets.map((tg) => tg.level)}
+            title={t.chartTitle}
+            offScaleLabel={t.offScale}
+          />
         </div>
       </div>
 
@@ -274,12 +283,15 @@ export function QcTool({ dict, lang }: ToolProps) {
             </div>
           </div>
           {sigma !== null && (
-            <p className="text-sm">
-              <span className="font-semibold">
-                {t.sigmaResult} = {sigma.toFixed(2)}
-              </span>{' '}
-              — {sigmaText}
-            </p>
+            <>
+              <p className="text-sm">
+                <span className="font-semibold">
+                  {t.sigmaResult} = {sigma.toFixed(2)}
+                </span>{' '}
+                — {sigmaText}
+              </p>
+              <p className="text-xs text-muted">{t.sigmaNote}</p>
+            </>
           )}
         </div>
       </div>

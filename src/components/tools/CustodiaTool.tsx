@@ -12,6 +12,7 @@ import { verifyChain } from '@/lib/lims/audit';
 import type { SampleStatus, SignatureMeaning } from '@/lib/lims/model';
 import { statusOfRun } from '@/lib/lims/qc';
 import { checkRelease } from '@/lib/lims/release';
+import { findUser } from '@/lib/lims/users';
 import type { ToolProps } from './registry';
 
 const sampleTone: Record<SampleStatus, ChipTone> = {
@@ -23,6 +24,11 @@ const sampleTone: Record<SampleStatus, ChipTone> = {
 };
 const MATRICES = ['suero', 'plasma', 'sangre', 'orina'];
 const EMPTY_FORM = { id: '', patientId: '', patientName: '', matrix: 'suero' };
+
+function actorLabel(actor: string, systemLabel: string): string {
+  if (actor === 'system') return systemLabel;
+  return findUser(actor)?.name ?? actor;
+}
 
 export function CustodiaTool({ dict }: ToolProps) {
   const t = dict.tools.custodia;
@@ -43,7 +49,7 @@ export function CustodiaTool({ dict }: ToolProps) {
       if (cancelled) return;
       setChain(
         r.valid
-          ? { valid: true, text: t.chainOk.replace('{n}', String(state.audit.length)) }
+          ? { valid: true, text: state.audit.length === 1 ? t.chainOkOne : t.chainOk.replace('{n}', String(state.audit.length)) }
           : { valid: false, text: t.chainBroken.replace('{seq}', String(r.brokenAt)) },
       );
     });
@@ -312,9 +318,9 @@ export function CustodiaTool({ dict }: ToolProps) {
                   {timeline.map((e) => (
                     <li key={e.seq}>
                       <span className="font-mono text-muted">
-                        #{e.seq} · {e.at.replace('T', ' ')}
+                        #{e.seq} · {e.at.replace('T', ' ')} UTC
                       </span>{' '}
-                      <span className="font-semibold">{e.action}</span> · {e.actor}
+                      <span className="font-semibold">{t.actions[e.action] ?? e.action}</span> · {actorLabel(e.actor, t.actorSystem)}
                       {e.reason ? ` · «${e.reason}»` : ''}
                     </li>
                   ))}

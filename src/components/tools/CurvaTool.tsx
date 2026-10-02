@@ -44,8 +44,8 @@ export function CurvaTool({ dict }: ToolProps) {
     }
   }, [text, weighting]);
 
-  const y0n = Number(y0);
-  const m = Number(replicates);
+  const y0n = Number(y0.replace(',', '.'));
+  const m = Number(replicates.replace(',', '.'));
   const prediction =
     result && Number.isFinite(y0n) && Number.isInteger(m) && m >= 1 ? inversePredict(result.fit, y0n, m) : null;
 
@@ -75,6 +75,7 @@ export function CurvaTool({ dict }: ToolProps) {
               onChange={(e) => setText(e.target.value)}
             />
           </label>
+          <p className="text-xs text-muted">{t.exampleNote}</p>
           <label className={label}>
             {t.weighting}
             <select className={`${input} mt-1`} value={weighting} onChange={(e) => setWeighting(e.target.value as Weighting)}>
@@ -97,8 +98,8 @@ export function CurvaTool({ dict }: ToolProps) {
                 [t.intercept, `${fmt(result.fit.intercept)} ± ${fmt(result.fit.seIntercept)}`],
                 [t.r2, result.fit.r2.toFixed(6)],
                 [t.syx, fmt(result.fit.syx)],
-                [t.lod, result.limits ? fmt(result.limits.lod) : t.lodWeighted],
-                [t.loq, result.limits ? fmt(result.limits.loq) : t.lodWeighted],
+                [t.lod, result.limits ? `${fmt(result.limits.lod)} ${t.xUnits}` : t.lodWeighted],
+                [t.loq, result.limits ? `${fmt(result.limits.loq)} ${t.xUnits}` : t.lodWeighted],
               ].map(([k, v]) => (
                 <div key={k} className="rounded-md border border-line p-2">
                   <dt className="text-xs text-muted">{k}</dt>
@@ -161,7 +162,9 @@ export function CurvaTool({ dict }: ToolProps) {
             <div className="text-sm sm:col-span-2" data-testid="curva-x0">
               <p>
                 <span className="text-muted">{t.x0}: </span>
-                <span className="font-mono font-semibold">{fmt(prediction.x0)}</span>
+                <span className="font-mono font-semibold">
+                  {fmt(prediction.x0)} {t.xUnits}
+                </span>
               </p>
               {prediction.sx0 !== null && prediction.ci95 ? (
                 <p className="font-mono text-xs">

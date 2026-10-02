@@ -54,7 +54,11 @@ export function EnlaceTool({ dict, lang }: ToolProps) {
           id="raw-message"
           data-testid="raw-message"
           value={raw}
-          onChange={(e) => setRaw(e.target.value)}
+          onChange={(e) => {
+            setRaw(e.target.value);
+            setOutcome(null);
+            setNotice(null);
+          }}
           rows={12}
           spellCheck={false}
           className="mt-1 w-full rounded-md border border-line bg-bg p-2 font-mono text-xs"

@@ -31,6 +31,8 @@ export const qc: typeof esQc = {
   sigmaHigh: '≥ 6: world class; 1-3s is enough.',
   sigmaMid: '4 to 6: adequate; use multirules.',
   sigmaLow: '< 4: poor performance; more controls per run and review the method.',
+  sigmaNote: "Uses the CV from this material's target values; the worked example uses CV 1.5 %, which is why it gives 6.0 there.",
   export: 'Export runs (CSV)',
   aiTitle: 'Assistant for the latest run',
+  offScale: ' (off scale)',
 };

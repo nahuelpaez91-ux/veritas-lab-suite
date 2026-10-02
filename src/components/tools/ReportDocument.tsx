@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   footer: { position: 'absolute', bottom: 24, left: 36, right: 36, fontSize: 7, color: '#5b6b76', textAlign: 'center' },
 });
 
-export function ReportDocument({ data, labels }: { data: ReportData; labels: Labels }) {
+export function ReportDocument({ data, labels, matrixLabel }: { data: ReportData; labels: Labels; matrixLabel: string }) {
   return (
     <Document title={`${labels.heading} ${data.sampleId}`} author="Andrés Nahuel Páez">
       <Page size="A4" style={styles.page}>
@@ -26,7 +26,7 @@ export function ReportDocument({ data, labels }: { data: ReportData; labels: Lab
         <Text style={styles.h1}>Veritas Lab Suite · {labels.heading}</Text>
         <Text style={styles.sub}>
           {labels.sample}: {data.sampleId} ({labels.revision} {data.revision}) · {labels.patient}: {data.patientName} ({data.patientId}) ·{' '}
-          {labels.matrix}: {data.matrix}
+          {labels.matrix}: {matrixLabel} · {labels.received}: {data.receivedAt.replace('T', ' ')} UTC
         </Text>
 
         <View style={[styles.row, styles.head]}>

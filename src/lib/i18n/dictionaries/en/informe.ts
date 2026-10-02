@@ -14,6 +14,7 @@ export const informe: typeof esInforme = {
     revision: 'rev.',
     patient: 'Patient',
     matrix: 'Matrix',
+    received: 'Received',
     test: 'Test',
     loinc: 'LOINC',
     value: 'Result',

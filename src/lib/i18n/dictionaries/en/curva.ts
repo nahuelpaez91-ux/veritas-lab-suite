@@ -25,4 +25,6 @@ export const curva: typeof esCurva = {
   export: 'Export data and residuals (CSV)',
   points: 'Points',
   fit: 'Fitted line',
+  exampleNote: 'Example: x in mg/L, y in absorbance (signal units).',
+  xUnits: '(x units)',
 };

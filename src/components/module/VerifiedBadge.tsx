@@ -4,7 +4,7 @@ import type { Dictionary } from '@/lib/i18n/get-dictionary';
 
 export function VerifiedBadge({ dict, verified }: { dict: Dictionary; verified: ModuleContent['verifiedAgainst'] }) {
   return (
-    <p className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-full border border-ok/40 bg-ok/10 px-3 py-1 text-xs text-ok">
+    <p className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-3 py-1 text-xs text-ok">
       <span aria-hidden="true">✔</span>
       <span>
         {dict.module.verified}: {verified.label}

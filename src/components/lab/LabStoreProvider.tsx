@@ -84,12 +84,16 @@ export function LabStoreProvider({ children }: { children: ReactNode }) {
     [user],
   );
 
-  const reset = useCallback(async () => {
-    clearState();
-    const fresh = await buildSeedState();
-    stateRef.current = fresh;
-    saveState(fresh);
-    setState(fresh);
+  const reset = useCallback((): Promise<void> => {
+    const task = queue.current.then(async () => {
+      clearState();
+      const fresh = await buildSeedState();
+      stateRef.current = fresh;
+      saveState(fresh);
+      setState(fresh);
+    });
+    queue.current = task.catch(() => undefined);
+    return task;
   }, []);
 
   const value = useMemo(() => ({ state, user, setUserId, run, reset }), [state, user, setUserId, run, reset]);

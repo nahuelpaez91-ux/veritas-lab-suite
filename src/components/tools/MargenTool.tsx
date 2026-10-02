@@ -25,7 +25,12 @@ const DEFAULT_ROWS: Row[] = [
 const DISTRIBUTIONS: Distribution[] = ['normal', 'rectangular', 'triangular'];
 
 function toInputs(rows: Row[]): InputQuantity[] | null {
-  const inputs = rows.map((r) => ({ name: r.name, value: Number(r.value), u: Number(r.u), distribution: r.distribution }));
+  const inputs = rows.map((r) => ({
+    name: r.name,
+    value: Number(r.value.replace(',', '.')),
+    u: Number(r.u.replace(',', '.')),
+    distribution: r.distribution,
+  }));
   return inputs.every((q) => Number.isFinite(q.value) && Number.isFinite(q.u) && q.u >= 0) ? inputs : null;
 }
 
@@ -39,7 +44,11 @@ export function MargenTool({ dict }: ToolProps) {
   const budget = useMemo(() => (inputs ? gumBudget(MODEL, inputs) : null), [inputs]);
 
   const typeAResult = useMemo(() => {
-    const values = replicates.split(/\r?\n/).map((l) => l.trim()).filter(Boolean).map(Number);
+    const values = replicates
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .map((l) => Number(l.replace(',', '.')));
     if (values.length < 2 || !values.every(Number.isFinite)) return null;
     return typeA(values);
   }, [replicates]);
@@ -128,7 +137,7 @@ export function MargenTool({ dict }: ToolProps) {
               </table>
             </div>
             <p className="font-mono text-sm" data-testid="margen-result">
-              {t.result}: {budget.y.toFixed(2)} mg/L · {t.uc} = {budget.uc.toFixed(3)} · {t.U} = {budget.U.toFixed(2)}
+              {t.result}: {budget.y.toFixed(2)} mg/L · {t.uc} = {budget.uc.toFixed(3)} mg/L · {t.U} = {budget.U.toFixed(2)} mg/L
             </p>
             <figure>
               <figcaption className="mb-2 text-sm font-semibold">{t.contributionsChart}</figcaption>
@@ -156,22 +165,22 @@ export function MargenTool({ dict }: ToolProps) {
                 <dl className="grid grid-cols-2 gap-2 text-sm" data-testid="mc-result">
                   <div>
                     <dt className="text-xs text-muted">{t.mcMean}</dt>
-                    <dd className="font-mono">{mc.mean.toFixed(2)}</dd>
+                    <dd className="font-mono">{mc.mean.toFixed(2)} mg/L</dd>
                   </div>
                   <div>
                     <dt className="text-xs text-muted">{t.mcSd}</dt>
-                    <dd className="font-mono">{mc.sd.toFixed(3)}</dd>
+                    <dd className="font-mono">{mc.sd.toFixed(3)} mg/L</dd>
                   </div>
                   <div>
                     <dt className="text-xs text-muted">{t.mcInterval}</dt>
                     <dd className="font-mono">
-                      [{mc.low.toFixed(2)}; {mc.high.toFixed(2)}]
+                      [{mc.low.toFixed(2)}; {mc.high.toFixed(2)}] mg/L
                     </dd>
                   </div>
                   <div>
                     <dt className="text-xs text-muted">{t.gumInterval}</dt>
                     <dd className="font-mono">
-                      [{(budget.y - budget.U).toFixed(2)}; {(budget.y + budget.U).toFixed(2)}]
+                      [{(budget.y - budget.U).toFixed(2)}; {(budget.y + budget.U).toFixed(2)}] mg/L
                     </dd>
                   </div>
                 </dl>

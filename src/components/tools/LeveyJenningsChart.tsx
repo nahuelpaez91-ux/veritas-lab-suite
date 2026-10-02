@@ -6,7 +6,17 @@ export type LjDatum = { run: string } & Record<string, number | string>;
 
 const COLORS = ['var(--color-accent)', '#7c3aed'];
 
-export function LeveyJenningsChart({ data, levels, title }: { data: LjDatum[]; levels: string[]; title: string }) {
+export function LeveyJenningsChart({
+  data,
+  levels,
+  title,
+  offScaleLabel,
+}: {
+  data: LjDatum[];
+  levels: string[];
+  title: string;
+  offScaleLabel: string;
+}) {
   return (
     <figure className="w-full">
       <figcaption className="mb-2 text-sm font-semibold">{title}</figcaption>
@@ -23,7 +33,17 @@ export function LeveyJenningsChart({ data, levels, title }: { data: LjDatum[]; l
             <ReferenceLine y={1} stroke="var(--color-line)" />
             <ReferenceLine y={-1} stroke="var(--color-line)" />
             <ReferenceLine y={0} stroke="var(--color-muted)" />
-            <Tooltip formatter={(v) => (typeof v === 'number' ? v.toFixed(2) : String(v))} />
+            <Tooltip
+              formatter={(value, name, item) => {
+                const payload = item?.payload as LjDatum | undefined;
+                const key = typeof item?.dataKey === 'string' ? item.dataKey : typeof name === 'string' ? name : undefined;
+                const real = payload && key ? payload[`${key}_real`] : undefined;
+                const shown = typeof real === 'number' ? real : value;
+                const text = typeof shown === 'number' ? shown.toFixed(2) : String(shown ?? '');
+                const clamped = typeof real === 'number' && typeof value === 'number' && real !== value;
+                return clamped ? `${text}${offScaleLabel}` : text;
+              }}
+            />
             <Legend />
             {levels.map((level, i) => (
               <Line

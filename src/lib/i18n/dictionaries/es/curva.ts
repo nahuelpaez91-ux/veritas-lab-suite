@@ -23,4 +23,6 @@ export const curva = {
   export: 'Exportar datos y residuos (CSV)',
   points: 'Puntos',
   fit: 'Recta ajustada',
+  exampleNote: 'Ejemplo: x en mg/L, y en absorbancia (unidades de señal).',
+  xUnits: '(unidades de x)',
 };

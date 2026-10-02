@@ -7,12 +7,12 @@ export function ScienceSection({ dict, science }: { dict: Dictionary; science: M
       <h2 id="science-title" className="text-xl font-semibold">
         {dict.module.science}
       </h2>
-      <div className="mt-3 grid gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-line bg-surface p-4">
+      <div className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="min-w-0 rounded-xl border border-line bg-surface p-4">
           <h3 className="text-sm font-semibold text-muted">{dict.module.formula}</h3>
           <pre className="mt-2 overflow-x-auto whitespace-pre font-mono text-xs leading-relaxed">{science.formula}</pre>
         </div>
-        <div className="rounded-xl border border-line bg-surface p-4">
+        <div className="min-w-0 rounded-xl border border-line bg-surface p-4">
           <h3 className="text-sm font-semibold text-muted">{dict.module.workedExample}</h3>
           <pre className="mt-2 overflow-x-auto whitespace-pre font-mono text-xs leading-relaxed">
             {science.workedExample}
