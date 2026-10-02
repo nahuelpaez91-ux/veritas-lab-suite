@@ -3,6 +3,8 @@ import type { informe as esInforme } from '../es/informe';
 export const informe: typeof esInforme = {
   released: 'Released samples: report ready',
   pending: 'Pending release',
+  pendingNone: 'No samples pending release.',
+  start: 'Start in Enlace',
   download: 'Download PDF report',
   generating: 'Generating…',
   error: 'The PDF could not be generated. Please try again.',

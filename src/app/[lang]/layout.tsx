@@ -59,7 +59,9 @@ export default async function LangLayout({
       <body className="min-h-screen antialiased">
         <LabStoreProvider>
           <SiteHeader lang={lang} dict={dict} />
-          <main>{children}</main>
+          <main id="contenido" tabIndex={-1} className="scroll-mt-28 focus:outline-none">
+            {children}
+          </main>
           <SiteFooter dict={dict} />
         </LabStoreProvider>
       </body>

@@ -25,7 +25,7 @@ export const enlace: typeof esEnlace = {
   },
   import: 'Load results into the system',
   imported: '{n} results loaded.',
-  next: 'Go to Quality control →',
+  next: 'Go to Quality control\u00a0→',
   issues: {
     missing_header: 'Missing H (header) record',
     no_specimen: 'Order record without specimen ID',

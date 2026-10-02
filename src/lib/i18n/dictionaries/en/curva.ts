@@ -27,4 +27,7 @@ export const curva: typeof esCurva = {
   fit: 'Fitted line',
   exampleNote: 'Example: x in mg/L, y in absorbance (signal units).',
   xUnits: '(x units)',
+  weightedExcluded: 'With weighting the blank (x = 0) was excluded.',
+  weightedExcludedMany: 'With weighting {n} points with x ≤ 0 were excluded.',
+  chartEmpty: 'No valid data to plot: check the standards.',
 };

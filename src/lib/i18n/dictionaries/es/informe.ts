@@ -1,6 +1,8 @@
 export const informe = {
   released: 'Muestras liberadas: informe listo',
   pending: 'Pendientes de liberación',
+  pendingNone: 'No hay muestras pendientes de liberación.',
+  start: 'Empezá en Enlace',
   download: 'Descargar informe PDF',
   generating: 'Generando…',
   error: 'No se pudo generar el PDF. Probá de nuevo.',

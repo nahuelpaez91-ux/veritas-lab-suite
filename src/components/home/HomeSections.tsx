@@ -32,6 +32,9 @@ const ctaSecondary =
 const textLink = 'underline decoration-line underline-offset-4 hover:text-accent hover:decoration-accent';
 const metaLabel = 'font-mono text-[0.625rem] font-medium uppercase tracking-[0.12em] text-muted';
 
+/** Espacio duro antes de la flecha final («Abrir módulo →») para que no quede sola en otra línea. */
+const keepArrow = (text: string) => text.replace(/ →$/, '\u00a0→');
+
 function SectionHead({ id, n, title, note }: { id: string; n: string; title: string; note?: string }) {
   return (
     <div className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 gap-y-1 border-b border-ink pb-2.5 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
@@ -71,7 +74,8 @@ export function HeroSheet({ lang, dict }: P) {
   ];
 
   return (
-    <section aria-labelledby="hero-title" className="mt-6 border border-ink bg-surface md:mt-10">
+    // Sin aria-labelledby: una <section> sin nombre no es landmark, así los <aside> internos no quedan anidados.
+    <section className="mt-6 border border-ink bg-surface md:mt-10">
       <dl
         aria-label={d.label}
         className="grid grid-cols-2 gap-px border-b border-ink bg-ink md:grid-cols-[minmax(0,1.8fr)_repeat(3,minmax(0,1fr))]"
@@ -103,8 +107,7 @@ export function HeroSheet({ lang, dict }: P) {
               width={480}
               height={480}
               alt={d.photoAlt}
-              unoptimized
-              priority
+              sizes="7rem"
               className="mt-2 aspect-square w-full border border-ink bg-bg object-cover p-[3px]"
             />
             <figcaption className="mt-2 font-mono text-[0.625rem] leading-snug text-muted">{d.photoCaption}</figcaption>
@@ -127,7 +130,7 @@ export function HeroSheet({ lang, dict }: P) {
                 width={480}
                 height={480}
                 alt={d.photoAlt}
-                unoptimized
+                sizes="5.5rem"
                 priority
                 className="aspect-square w-full border border-ink bg-bg object-cover p-[2px]"
               />
@@ -149,7 +152,7 @@ export function HeroSheet({ lang, dict }: P) {
           <p className="mt-6 max-w-[54ch] text-lg leading-relaxed md:text-xl">{t.subtitle}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href={`/${lang}/modulos/enlace`} className={ctaPrimary}>
-              {t.ctaFlow} <span aria-hidden="true">→</span>
+              {t.ctaFlow}&nbsp;<span aria-hidden="true">→</span>
             </Link>
             <Link href={`/${lang}/validacion`} className={ctaSecondary}>
               {t.ctaValidation}
@@ -219,7 +222,10 @@ export function Flow({ lang, dict }: P) {
                   {moduleCode[step.slug as ModuleSlug]}
                 </span>
               </span>
-              <span className="text-xl font-semibold leading-tight decoration-accent underline-offset-4 group-hover:underline">{step.title}</span>
+              {/* Mismo nombre que la tarjeta del módulo (fuente única: src/content/modules). */}
+              <span className="text-xl font-semibold leading-tight decoration-accent underline-offset-4 group-hover:underline">
+                {modules[step.slug as ModuleSlug]?.[lang].name ?? step.title}
+              </span>
               <span className="text-[0.9375rem] leading-relaxed">{step.text}</span>
             </Link>
           </li>
@@ -235,7 +241,8 @@ export function ModuleMatrix({ lang, dict }: P) {
     <section id="modulos" aria-labelledby="modules-title" className="mt-20 scroll-mt-24">
       <SectionHead id="modules-title" n={t.n} title={t.title} note={t.note} />
       <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">{t.subtitle}</p>
-      <ul className="mt-8 grid border-l border-t border-line sm:grid-cols-2 lg:grid-cols-3">
+      {/* Subgrid: las cinco filas de cada tarjeta se alinean entre tarjetas vecinas (la línea de «Referencia» queda pareja). */}
+      <ul className="mt-8 grid grid-cols-1 border-l border-t border-line sm:grid-cols-2 lg:grid-cols-3">
         {moduleOrder.map((slug) => {
           const m = modules[slug][lang];
           const v = testFileVerdict(m.verifiedAgainst.testPath);
@@ -248,21 +255,24 @@ export function ModuleMatrix({ lang, dict }: P) {
               </span>
             );
           return (
-            <li key={slug} className="border-b border-r border-line bg-surface">
-              <Link href={`/${lang}/modulos/${slug}`} className="group flex h-full flex-col gap-3 p-5 transition-colors hover:bg-accent-soft">
+            <li key={slug} className="row-span-5 grid grid-rows-subgrid border-b border-r border-line bg-surface">
+              <Link
+                href={`/${lang}/modulos/${slug}`}
+                className="group row-span-5 grid grid-rows-subgrid gap-3 p-5 transition-colors hover:bg-accent-soft"
+              >
                 <span className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 font-mono text-[0.6875rem]">
                   <span className="font-semibold tracking-[0.06em] text-accent">{moduleCode[slug]}</span>
                   <span className="uppercase tracking-[0.1em] text-muted">{m.area}</span>
                 </span>
                 <span className="text-2xl font-semibold leading-tight decoration-accent underline-offset-4 group-hover:underline">{m.name}</span>
-                <span className="grow text-[0.9375rem] leading-relaxed">{m.tagline}</span>
-                <span className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 border-t border-line pt-3 font-mono text-[0.6875rem] leading-snug text-muted">
+                <span className="text-[0.9375rem] leading-relaxed">{m.tagline}</span>
+                <span className="grid content-start grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 border-t border-line pt-3 font-mono text-[0.6875rem] leading-snug text-muted">
                   <span>{t.reference}</span>
                   <span className="text-ink">{m.verifiedAgainst.label}</span>
                   <span>{t.verdict}</span>
                   {verdict}
                 </span>
-                <span className="font-mono text-xs text-accent">{t.open}</span>
+                <span className="self-end font-mono text-xs text-accent">{keepArrow(t.open)}</span>
               </Link>
             </li>
           );
@@ -358,7 +368,7 @@ export function Credentials({ lang, dict }: P) {
         className="group mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border border-ink bg-surface px-5 py-4 transition-colors hover:border-accent hover:bg-accent-soft"
       >
         <span className="text-xl font-semibold leading-snug decoration-accent underline-offset-4 group-hover:text-accent group-hover:underline">
-          {t.all} <span aria-hidden="true">→</span>
+          {t.all}&nbsp;<span aria-hidden="true">→</span>
         </span>
         <span className="font-mono text-xs text-muted">{t.allNote}</span>
       </Link>
@@ -370,7 +380,7 @@ export function Credentials({ lang, dict }: P) {
               <li key={e.org} className="border-t border-line py-3.5 last:border-b">
                 <p className="flex items-baseline justify-between gap-4">
                   <span className="font-semibold">{e.title[lang]}</span>
-                  <span className="font-mono text-xs text-muted tabular-nums">{e.year}</span>
+                  <span className="shrink-0 text-right font-mono text-xs text-muted tabular-nums">{e.yearLabel?.[lang] ?? e.year}</span>
                 </p>
                 <p className="text-[0.9375rem]">{e.org}</p>
                 <p className="mt-1 text-sm leading-relaxed text-muted">{e.detail[lang]}</p>
@@ -414,7 +424,7 @@ export function Contact({ lang, dict }: P) {
     { k: t.email, v: profile.email, href: `mailto:${profile.email}` },
     { k: t.whatsapp, v: profile.phone, href: profile.whatsappUrl },
     { k: t.github, v: profile.github.replace('https://', ''), href: profile.github },
-    { k: t.cv, v: t.cvLink, href: `/${lang}/cv/${lang === 'en' ? 'global' : 'nacional'}` },
+    { k: t.cv, v: keepArrow(t.cvLink), href: `/${lang}/cv/${lang === 'en' ? 'global' : 'nacional'}` },
   ];
   return (
     <section aria-labelledby="contact-title" className="mt-24 border border-ink bg-surface">
@@ -430,7 +440,7 @@ export function Contact({ lang, dict }: P) {
           {rows.map((r) => (
             <div key={r.k} className="grid grid-cols-[6rem_minmax(0,1fr)] gap-x-3 border-t border-line py-2.5 last:border-b">
               <dt className="text-muted">{r.k}</dt>
-              <dd className="break-all">
+              <dd className="min-w-0 [overflow-wrap:anywhere]">
                 {r.href.startsWith('/') ? (
                   <Link className={textLink} href={r.href}>
                     {r.v}

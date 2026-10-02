@@ -29,8 +29,14 @@ export function ScienceSection({
               <b className="mr-2 font-mono text-xs font-semibold text-accent">{box.tag}</b>
               {box.title}
             </figcaption>
-            <pre className="mt-3 overflow-x-auto border-t border-dashed border-line pt-3 font-mono text-xs leading-relaxed whitespace-pre">
-              {box.body}
+            {/* Una línea por renglón: se respeta la alineación monoespaciada y, si no entra, el renglón
+                se ajusta con sangría francesa en vez de recortarse o exigir desplazamiento horizontal. */}
+            <pre className="mt-3 border-t border-dashed border-line pt-3 font-mono text-xs leading-relaxed whitespace-pre-wrap [overflow-wrap:anywhere]">
+              {box.body.split('\n').map((line, i) => (
+                <span key={i} className="block pl-[2ch] -indent-[2ch]">
+                  {line}
+                </span>
+              ))}
             </pre>
           </figure>
         ))}

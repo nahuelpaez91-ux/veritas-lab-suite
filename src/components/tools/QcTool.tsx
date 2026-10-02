@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useMemo, useState, type FormEvent } from 'react';
 import { formatLabError, useLab } from '@/components/lab/LabStoreProvider';
 import { runTone, StatusChip } from '@/components/lab/StatusChip';
@@ -10,8 +11,16 @@ import { addQcRun } from '@/lib/lims/actions';
 import { analytesOf, runsFor, targetsFor, violationsFor } from '@/lib/lims/qc';
 import { runStatus, sigmaMetric, zScore } from '@/lib/science/westgard';
 import { AssistButton } from './AssistButton';
-import { LeveyJenningsChart, type LjDatum } from './LeveyJenningsChart';
+import { figCaption, figTag } from './chartStyle';
+import type { LjDatum } from './LeveyJenningsChart';
+import { ChartPlaceholder, ToolLoading, WhenVisible } from './Placeholders';
 import type { ToolProps } from './registry';
+
+// Recharts se carga solo en esta ruta (y en las demás que grafican), no en el bundle compartido.
+const LeveyJenningsChart = dynamic(() => import('./LeveyJenningsChart').then((m) => m.LeveyJenningsChart), {
+  ssr: false,
+  loading: () => <ChartPlaceholder className="h-72" />,
+});
 
 export function QcTool({ dict, lang }: ToolProps) {
   const t = dict.tools.qc;
@@ -51,7 +60,7 @@ export function QcTool({ dict, lang }: ToolProps) {
     return { analytes: analytesOf(state), targets, runs, chart, rows };
   }, [state, analyte]);
 
-  if (!state || !view) return <p className="text-muted">{dict.demoBar.loading}</p>;
+  if (!state || !view) return <ToolLoading text={dict.demoBar.loading} className="min-h-[130rem] sm:min-h-[105rem] lg:min-h-[78rem]" />;
 
   const first = view.targets[0];
   const cvTarget = first ? (first.sd / first.mean) * 100 : null;
@@ -93,8 +102,8 @@ export function QcTool({ dict, lang }: ToolProps) {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-        <div className={`${card} space-y-4`}>
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <div className={`${card} min-w-0 space-y-4`}>
           <label className={label}>
             {t.analyte}
             <select
@@ -144,13 +153,16 @@ export function QcTool({ dict, lang }: ToolProps) {
             </div>
           </div>
         </div>
-        <div className={card}>
-          <LeveyJenningsChart
-            data={view.chart}
-            levels={view.targets.map((tg) => tg.level)}
-            title={t.chartTitle}
-            offScaleLabel={t.offScale}
-          />
+        <div className={`${card} min-w-0`}>
+          <figure className="w-full">
+            <figcaption className={figCaption}>
+              <b className={figTag}>Fig. 2-a</b>
+              {t.chartTitle}
+            </figcaption>
+            <WhenVisible placeholder={<ChartPlaceholder className="h-72" />}>
+              <LeveyJenningsChart data={view.chart} levels={view.targets.map((tg) => tg.level)} offScaleLabel={t.offScale} />
+            </WhenVisible>
+          </figure>
         </div>
       </div>
 
@@ -166,35 +178,37 @@ export function QcTool({ dict, lang }: ToolProps) {
             <thead>
               <tr>
                 <th>{t.run}</th>
+                <th>{t.status}</th>
                 <th>{t.date}</th>
                 {view.targets.map((tg) => (
-                  <th key={tg.level}>{tg.level} (z)</th>
+                  <th key={tg.level} className="whitespace-nowrap">
+                    {tg.level} (z)
+                  </th>
                 ))}
                 <th>{t.rules}</th>
-                <th>{t.status}</th>
                 <th>{t.corrective}</th>
               </tr>
             </thead>
             <tbody>
               {view.rows.map(({ run: r, status, rules }) => (
                 <tr key={r.id}>
-                  <td className="font-mono">{r.id}</td>
-                  <td className="font-mono text-xs">{r.at.replace('T', ' ')}</td>
-                  {view.targets.map((tg) => {
-                    const p = r.points.find((x) => x.level === tg.level);
-                    return (
-                      <td key={tg.level} className="font-mono">
-                        {p ? `${p.value} (${zScore(p.value, tg).toFixed(2)})` : t.none}
-                      </td>
-                    );
-                  })}
-                  <td className="font-mono">{rules.join(', ') || t.none}</td>
+                  <td className="whitespace-nowrap font-mono">{r.id}</td>
                   <td>
                     <StatusChip tone={runTone(status)} testId={`run-status-${r.id}`}>
                       {dict.runStatus[status]}
                     </StatusChip>
                   </td>
-                  <td className="text-xs">{r.correctiveAction ?? t.none}</td>
+                  <td className="whitespace-nowrap font-mono text-xs">{r.at.replace('T', ' ')}</td>
+                  {view.targets.map((tg) => {
+                    const p = r.points.find((x) => x.level === tg.level);
+                    return (
+                      <td key={tg.level} className="whitespace-nowrap font-mono">
+                        {p ? `${p.value} (${zScore(p.value, tg).toFixed(2)})` : t.none}
+                      </td>
+                    );
+                  })}
+                  <td className="whitespace-nowrap font-mono">{rules.join(', ') || t.none}</td>
+                  <td className="min-w-[12rem] text-xs">{r.correctiveAction ?? t.none}</td>
                 </tr>
               ))}
             </tbody>
@@ -227,7 +241,7 @@ export function QcTool({ dict, lang }: ToolProps) {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-2">
         <form onSubmit={onAddRun} className={`${card} space-y-3`}>
           <h2 className="font-semibold">{t.newRun}</h2>
           <div className="grid gap-3 sm:grid-cols-2">

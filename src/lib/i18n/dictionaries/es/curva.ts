@@ -3,7 +3,7 @@ export const curva = {
   weighting: 'Ponderación',
   weights: { none: 'Sin ponderar', '1/x': '1/x', '1/x2': '1/x²' },
   slope: 'Pendiente (b)',
-  intercept: 'Ordenada (a)',
+  intercept: 'Ordenada al origen (a)',
   r2: 'R²',
   syx: 's y/x',
   lod: 'LOD (3,3·s/b)',
@@ -25,4 +25,7 @@ export const curva = {
   fit: 'Recta ajustada',
   exampleNote: 'Ejemplo: x en mg/L, y en absorbancia (unidades de señal).',
   xUnits: '(unidades de x)',
+  weightedExcluded: 'Con ponderación se excluyó el blanco (x = 0).',
+  weightedExcludedMany: 'Con ponderación se excluyeron {n} puntos con x ≤ 0.',
+  chartEmpty: 'Sin datos válidos para graficar: revisá los estándares.',
 };

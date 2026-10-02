@@ -23,7 +23,7 @@ export const enlace = {
   },
   import: 'Ingresar resultados al sistema',
   imported: '{n} resultados ingresados.',
-  next: 'Ir a Control de calidad →',
+  next: 'Ir a Control de calidad\u00a0→',
   issues: {
     missing_header: 'Falta el registro H (encabezado)',
     no_specimen: 'Registro de orden sin ID de muestra',

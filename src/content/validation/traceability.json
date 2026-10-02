@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T20:53:01.252Z",
-  "commit": "bb772a6",
+  "generatedAt": "2026-10-02T21:31:06.346Z",
+  "commit": "46cca6f",
   "tests": [
     {
       "ids": [
@@ -412,22 +412,6 @@
     },
     {
       "ids": [
-        "EXP-URS-01"
-      ],
-      "title": "CSV con escape de comillas, comas, saltos de línea y celdas vacías",
-      "file": "src/lib/export/csv.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "EXP-URS-02"
-      ],
-      "title": "neutraliza fórmulas pero no números negativos",
-      "file": "src/lib/export/csv.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
         "ENL-URS-01"
       ],
       "title": "interpreta registros H, P, O, R y L del ejemplo",
@@ -496,6 +480,22 @@
       ],
       "title": "HL7 con marco MLLP y varios pacientes",
       "file": "src/lib/lis/hl7.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "EXP-URS-01"
+      ],
+      "title": "CSV con escape de comillas, comas, saltos de línea y celdas vacías",
+      "file": "src/lib/export/csv.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "EXP-URS-02"
+      ],
+      "title": "neutraliza fórmulas pero no números negativos",
+      "file": "src/lib/export/csv.test.ts",
       "status": "passed"
     }
   ]

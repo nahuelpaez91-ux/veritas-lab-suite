@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useState, type FormEvent } from 'react';
 import { formatLabError, useLab } from '@/components/lab/LabStoreProvider';
@@ -13,6 +14,7 @@ import type { SampleStatus, SignatureMeaning } from '@/lib/lims/model';
 import { statusOfRun } from '@/lib/lims/qc';
 import { checkRelease } from '@/lib/lims/release';
 import { findUser } from '@/lib/lims/users';
+import { ToolLoading } from './Placeholders';
 import type { ToolProps } from './registry';
 
 const sampleTone: Record<SampleStatus, ChipTone> = {
@@ -30,7 +32,7 @@ function actorLabel(actor: string, systemLabel: string): string {
   return findUser(actor)?.name ?? actor;
 }
 
-export function CustodiaTool({ dict }: ToolProps) {
+export function CustodiaTool({ dict, lang }: ToolProps) {
   const t = dict.tools.custodia;
   const { state, run } = useLab();
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -71,7 +73,7 @@ export function CustodiaTool({ dict }: ToolProps) {
     };
   }, [selectedId]);
 
-  if (!state) return <p className="text-muted">{dict.demoBar.loading}</p>;
+  if (!state) return <ToolLoading text={dict.demoBar.loading} className="min-h-[86rem] sm:min-h-[60rem] lg:min-h-[40rem]" />;
   const lab = state;
   const sample = lab.samples.find((s) => s.id === selectedId) ?? null;
   const results = sample ? lab.results.filter((r) => r.sampleId === sample.id) : [];
@@ -119,8 +121,8 @@ export function CustodiaTool({ dict }: ToolProps) {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-        <div className="space-y-6">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <div className="min-w-0 space-y-6">
           <div className={card}>
             <h2 className="font-semibold">{t.samples}</h2>
             {lab.samples.length === 0 ? (
@@ -143,7 +145,7 @@ export function CustodiaTool({ dict }: ToolProps) {
                           <button
                             type="button"
                             data-testid={`sample-${s.id}`}
-                            className="font-mono text-accent underline"
+                            className="whitespace-nowrap font-mono text-accent underline"
                             onClick={() => {
                               setSelectedId(s.id);
                               setMessage(null);
@@ -198,9 +200,25 @@ export function CustodiaTool({ dict }: ToolProps) {
           </form>
         </div>
 
-        <div className={card}>
+        <div className={`${card} min-w-0`}>
           {!sample ? (
-            <p className="text-sm text-muted">{t.select}</p>
+            <div className="grid h-full content-center gap-3 border border-dashed border-line p-5 text-sm" data-testid="custodia-empty">
+              <h2 className="font-semibold">{t.emptyTitle}</h2>
+              <p className="text-muted">{t.select}</p>
+              <ol className="grid gap-2">
+                {t.emptySteps.map((step, i) => (
+                  <li key={step} className="grid grid-cols-[1.75rem_minmax(0,1fr)] leading-relaxed">
+                    <span className="font-mono text-xs leading-6 text-accent">{String(i + 1).padStart(2, '0')}</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              <p>
+                <Link href={`/${lang}/modulos/enlace`} className="font-mono text-ink underline decoration-accent underline-offset-4 hover:text-accent">
+                  {t.emptyLink}&nbsp;<span aria-hidden="true">→</span>
+                </Link>
+              </p>
+            </div>
           ) : (
             <div className="space-y-4">
               <div className="flex flex-wrap items-start justify-between gap-4">

@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { VertexMark } from '@/components/brand/VertexMark';
-import { Signature } from '@/components/layout/Signature';
 import { profile } from '@/content/profile';
 import { isLocale } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
@@ -68,8 +67,8 @@ export default async function AboutPage({ params }: { params: Params }) {
             width={800}
             height={600}
             alt={t.photoAlt}
-            unoptimized
             priority
+            sizes="(min-width: 768px) 26rem, calc(100vw - 2rem)"
             className="aspect-[4/3] w-full border border-ink bg-surface object-cover p-1"
           />
           <figcaption className="mt-2 font-mono text-[0.6875rem] leading-snug text-muted">{t.photoCaption}</figcaption>
@@ -118,7 +117,7 @@ export default async function AboutPage({ params }: { params: Params }) {
             {t.other.map((o) => (
               <li key={o.href} className="border-b border-line py-3">
                 <a className={`text-lg font-semibold ${textLink}`} href={o.href}>
-                  {o.label} <span aria-hidden="true">→</span>
+                  {o.label}&nbsp;<span aria-hidden="true">→</span>
                 </a>
                 <p className="mt-0.5 break-all font-mono text-xs text-muted">{o.href.replace('https://', '')}</p>
               </li>
@@ -128,8 +127,9 @@ export default async function AboutPage({ params }: { params: Params }) {
       </div>
 
       <section aria-labelledby="about-contact-title" className="mt-20 border border-ink bg-surface">
-        <div className="grid gap-10 p-6 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:p-10">
-          <div>
+        {/* La firma ya está en el pie de página: aquí solo los datos de contacto. */}
+        <div className="p-6 md:p-10">
+          <div className="max-w-3xl">
             <h2 id="about-contact-title" className={metaLabel}>
               {t.contactTitle}
             </h2>
@@ -144,9 +144,6 @@ export default async function AboutPage({ params }: { params: Params }) {
               </a>
               <span className="text-muted"> · {profile.location}</span>
             </p>
-          </div>
-          <div className="md:self-end">
-            <Signature dict={dict} />
           </div>
         </div>
       </section>

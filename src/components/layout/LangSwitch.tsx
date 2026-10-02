@@ -12,8 +12,9 @@ export function LangSwitch({ lang, label }: { lang: Locale; label: string }) {
     <Link
       href={target}
       hrefLang={other}
-      aria-label={label}
-      className="border border-ink px-2 py-0.5 font-mono text-xs uppercase tracking-wider hover:border-accent hover:bg-accent hover:text-accent-ink"
+      // El nombre accesible empieza con el texto visible (WCAG 2.5.3, etiqueta en el nombre).
+      aria-label={`${other.toUpperCase()} · ${label}`}
+      className="inline-flex min-h-7 shrink-0 items-center border border-ink px-2 py-0.5 font-mono text-xs uppercase tracking-wider hover:border-accent hover:bg-accent hover:text-accent-ink"
     >
       {other}
     </Link>

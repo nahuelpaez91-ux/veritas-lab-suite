@@ -37,8 +37,8 @@ export function EnlaceTool({ dict, lang }: ToolProps) {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-      <div className={card}>
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+      <div className={`${card} min-w-0`}>
         <div className="flex flex-wrap gap-2">
           <button type="button" data-testid="load-astm-example" className={btnSecondary} onClick={() => load(ASTM_EXAMPLE)}>
             {t.loadAstm}
@@ -78,7 +78,7 @@ export function EnlaceTool({ dict, lang }: ToolProps) {
         </button>
       </div>
 
-      <div className={card}>
+      <div className={`${card} min-w-0`}>
         {!outcome ? (
           <p className="text-sm text-muted">{t.empty}</p>
         ) : (
@@ -89,7 +89,9 @@ export function EnlaceTool({ dict, lang }: ToolProps) {
               </StatusChip>
               {outcome.sender && (
                 <StatusChip tone="neutral">
-                  {t.sender}: {outcome.sender}
+                  <span className="break-all">
+                    {t.sender}: {outcome.sender}
+                  </span>
                 </StatusChip>
               )}
             </div>
@@ -126,17 +128,17 @@ export function EnlaceTool({ dict, lang }: ToolProps) {
                 <tbody>
                   {outcome.results.map((r) => (
                     <tr key={`${r.specimenId}:${r.testCode}`} data-testid="parsed-row">
-                      <td className="font-mono">{r.specimenId}</td>
-                      <td>
-                        {r.patientName} <span className="text-muted">({r.patientId})</span>
+                      <td className="whitespace-nowrap font-mono">{r.specimenId}</td>
+                      <td className="min-w-[9rem]">
+                        {r.patientName} <span className="whitespace-nowrap text-muted">({r.patientId})</span>
                       </td>
-                      <td className="font-mono">{r.testCode}</td>
-                      <td className="font-mono">{r.loinc ?? '—'}</td>
+                      <td className="whitespace-nowrap font-mono">{r.testCode}</td>
+                      <td className="whitespace-nowrap font-mono">{r.loinc ?? '—'}</td>
                       <td className="font-mono">{r.rawValue}</td>
-                      <td>{r.units}</td>
-                      <td>{r.referenceRange}</td>
+                      <td className="whitespace-nowrap">{r.units}</td>
+                      <td className="whitespace-nowrap">{r.referenceRange}</td>
                       <td>{r.flag}</td>
-                      <td className="font-mono text-xs">{r.completedAt ?? '—'}</td>
+                      <td className="whitespace-nowrap font-mono text-xs">{r.completedAt ?? '—'}</td>
                     </tr>
                   ))}
                 </tbody>

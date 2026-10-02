@@ -12,6 +12,13 @@ export const custodia: typeof esCustodia = {
   samples: 'Samples',
   noSamples: 'No samples yet: load results from Enlace or register a sample.',
   select: 'Select a sample to see its details.',
+  emptyTitle: 'No sample selected',
+  emptySteps: [
+    'Import analyzer results in Enlace (or register a sample manually).',
+    'Pick a sample from the list to see its results, pre-release check and timeline.',
+    'Sign “reviewed” and then “approved” to release it.',
+  ],
+  emptyLink: 'Go to Enlace',
   status: 'Status',
   revision: 'Rev.',
   results: 'Results',

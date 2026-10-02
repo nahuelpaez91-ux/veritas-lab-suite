@@ -1,14 +1,28 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Fragment, type ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { Seal } from '@/components/brand/Seal';
 import { PrintButton } from '@/components/ui/PrintButton';
+import { btnSecondary } from '@/components/ui/styles';
 import { audiences, cvPdfName, getCv, isAudience } from '@/content/cv';
 import { validationSummary } from '@/content/validation/summary';
 import { isLocale } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
 
 type Params = Promise<{ lang: string; audience: string }>;
+
+/** Espacios duros dentro de cada dato y puntos de corte (<wbr>) tras «.», «-» y «/» para URLs largas. */
+function contactLabel(label: string): ReactNode {
+  return label
+    .split(/(?<=[./-])/)
+    .map((part, i) => (
+      <Fragment key={i}>
+        {i > 0 && <wbr />}
+        {part.replace(/ /g, '\u00a0')}
+      </Fragment>
+    ));
+}
 
 export const dynamicParams = false;
 
@@ -31,23 +45,28 @@ export default async function CvPage({ params }: { params: Params }) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-8 text-[15px] leading-snug print:max-w-none print:px-0 print:py-0 print:text-[9pt] print:leading-[1.25]">
-      <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm print:hidden" aria-label={t.variant}>
-        <span className="font-mono text-xs uppercase tracking-[0.1em] text-muted">{t.variant}</span>
-        {audiences.map((a) => (
-          <Link
-            key={a}
-            href={`/${lang}/cv/${a}`}
-            aria-current={a === audience ? 'page' : undefined}
-            className={`border px-3 py-1 font-mono text-xs ${a === audience ? 'border-ink bg-ink text-surface' : 'border-line hover:border-ink'}`}
-          >
-            {t.audiences[a]}
-          </Link>
-        ))}
-        <a className="ml-auto font-mono text-accent underline underline-offset-2" href={`/cv/${cvPdfName(audience, lang)}`} download>
-          {t.download}
-        </a>
-        <PrintButton label={t.print} />
-      </nav>
+      {/* Barra de herramientas: versión del CV a la izquierda, acciones a la derecha; se parte en dos filas limpias. */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-line pb-4 text-sm print:hidden">
+        <nav className="flex flex-wrap items-center gap-2" aria-label={t.variant}>
+          <span className="font-mono text-xs uppercase tracking-[0.1em] text-muted">{t.variant}</span>
+          {audiences.map((a) => (
+            <Link
+              key={a}
+              href={`/${lang}/cv/${a}`}
+              aria-current={a === audience ? 'page' : undefined}
+              className={`inline-flex min-h-8 items-center border px-3 py-1 font-mono text-xs ${a === audience ? 'border-ink bg-ink text-surface' : 'border-line hover:border-ink'}`}
+            >
+              {t.audiences[a]}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex flex-wrap items-center gap-2">
+          <a className={btnSecondary} href={`/cv/${cvPdfName(audience, lang)}`} download>
+            {t.download}
+          </a>
+          <PrintButton label={t.print} />
+        </div>
+      </div>
 
       <header className="print:mb-1">
         <p className="flex flex-wrap justify-between gap-x-4 border-b border-ink pb-1 font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted print:text-[7pt]">
@@ -66,15 +85,16 @@ export default async function CvPage({ params }: { params: Params }) {
           <Seal variant="compact" decorative className="h-12 w-12 shrink-0 text-accent print:h-10 print:w-10 print:text-black" />
         </div>
         <p className="mt-2 text-sm print:mt-1 print:text-[8pt]">
+          {/* El renglón se parte en los « · »; dentro de un dato solo después de «.», «-» o «/» (nunca a mitad de palabra). */}
           {cv.contact.map((c, i) => (
             <span key={c.label}>
               {i > 0 && ' · '}
               {c.href ? (
                 <a className="hover:underline" href={c.href}>
-                  {c.label}
+                  {contactLabel(c.label)}
                 </a>
               ) : (
-                c.label
+                contactLabel(c.label)
               )}
             </span>
           ))}

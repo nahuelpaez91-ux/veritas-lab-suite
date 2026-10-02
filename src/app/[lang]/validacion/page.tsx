@@ -13,6 +13,11 @@ import { getDictionary } from '@/lib/i18n/get-dictionary';
 
 type Params = Promise<{ lang: string }>;
 type TraceTest = { ids: string[]; title: string; file: string; status: string };
+type Risk = 'high' | 'medium' | 'low';
+
+const riskTone = { high: 'danger', medium: 'warn', low: 'neutral' } as const;
+// Evidencia: texto en tinta, subrayado en lacre (el lacre se reserva para el acento, no para párrafos enteros).
+const evidenceLink = 'text-ink underline decoration-accent/60 underline-offset-2 hover:text-accent hover:decoration-accent';
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { lang } = await params;
@@ -27,7 +32,13 @@ export default async function ValidationPage({ params }: { params: Params }) {
   const tests = traceability.tests as TraceTest[];
   const passed = tests.filter((x) => x.status === 'passed').length;
   const failed = tests.length - passed;
-  const riskOf = (rpn: number) => (rpn >= 12 ? 'high' : rpn >= 6 ? 'medium' : 'low') as 'high' | 'medium' | 'low';
+  const riskOf = (rpn: number): Risk => (rpn >= 12 ? 'high' : rpn >= 6 ? 'medium' : 'low');
+  const rows = URS.map((u) => {
+    const rpn = u.s * u.p * u.d;
+    const evidence = tests.filter((x) => x.ids.includes(u.id));
+    const ok = evidence.length > 0 && evidence.every((x) => x.status === 'passed');
+    return { u, rpn, risk: riskOf(rpn), evidence, ok, verdict: ok ? t.passed : evidence.length === 0 ? t.noEvidence : t.failed };
+  });
 
   const summary = validationSummary();
   const hasRun = Boolean(traceability.generatedAt);
@@ -110,7 +121,46 @@ export default async function ValidationPage({ params }: { params: Params }) {
       <section aria-labelledby="urs-title">
         <SectionHead n="3" id="urs-title" title={t.ursTitle} note={`${URS.length} URS`} />
         <p className="mt-2 font-mono text-xs text-muted">{t.riskLegend}</p>
-        <div className={`${tableWrap} mt-3`}>
+        <p className="mt-1 text-xs text-muted">{t.testNamesNote}</p>
+
+        {/* Móvil: una ficha por requisito. */}
+        <ol className="mt-3 grid gap-3 md:hidden">
+          {rows.map((r) => (
+            <li key={r.u.id} className="border border-line bg-surface p-3 text-sm">
+              <p className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-xs font-semibold text-accent">{r.u.id}</span>
+                <StatusChip tone={riskTone[r.risk]}>{t.risk[r.risk]}</StatusChip>
+              </p>
+              <p className="mt-1.5 leading-snug">{r.u[lang]}</p>
+              <p className="mt-2 font-mono text-xs text-muted">
+                {t.cols.s} {r.u.s} · {t.cols.p} {r.u.p} · {t.cols.d} {r.u.d} · {t.cols.rpn} <span className="font-semibold text-ink">{r.rpn}</span>
+              </p>
+              <div className="mt-2 border-t border-dashed border-line pt-2">
+                <p className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-muted">{t.cols.tests}</p>
+                {r.evidence.length === 0 ? (
+                  <p className="mt-1 text-xs">{t.noEvidence}</p>
+                ) : (
+                  <ul className="mt-1 grid gap-1 text-xs">
+                    {r.evidence.map((x) => (
+                      <li key={x.title}>
+                        <a className={evidenceLink} href={`${profile.repo}/blob/main/${x.file}`}>
+                          {x.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <p className="mt-2 flex items-center gap-2">
+                <span className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-muted">{t.cols.status}</span>
+                <StatusChip tone={r.ok ? 'ok' : 'danger'}>{r.verdict}</StatusChip>
+              </p>
+            </li>
+          ))}
+        </ol>
+
+        {/* Desde md: matriz completa. */}
+        <div className={`${tableWrap} mt-3 hidden [--hint-bg:var(--color-bg)] md:block`}>
           <table className={`${table} text-xs`}>
             <thead>
               <tr>
@@ -126,37 +176,31 @@ export default async function ValidationPage({ params }: { params: Params }) {
               </tr>
             </thead>
             <tbody>
-              {URS.map((u) => {
-                const rpn = u.s * u.p * u.d;
-                const risk = riskOf(rpn);
-                const evidence = tests.filter((x) => x.ids.includes(u.id));
-                const ok = evidence.length > 0 && evidence.every((x) => x.status === 'passed');
-                return (
-                  <tr key={u.id}>
-                    <td className="font-mono whitespace-nowrap">{u.id}</td>
-                    <td>{u[lang]}</td>
-                    <td>{u.s}</td>
-                    <td>{u.p}</td>
-                    <td>{u.d}</td>
-                    <td className="font-mono">{rpn}</td>
-                    <td>
-                      <StatusChip tone={risk === 'high' ? 'danger' : risk === 'medium' ? 'warn' : 'neutral'}>{t.risk[risk]}</StatusChip>
-                    </td>
-                    <td>
-                      {evidence.length === 0
-                        ? t.noEvidence
-                        : evidence.map((x) => (
-                            <a key={x.title} className="block text-accent underline-offset-2 hover:underline" href={`${profile.repo}/blob/main/${x.file}`}>
-                              {x.title}
-                            </a>
-                          ))}
-                    </td>
-                    <td>
-                      <StatusChip tone={ok ? 'ok' : 'danger'}>{ok ? t.passed : evidence.length === 0 ? t.noEvidence : t.failed}</StatusChip>
-                    </td>
-                  </tr>
-                );
-              })}
+              {rows.map((r) => (
+                <tr key={r.u.id}>
+                  <td className="font-mono whitespace-nowrap">{r.u.id}</td>
+                  <td className="min-w-[14rem]">{r.u[lang]}</td>
+                  <td>{r.u.s}</td>
+                  <td>{r.u.p}</td>
+                  <td>{r.u.d}</td>
+                  <td className="font-mono">{r.rpn}</td>
+                  <td>
+                    <StatusChip tone={riskTone[r.risk]}>{t.risk[r.risk]}</StatusChip>
+                  </td>
+                  <td className="min-w-[12rem]">
+                    {r.evidence.length === 0
+                      ? t.noEvidence
+                      : r.evidence.map((x) => (
+                          <a key={x.title} className={`block ${evidenceLink}`} href={`${profile.repo}/blob/main/${x.file}`}>
+                            {x.title}
+                          </a>
+                        ))}
+                  </td>
+                  <td>
+                    <StatusChip tone={r.ok ? 'ok' : 'danger'}>{r.verdict}</StatusChip>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -166,7 +210,7 @@ export default async function ValidationPage({ params }: { params: Params }) {
         <SectionHead n="4" id="change-title" title={t.changeTitle} />
         <p className="mt-3 max-w-3xl text-[0.95rem] leading-relaxed">{t.change}</p>
         <a className="mt-2 inline-block font-mono text-sm text-accent underline-offset-2 hover:underline" href={`${profile.repo}/commits/main`}>
-          {t.changeLink} →
+          {t.changeLink}&nbsp;<span aria-hidden="true">→</span>
         </a>
       </section>
     </div>

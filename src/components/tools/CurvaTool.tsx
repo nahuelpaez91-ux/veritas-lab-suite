@@ -1,12 +1,23 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
-import { CartesianGrid, ComposedChart, Line, ReferenceLine, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { btnSecondary, card, input, label } from '@/components/ui/styles';
 import { downloadText, toCsv } from '@/lib/export/csv';
 import { detectionLimits, fitCalibration, inversePredict, type Weighting } from '@/lib/science/calibration';
-import { chartTick, chartTooltip, figCaption, figTag } from './chartStyle';
+import { figCaption, figTag } from './chartStyle';
+import { ChartPlaceholder, WhenVisible } from './Placeholders';
 import type { ToolProps } from './registry';
+
+// Recharts viaja solo con esta herramienta (next/dynamic, sin SSR); el marcador conserva la altura.
+const CalibrationChart = dynamic(() => import('./CurvaCharts').then((m) => m.CalibrationChart), {
+  ssr: false,
+  loading: () => <ChartPlaceholder className="h-64" />,
+});
+const ResidualsChart = dynamic(() => import('./CurvaCharts').then((m) => m.ResidualsChart), {
+  ssr: false,
+  loading: () => <ChartPlaceholder className="h-40" />,
+});
 
 // Ejemplo sintético: absorbancia vs concentración (mg/L)
 const DEFAULT_DATA = '0, 0.002\n2, 0.101\n4, 0.198\n6, 0.304\n8, 0.399\n10, 0.502';
@@ -35,11 +46,15 @@ export function CurvaTool({ dict }: ToolProps) {
   const [replicates, setReplicates] = useState('1');
 
   const result = useMemo(() => {
-    const pairs = parsePairs(text);
-    if (!pairs) return null;
+    const parsed = parsePairs(text);
+    if (!parsed) return null;
+    // Con ponderación 1/x o 1/x² el peso de x ≤ 0 no está definido: esos puntos (el blanco) quedan fuera del ajuste.
+    const keep = parsed.x.map((x) => weighting === 'none' || x > 0);
+    const pairs = { x: parsed.x.filter((_, i) => keep[i]), y: parsed.y.filter((_, i) => keep[i]) };
+    const excluded = parsed.x.filter((_, i) => !keep[i]);
     try {
       const fit = fitCalibration(pairs.x, pairs.y, weighting);
-      return { fit, limits: detectionLimits(fit) }; // limits = null en regresión ponderada
+      return { fit, limits: detectionLimits(fit), excluded }; // limits = null en regresión ponderada
     } catch {
       return null;
     }
@@ -64,8 +79,8 @@ export function CurvaTool({ dict }: ToolProps) {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-        <div className={`${card} space-y-3`}>
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <div className={`${card} min-w-0 space-y-3`}>
           <label className={label}>
             {t.data}
             <textarea
@@ -92,8 +107,15 @@ export function CurvaTool({ dict }: ToolProps) {
               {t.parseError}
             </p>
           )}
+          {result && result.excluded.length > 0 && (
+            <p role="status" data-testid="curva-excluded" className="text-xs text-warn">
+              {result.excluded.length === 1 && result.excluded[0] === 0
+                ? t.weightedExcluded
+                : t.weightedExcludedMany.replace('{n}', String(result.excluded.length))}
+            </p>
+          )}
           {result && (
-            <dl className="grid grid-cols-2 gap-2 text-sm" data-testid="curva-results">
+            <dl className="grid grid-cols-1 gap-x-4 gap-y-2 text-sm min-[22rem]:grid-cols-2" data-testid="curva-results">
               {[
                 [t.slope, `${fmt(result.fit.slope)} ± ${fmt(result.fit.seSlope)}`],
                 [t.intercept, `${fmt(result.fit.intercept)} ± ${fmt(result.fit.seIntercept)}`],
@@ -104,7 +126,7 @@ export function CurvaTool({ dict }: ToolProps) {
               ].map(([k, v]) => (
                 <div key={k} className="border-t border-line pt-1.5">
                   <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted">{k}</dt>
-                  <dd className="font-mono">{v}</dd>
+                  <dd className="break-words font-mono">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -114,42 +136,32 @@ export function CurvaTool({ dict }: ToolProps) {
           </button>
         </div>
 
-        <div className={`${card} space-y-4`}>
+        <div className={`${card} min-w-0 space-y-4`}>
           <figure>
             <figcaption className={figCaption}>
               <b className={figTag}>Fig. 2-a</b>
               {t.chart}
             </figcaption>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={chartData} margin={{ top: 8, right: 16, bottom: 4, left: -8 }}>
-                  <CartesianGrid stroke="var(--color-line)" strokeDasharray="1 3" />
-                  <XAxis type="number" dataKey="x" tick={chartTick} stroke="var(--color-line)" />
-                  <YAxis tick={chartTick} stroke="var(--color-line)" />
-                  <Tooltip {...chartTooltip} />
-                  <Line dataKey="fit" name={t.fit} stroke="var(--color-ink)" strokeWidth={1.4} dot={false} isAnimationActive={false} />
-                  <Scatter dataKey="y" name={t.points} fill="var(--color-accent)" shape="square" isAnimationActive={false} />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
+            {result ? (
+              <WhenVisible placeholder={<ChartPlaceholder className="h-64" />}>
+                <CalibrationChart data={chartData} fitLabel={t.fit} pointsLabel={t.points} />
+              </WhenVisible>
+            ) : (
+              <ChartPlaceholder className="h-64" text={t.chartEmpty} />
+            )}
           </figure>
           <figure>
             <figcaption className={figCaption}>
               <b className={figTag}>Fig. 2-b</b>
               {t.residuals}
             </figcaption>
-            <div className="h-40">
-              <ResponsiveContainer width="100%" height="100%">
-                <ScatterChart margin={{ top: 8, right: 16, bottom: 4, left: -8 }}>
-                  <CartesianGrid stroke="var(--color-line)" strokeDasharray="1 3" />
-                  <XAxis type="number" dataKey="x" tick={chartTick} stroke="var(--color-line)" />
-                  <YAxis type="number" dataKey="r" tick={chartTick} stroke="var(--color-line)" />
-                  <ReferenceLine y={0} stroke="var(--color-ink)" />
-                  <Tooltip {...chartTooltip} />
-                  <Scatter data={chartData} fill="var(--color-accent)" shape="square" isAnimationActive={false} />
-                </ScatterChart>
-              </ResponsiveContainer>
-            </div>
+            {result ? (
+              <WhenVisible placeholder={<ChartPlaceholder className="h-40" />}>
+                <ResidualsChart data={chartData} />
+              </WhenVisible>
+            ) : (
+              <ChartPlaceholder className="h-40" text={t.chartEmpty} />
+            )}
           </figure>
         </div>
       </div>

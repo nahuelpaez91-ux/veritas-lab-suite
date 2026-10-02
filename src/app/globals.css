@@ -103,3 +103,20 @@ body {
 dialog::backdrop {
   background: rgb(0 0 0 / 0.45);
 }
+
+/*
+ * Indicio de desplazamiento horizontal: sombra en el borde derecho que aparece solo
+ * cuando la tabla desborda. La tapa (local) viaja con el contenido y cubre la sombra
+ * (scroll) al llegar al final. --hint-bg = fondo sobre el que está la tabla.
+ */
+@utility scroll-hint {
+  background:
+    linear-gradient(var(--hint-bg, var(--color-surface)), var(--hint-bg, var(--color-surface))) right center / 1rem 100% no-repeat local,
+    linear-gradient(to left, color-mix(in srgb, var(--color-ink) 16%, transparent), transparent) right center / 0.875rem 100% no-repeat scroll;
+}
+
+@media print {
+  .scroll-hint {
+    background: none;
+  }
+}

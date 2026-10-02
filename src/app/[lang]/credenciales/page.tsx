@@ -42,6 +42,7 @@ export default async function CredentialsPage({ params }: { params: Params }) {
       title,
       issuer: d.issuer[lang],
       year: d.year,
+      yearText: d.yearLabel?.[lang] ?? String(d.year),
       hours: d.hours ? `${d.hours} ${t.hours}` : undefined,
       pagesLabel: d.pages.length === 1 ? t.pageOne : fill(t.pageMany, { n: d.pages.length }),
       pages: d.pages.map((src, i) => {
@@ -66,7 +67,11 @@ export default async function CredentialsPage({ params }: { params: Params }) {
             { label: t.doc.code, value: <span className="text-accent">{DOC_CODE}</span> },
             { label: t.doc.revision, value: s.commit || '—' },
             { label: t.doc.effective, value: s.date || '—' },
-            { label: t.doc.contents, value: fill(t.contentsValue, { t: n('titulo'), a: n('analitico'), c: n('certificado') }) },
+            {
+              label: t.doc.contents,
+              // Espacio duro antes de cada «·»: si el valor se parte, la línea nueva no empieza con el separador.
+              value: fill(t.contentsValue, { t: n('titulo'), a: n('analitico'), c: n('certificado') }).replace(/ · /g, '\u00a0· '),
+            },
           ]}
         />
         <div className="grid gap-6 px-4 py-7 sm:px-6 md:py-9 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-12">

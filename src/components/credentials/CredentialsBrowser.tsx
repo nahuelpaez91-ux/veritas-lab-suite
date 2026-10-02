@@ -14,6 +14,8 @@ export interface DocView {
   title: string;
   issuer: string;
   year: number;
+  /** Texto de fecha a mostrar (p. ej. «Egreso 2014 · expedido 2016»); por defecto, el año. */
+  yearText: string;
   hours?: string;
   pagesLabel: string;
   pages: { src: string; w: number; h: number; alt: string; label: string }[];
@@ -35,6 +37,14 @@ export interface BrowserLabels {
 }
 
 const FILTERS: Filter[] = ['all', 'titulo', 'analitico', 'certificado'];
+
+/**
+ * `sizes` de la miniatura según su orientación. La caja es 4:3 con 1 rem de relleno y la imagen
+ * se ajusta por alto: las verticales (A4) ocupan ~la mitad del ancho de la tarjeta, las apaisadas casi todo.
+ */
+function thumbSizes(w: number, h: number): string {
+  return h > w ? '(min-width: 1024px) 11rem, (min-width: 640px) 25vw, 52vw' : '(min-width: 1024px) 21rem, (min-width: 640px) 46vw, 92vw';
+}
 
 const chip = 'border px-1.5 py-0.5 font-mono text-[0.625rem] font-semibold uppercase leading-none tracking-[0.12em]';
 const chipTone: Record<Kind, string> = {
@@ -133,10 +143,9 @@ export function CredentialsBrowser({ docs, labels }: { docs: DocView[]; labels: 
                   width={d.thumb.w}
                   height={d.thumb.h}
                   alt=""
-                  unoptimized
                   loading="lazy"
-                  sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 90vw"
-                  className="h-full w-auto max-w-full border border-line bg-white object-contain transition-transform group-hover:-translate-y-0.5"
+                  sizes={thumbSizes(d.thumb.w, d.thumb.h)}
+                  className="h-full w-auto max-w-full border border-line bg-bg object-contain transition-transform group-hover:-translate-y-0.5"
                 />
               </button>
               <div className="flex grow flex-col gap-2 px-4 pb-4 pt-3.5">
@@ -146,7 +155,7 @@ export function CredentialsBrowser({ docs, labels }: { docs: DocView[]; labels: 
                 </p>
                 <h2 className="text-[1.125rem] font-semibold leading-snug [text-wrap:balance]">{d.title}</h2>
                 <p className="text-[0.875rem] leading-snug text-muted">
-                  {d.issuer} · <span className="font-mono text-[0.8125rem] tabular-nums">{d.year}</span>
+                  {d.issuer} · <span className="font-mono text-[0.8125rem] tabular-nums">{d.yearText}</span>
                   {d.hours ? (
                     <>
                       {' '}
@@ -206,7 +215,7 @@ export function CredentialsBrowser({ docs, labels }: { docs: DocView[]; labels: 
                   {current.title}
                 </h2>
                 <p className="text-[0.8125rem] leading-snug text-muted">
-                  {current.issuer} · {current.year}
+                  {current.issuer} · {current.yearText}
                 </p>
               </div>
               <form method="dialog" className="shrink-0">
@@ -228,9 +237,9 @@ export function CredentialsBrowser({ docs, labels }: { docs: DocView[]; labels: 
                         width={p.w}
                         height={p.h}
                         alt={p.alt}
-                        unoptimized
                         loading="lazy"
-                        className="h-auto w-full border border-line bg-white"
+                        sizes="(min-width: 60rem) 52rem, calc(100vw - 2.5rem)"
+                        className="h-auto w-full border border-line bg-bg"
                       />
                     </figure>
                   </li>
