@@ -27,7 +27,7 @@ export default async function CvPage({ params }: { params: Params }) {
   const cv = getCv(lang, audience);
 
   return (
-    <article className="mx-auto max-w-3xl px-4 py-8 text-[15px] leading-snug print:max-w-none print:px-0 print:py-0 print:text-[10pt]">
+    <article className="mx-auto max-w-3xl px-4 py-8 text-[15px] leading-snug print:max-w-none print:px-0 print:py-0 print:text-[9pt] print:leading-[1.25]">
       <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm print:hidden" aria-label={t.variant}>
         <span className="text-muted">{t.variant}:</span>
         {audiences.map((a) => (
@@ -45,10 +45,10 @@ export default async function CvPage({ params }: { params: Params }) {
         <PrintButton label={t.print} />
       </nav>
 
-      <header>
-        <h1 className="text-3xl font-semibold print:text-[20pt]">{cv.name}</h1>
-        <p className="mt-1 text-lg font-medium text-accent print:text-[12pt]">{cv.headline}</p>
-        <p className="mt-2 text-sm">
+      <header className="print:mb-1">
+        <h1 className="text-3xl font-semibold print:text-[15pt] print:leading-tight">{cv.name}</h1>
+        <p className="mt-1 text-lg font-medium text-accent print:mt-0.5 print:text-[9.5pt]">{cv.headline}</p>
+        <p className="mt-2 text-sm print:mt-1 print:text-[8pt]">
           {cv.contact.map((c, i) => (
             <span key={c.label}>
               {i > 0 && ' · '}
@@ -65,23 +65,25 @@ export default async function CvPage({ params }: { params: Params }) {
       </header>
 
       {cv.sections.map((section) => (
-        <section key={section.id} className="mt-5 break-inside-avoid-page">
-          <h2 className="border-b border-line pb-1 text-sm font-semibold uppercase tracking-wider text-accent">{section.title}</h2>
+        <section key={section.id} className="mt-5 break-inside-avoid-page print:mt-2">
+          <h2 className="border-b border-line pb-1 text-sm font-semibold uppercase tracking-wider text-accent print:pb-0 print:text-[8.5pt]">
+            {section.title}
+          </h2>
           {section.entries.map((entry, i) => (
-            <div key={`${section.id}-${i}`} className="mt-2">
+            <div key={`${section.id}-${i}`} className="mt-2 print:mt-1">
               {(entry.title || entry.meta) && (
                 <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                   {entry.title && <h3 className={entry.bullets || entry.meta ? 'font-semibold' : ''}>{entry.title}</h3>}
-                  {entry.meta && <span className="text-sm text-muted">{entry.meta}</span>}
+                  {entry.meta && <span className="text-sm text-muted print:text-[8pt]">{entry.meta}</span>}
                 </div>
               )}
               {entry.link && (
-                <a className="text-sm text-accent hover:underline" href={entry.link.href}>
+                <a className="text-sm text-accent hover:underline print:text-[8pt]" href={entry.link.href}>
                   {entry.link.label}
                 </a>
               )}
               {entry.bullets && (
-                <ul className="mt-1 list-disc space-y-0.5 pl-5">
+                <ul className="mt-1 list-disc space-y-0.5 pl-5 print:mt-0.5 print:space-y-0">
                   {entry.bullets.map((b) => (
                     <li key={b}>{b}</li>
                   ))}
