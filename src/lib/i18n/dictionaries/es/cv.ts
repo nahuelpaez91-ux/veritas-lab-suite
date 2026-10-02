@@ -3,4 +3,6 @@ export const cv = {
   audiences: { nacional: 'Nacional (remoto)', local: 'Local (La Rioja / NOA)', global: 'Mundial (remoto)' },
   download: 'Descargar PDF',
   print: 'Imprimir',
+  docLabel: 'CV',
+  revision: 'rev',
 };

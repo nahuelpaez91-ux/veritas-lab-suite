@@ -2,9 +2,11 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { StatusChip } from '@/components/lab/StatusChip';
 import { PrintButton } from '@/components/ui/PrintButton';
-import { card, h2, table, tableWrap } from '@/components/ui/styles';
+import { DocHeader, SectionHead } from '@/components/module/DocHeader';
+import { table, tableWrap } from '@/components/ui/styles';
 import { profile } from '@/content/profile';
 import traceability from '@/content/validation/traceability.json';
+import { validationSummary } from '@/content/validation/summary';
 import { URS } from '@/content/validation/urs';
 import { isLocale } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
@@ -27,20 +29,62 @@ export default async function ValidationPage({ params }: { params: Params }) {
   const failed = tests.length - passed;
   const riskOf = (rpn: number) => (rpn >= 12 ? 'high' : rpn >= 6 ? 'medium' : 'low') as 'high' | 'medium' | 'low';
 
+  const summary = validationSummary();
+  const hasRun = Boolean(traceability.generatedAt);
+  const allPassed = hasRun && tests.length > 0 && failed === 0;
+
   return (
-    <div className="mx-auto max-w-6xl space-y-8 px-4 py-8">
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div className="max-w-3xl">
-          <h1 className="text-3xl font-semibold">{t.title}</h1>
-          <p className="mt-2 text-muted">{t.intro}</p>
+    <div className="mx-auto max-w-6xl space-y-12 px-4 py-8">
+      <header className="border border-ink bg-surface">
+        <DocHeader
+          cells={[
+            { label: t.doc.document, value: t.title, title: true },
+            { label: t.doc.code, value: <span className="text-accent">ANP-VAL-001</span> },
+            { label: t.doc.revision, value: summary.commit || '—' },
+            { label: t.doc.effective, value: summary.date || '—' },
+            { label: t.doc.scope, value: t.doc.scopeValue },
+          ]}
+        />
+        <div className="flex flex-wrap items-end justify-between gap-4 px-4 py-6 sm:px-6">
+          <div className="max-w-3xl">
+            <p className="font-mono text-xs tracking-[0.04em] text-accent">ANP-VAL-001 · GAMP 5</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">{t.title}</h1>
+            <p className="mt-3 text-lg leading-relaxed">{t.intro}</p>
+          </div>
+          <PrintButton label={t.print} />
         </div>
-        <PrintButton label={t.print} />
       </header>
 
-      <section className={card}>
-        <h2 className={h2}>{t.oqTitle}</h2>
-        <p className="mt-2 text-sm" data-testid="oq-summary">
-          {traceability.generatedAt
+      <section aria-labelledby="oq-title">
+        <SectionHead n="1" id="oq-title" title={t.oqTitle} note={t.docTitle} />
+        <dl className="grid grid-cols-2 gap-px border border-line bg-line lg:grid-cols-[minmax(0,1.6fr)_repeat(4,minmax(0,1fr))]">
+          <div className="col-span-2 bg-surface px-4 py-4 lg:col-span-1">
+            <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-muted">{t.oqPassed}</dt>
+            <dd className={`mt-1 font-mono text-5xl font-semibold tracking-tight [font-variant-numeric:tabular-nums] ${allPassed ? 'text-ok' : 'text-danger'}`}>
+              {passed}/{tests.length}
+            </dd>
+          </div>
+          {[
+            [t.oqFailed, String(failed)],
+            [t.oqCommit, summary.commit || '—'],
+            [t.oqDate, summary.date || '—'],
+          ].map(([k, v]) => (
+            <div key={k} className="bg-surface px-4 py-4">
+              <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-muted">{k}</dt>
+              <dd className="mt-2 font-mono text-xl font-semibold [font-variant-numeric:tabular-nums]">{v}</dd>
+            </div>
+          ))}
+          <div className="bg-surface px-4 py-4">
+            <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-muted">{t.oqVerdict}</dt>
+            <dd className="mt-2">
+              <StatusChip tone={!hasRun ? 'neutral' : allPassed ? 'ok' : 'danger'}>
+                {!hasRun ? t.doc.noData : allPassed ? t.doc.conforme : t.doc.noConforme}
+              </StatusChip>
+            </dd>
+          </div>
+        </dl>
+        <p className="mt-3 text-sm text-muted" data-testid="oq-summary">
+          {hasRun
             ? t.oq
                 .replace('{date}', traceability.generatedAt.slice(0, 10))
                 .replace('{commit}', traceability.commit)
@@ -51,18 +95,21 @@ export default async function ValidationPage({ params }: { params: Params }) {
         </p>
       </section>
 
-      <section className={card}>
-        <h2 className={h2}>{t.scopeTitle}</h2>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-          {t.scope.map((s) => (
-            <li key={s}>{s}</li>
+      <section aria-labelledby="scope-title">
+        <SectionHead n="2" id="scope-title" title={t.scopeTitle} />
+        <ol className="mt-3 space-y-2 text-[0.95rem] leading-relaxed">
+          {t.scope.map((s, i) => (
+            <li key={s} className="grid grid-cols-[2.5rem_minmax(0,1fr)]">
+              <span className="font-mono text-xs text-muted">2.{i + 1}</span>
+              <span>{s}</span>
+            </li>
           ))}
-        </ul>
+        </ol>
       </section>
 
-      <section className={card}>
-        <h2 className={h2}>{t.ursTitle}</h2>
-        <p className="mt-1 text-xs text-muted">{t.riskLegend}</p>
+      <section aria-labelledby="urs-title">
+        <SectionHead n="3" id="urs-title" title={t.ursTitle} note={`${URS.length} URS`} />
+        <p className="mt-2 font-mono text-xs text-muted">{t.riskLegend}</p>
         <div className={`${tableWrap} mt-3`}>
           <table className={`${table} text-xs`}>
             <thead>
@@ -86,7 +133,7 @@ export default async function ValidationPage({ params }: { params: Params }) {
                 const ok = evidence.length > 0 && evidence.every((x) => x.status === 'passed');
                 return (
                   <tr key={u.id}>
-                    <td className="font-mono">{u.id}</td>
+                    <td className="font-mono whitespace-nowrap">{u.id}</td>
                     <td>{u[lang]}</td>
                     <td>{u.s}</td>
                     <td>{u.p}</td>
@@ -99,7 +146,7 @@ export default async function ValidationPage({ params }: { params: Params }) {
                       {evidence.length === 0
                         ? t.noEvidence
                         : evidence.map((x) => (
-                            <a key={x.title} className="block text-accent hover:underline" href={`${profile.repo}/blob/main/${x.file}`}>
+                            <a key={x.title} className="block text-accent underline-offset-2 hover:underline" href={`${profile.repo}/blob/main/${x.file}`}>
                               {x.title}
                             </a>
                           ))}
@@ -115,10 +162,10 @@ export default async function ValidationPage({ params }: { params: Params }) {
         </div>
       </section>
 
-      <section className={card}>
-        <h2 className={h2}>{t.changeTitle}</h2>
-        <p className="mt-2 text-sm">{t.change}</p>
-        <a className="mt-2 inline-block text-sm text-accent hover:underline" href={`${profile.repo}/commits/main`}>
+      <section aria-labelledby="change-title">
+        <SectionHead n="4" id="change-title" title={t.changeTitle} />
+        <p className="mt-3 max-w-3xl text-[0.95rem] leading-relaxed">{t.change}</p>
+        <a className="mt-2 inline-block font-mono text-sm text-accent underline-offset-2 hover:underline" href={`${profile.repo}/commits/main`}>
           {t.changeLink} →
         </a>
       </section>

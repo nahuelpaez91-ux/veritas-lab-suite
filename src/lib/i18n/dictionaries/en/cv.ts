@@ -5,4 +5,6 @@ export const cv: typeof esCv = {
   audiences: { nacional: 'National (remote)', local: 'Local (La Rioja / NW Argentina)', global: 'Worldwide (remote)' },
   download: 'Download PDF',
   print: 'Print',
+  docLabel: 'CV',
+  revision: 'rev',
 };

@@ -53,7 +53,7 @@ export function SignDialog({
       ref={ref}
       onClose={() => onClose(signedRef.current)}
       aria-label={t.signTitle}
-      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-xl border border-line bg-surface p-0 text-ink"
+      className="m-auto w-[min(28rem,calc(100vw-2rem))] border border-ink bg-surface p-0 text-ink"
     >
       <form onSubmit={submit} className="space-y-3 p-6">
         <h2 className="text-lg font-semibold">{t.signTitle}</h2>

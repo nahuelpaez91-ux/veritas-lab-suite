@@ -5,6 +5,7 @@ import { CartesianGrid, ComposedChart, Line, ReferenceLine, ResponsiveContainer,
 import { btnSecondary, card, input, label } from '@/components/ui/styles';
 import { downloadText, toCsv } from '@/lib/export/csv';
 import { detectionLimits, fitCalibration, inversePredict, type Weighting } from '@/lib/science/calibration';
+import { chartTick, chartTooltip, figCaption, figTag } from './chartStyle';
 import type { ToolProps } from './registry';
 
 // Ejemplo sintético: absorbancia vs concentración (mg/L)
@@ -101,8 +102,8 @@ export function CurvaTool({ dict }: ToolProps) {
                 [t.lod, result.limits ? `${fmt(result.limits.lod)} ${t.xUnits}` : t.lodWeighted],
                 [t.loq, result.limits ? `${fmt(result.limits.loq)} ${t.xUnits}` : t.lodWeighted],
               ].map(([k, v]) => (
-                <div key={k} className="rounded-md border border-line p-2">
-                  <dt className="text-xs text-muted">{k}</dt>
+                <div key={k} className="border-t border-line pt-1.5">
+                  <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted">{k}</dt>
                   <dd className="font-mono">{v}</dd>
                 </div>
               ))}
@@ -115,31 +116,37 @@ export function CurvaTool({ dict }: ToolProps) {
 
         <div className={`${card} space-y-4`}>
           <figure>
-            <figcaption className="mb-2 text-sm font-semibold">{t.chart}</figcaption>
+            <figcaption className={figCaption}>
+              <b className={figTag}>Fig. 2-a</b>
+              {t.chart}
+            </figcaption>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={chartData} margin={{ top: 8, right: 16, bottom: 4, left: -8 }}>
-                  <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" />
-                  <XAxis type="number" dataKey="x" tick={{ fontSize: 10 }} stroke="var(--color-muted)" />
-                  <YAxis tick={{ fontSize: 10 }} stroke="var(--color-muted)" />
-                  <Tooltip />
-                  <Line dataKey="fit" name={t.fit} stroke="var(--color-accent)" dot={false} isAnimationActive={false} />
-                  <Scatter dataKey="y" name={t.points} fill="var(--color-ink)" isAnimationActive={false} />
+                  <CartesianGrid stroke="var(--color-line)" strokeDasharray="1 3" />
+                  <XAxis type="number" dataKey="x" tick={chartTick} stroke="var(--color-line)" />
+                  <YAxis tick={chartTick} stroke="var(--color-line)" />
+                  <Tooltip {...chartTooltip} />
+                  <Line dataKey="fit" name={t.fit} stroke="var(--color-ink)" strokeWidth={1.4} dot={false} isAnimationActive={false} />
+                  <Scatter dataKey="y" name={t.points} fill="var(--color-accent)" shape="square" isAnimationActive={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
           </figure>
           <figure>
-            <figcaption className="mb-2 text-sm font-semibold">{t.residuals}</figcaption>
+            <figcaption className={figCaption}>
+              <b className={figTag}>Fig. 2-b</b>
+              {t.residuals}
+            </figcaption>
             <div className="h-40">
               <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart margin={{ top: 8, right: 16, bottom: 4, left: -8 }}>
-                  <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" />
-                  <XAxis type="number" dataKey="x" tick={{ fontSize: 10 }} stroke="var(--color-muted)" />
-                  <YAxis type="number" dataKey="r" tick={{ fontSize: 10 }} stroke="var(--color-muted)" />
-                  <ReferenceLine y={0} stroke="var(--color-muted)" />
-                  <Tooltip />
-                  <Scatter data={chartData} fill="var(--color-warn)" isAnimationActive={false} />
+                  <CartesianGrid stroke="var(--color-line)" strokeDasharray="1 3" />
+                  <XAxis type="number" dataKey="x" tick={chartTick} stroke="var(--color-line)" />
+                  <YAxis type="number" dataKey="r" tick={chartTick} stroke="var(--color-line)" />
+                  <ReferenceLine y={0} stroke="var(--color-ink)" />
+                  <Tooltip {...chartTooltip} />
+                  <Scatter data={chartData} fill="var(--color-accent)" shape="square" isAnimationActive={false} />
                 </ScatterChart>
               </ResponsiveContainer>
             </div>

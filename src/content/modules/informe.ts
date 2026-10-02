@@ -6,12 +6,12 @@ export const informe: LocalizedModule = {
     area: 'Trazabilidad e integración',
     tagline: 'Genera el informe de resultados en PDF con estado del control de calidad, firmas y huellas de integridad.',
     whatSolves:
-      'El informe es lo que sale del laboratorio. Debe mostrar solo resultados liberados, quién los aprobó y con qué evidencia. Este módulo genera el PDF a partir de los datos auditados, sin copiar y pegar, e incluye los hashes que permiten comprobar que no fue alterado.',
+      'El informe es lo que sale del laboratorio. Debe mostrar solo resultados liberados, quién los aprobó y con qué evidencia. Este módulo genera el PDF a partir de los datos auditados, sin copiar y pegar, e imprime el hash del registro firmado y el último del audit trail: si alguien cambia el resultado en la base, el hash deja de coincidir.',
     howItWorks: [
       'Solo habilita el informe de muestras liberadas: firma de aprobación válida para la revisión vigente.',
       'Incluye los resultados con unidades, rango y marca, y el estado de la corrida de control de cada prueba.',
       'Lista las firmas electrónicas con nombre, rol, significado y fecha UTC.',
-      'Imprime el hash del registro firmado y el último hash del audit trail como evidencia de integridad.',
+      'Imprime el hash del registro firmado y el último hash del audit trail. Prueban que el informe coincide con la base; el archivo PDF en sí no lleva firma digital.',
     ],
     dataSources: [
       { variable: 'Resultados liberados', source: 'Base de datos del LIMS / LIS' },
@@ -49,12 +49,12 @@ export const informe: LocalizedModule = {
     area: 'Traceability & integration',
     tagline: 'Generates the PDF results report with quality-control status, signatures and integrity fingerprints.',
     whatSolves:
-      'The report is what leaves the laboratory. It must show only released results, who approved them and on what evidence. This module builds the PDF from audited data, with no copy-paste, and includes the hashes that let anyone check it was not altered.',
+      'The report is what leaves the laboratory. It must show only released results, who approved them and on what evidence. This module builds the PDF from audited data, with no copy-paste, and prints the signed-record hash and the latest audit-trail hash: if anyone changes the result in the database, the hash no longer matches.',
     howItWorks: [
       'Only released samples get a report: an approval signature valid for the current revision.',
       'Includes results with units, range and flag, plus the control-run status of each test.',
       'Lists electronic signatures with name, role, meaning and UTC date.',
-      'Prints the signed-record hash and the latest audit-trail hash as integrity evidence.',
+      'Prints the signed-record hash and the latest audit-trail hash. They prove the report matches the database; the PDF file itself is not digitally signed.',
     ],
     dataSources: [
       { variable: 'Released results', source: 'LIMS / LIS database' },

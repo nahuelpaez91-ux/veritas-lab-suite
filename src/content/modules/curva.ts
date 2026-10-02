@@ -10,7 +10,7 @@ export const curva: LocalizedModule = {
       'La curva de calibración convierte una señal (absorbancia, área de pico) en concentración. Una regresión mal hecha o una extrapolación fuera de rango producen resultados equivocados sin que nadie lo note. Curva calcula la recta, muestra los residuos para detectar falta de linealidad, estima LOD y LOQ, y advierte cuando una muestra cae fuera del rango calibrado.',
     howItWorks: [
       'Ajusta y = a + b·x por mínimos cuadrados. Opcionalmente pondera por 1/x o 1/x² cuando la varianza crece con la concentración.',
-      'Informa pendiente, ordenada, R², error estándar de la regresión (s y/x) y errores de a y de b.',
+      'Informa pendiente, ordenada, R² (que por sí solo no prueba linealidad: para eso están los residuos), error estándar de la regresión (s y/x) y errores de a y de b.',
       'Estima LOD = 3,3·s/b y LOQ = 10·s/b (ICH Q2), solo en regresión sin ponderar: con ponderación, s y/x no representa el desvío del blanco.',
       'Para una muestra calcula x₀ = (y₀ − a)/b, su desvío y el intervalo de confianza del 95 % (t de Student).',
       'El cálculo está verificado contra el conjunto certificado Norris del NIST (StRD).',
@@ -61,7 +61,7 @@ export const curva: LocalizedModule = {
       'A calibration curve turns a signal (absorbance, peak area) into concentration. A poor regression or an out-of-range extrapolation produces wrong results nobody notices. Curva fits the line, shows residuals to reveal non-linearity, estimates LOD and LOQ, and warns when a sample falls outside the calibrated range.',
     howItWorks: [
       'Fits y = a + b·x by least squares. It can optionally weight by 1/x or 1/x² when variance grows with concentration.',
-      'Reports slope, intercept, R², the regression standard error (s y/x) and the errors of a and b.',
+      'Reports slope, intercept, R² (which alone does not prove linearity; that’s what the residual plot is for), the regression standard error (s y/x) and the errors of a and b.',
       'Estimates LOD = 3.3·s/b and LOQ = 10·s/b (ICH Q2), for unweighted regression only: with weighting, s y/x does not represent the blank SD.',
       'For a sample it computes x₀ = (y₀ − a)/b, its standard deviation and the 95 % confidence interval (Student’s t).',
       'The calculation is verified against NIST’s certified Norris dataset (StRD).',

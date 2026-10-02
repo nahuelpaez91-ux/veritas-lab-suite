@@ -217,7 +217,7 @@ export function CustodiaTool({ dict }: ToolProps) {
                 </div>
                 {qrUrl && (
                   // eslint-disable-next-line @next/next/no-img-element -- data URL generada en el cliente
-                  <img src={qrUrl} alt={`${t.qrLabel}: ${sample.id}`} width={96} height={96} className="rounded border border-line bg-white p-1" />
+                  <img src={qrUrl} alt={`${t.qrLabel}: ${sample.id}`} width={96} height={96} className="border border-ink bg-white p-1" />
                 )}
               </div>
 
@@ -253,7 +253,7 @@ export function CustodiaTool({ dict }: ToolProps) {
               </div>
 
               {release && (
-                <div data-testid="release-check" className={`rounded-lg border p-3 text-sm ${release.ok ? 'border-ok/40 bg-ok/10' : 'border-danger/40 bg-danger/10'}`}>
+                <div data-testid="release-check" className={`border border-l-4 bg-surface p-3 text-sm ${release.ok ? 'border-ok' : 'border-danger'}`}>
                   <p className="font-semibold">{t.releaseCheck}</p>
                   {release.ok ? (
                     <p>{t.releaseOk}</p>

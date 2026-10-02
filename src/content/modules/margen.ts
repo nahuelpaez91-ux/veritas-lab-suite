@@ -6,11 +6,11 @@ export const margen: LocalizedModule = {
     area: 'Calidad analítica',
     tagline: 'Incertidumbre de medición: presupuesto GUM con coeficientes de sensibilidad y verificación por Monte Carlo.',
     whatSolves:
-      'ISO/IEC 17025 exige estimar la incertidumbre de medición, y es uno de los puntos que más cuesta en las auditorías. Margen arma el presupuesto paso a paso y muestra qué fuente pesa más, que es donde conviene invertir para mejorar. Después lo confirma con una simulación de Monte Carlo.',
+      'ISO/IEC 17025 §7.6 exige evaluar la incertidumbre de medición. Margen arma el presupuesto paso a paso y muestra qué fuente pesa más, que es donde conviene invertir para mejorar. Después lo confirma con una simulación de Monte Carlo.',
     howItWorks: [
       'Cada magnitud de entrada tiene un valor, una incertidumbre estándar y una distribución (normal, rectangular o triangular).',
       'Calcula los coeficientes de sensibilidad derivando numéricamente el modelo de medición.',
-      'Combina las contribuciones con u_c = √Σ(cᵢ·uᵢ)² y expande con k = 2 (≈ 95 %).',
+      'Combina las contribuciones con u_c = √Σ(cᵢ·uᵢ)² y expande con k = 2 (≈ 95 % si el resultado se distribuye aproximadamente normal; el Monte Carlo lo comprueba).',
       'Simula 100 000 valores con la distribución de cada entrada (GUM Suplemento 1) y compara el intervalo con el de la GUM.',
       'Incluye una calculadora tipo A a partir de réplicas.',
     ],
@@ -42,7 +42,7 @@ export const margen: LocalizedModule = {
     glossary: [
       { term: 'Incertidumbre estándar', definition: 'Incertidumbre expresada como un desvío estándar.' },
       { term: 'Coeficiente de sensibilidad', definition: 'Cuánto cambia el resultado por cada unidad de cambio en una entrada.' },
-      { term: 'Factor de cobertura k', definition: 'Multiplicador para obtener la incertidumbre expandida; k = 2 ≈ 95 %.' },
+      { term: 'Factor de cobertura k', definition: 'Multiplicador para obtener la incertidumbre expandida. Con k = 2, la cobertura es ≈ 95 % solo si el resultado se distribuye aproximadamente normal (GUM §6.3).' },
       { term: 'Monte Carlo', definition: 'Propagación por simulación: se muestrean las entradas y se obtiene la distribución del resultado.' },
     ],
     verifiedAgainst: {
@@ -55,11 +55,11 @@ export const margen: LocalizedModule = {
     area: 'Analytical quality',
     tagline: 'Measurement uncertainty: GUM budget with sensitivity coefficients and Monte Carlo verification.',
     whatSolves:
-      'ISO/IEC 17025 requires estimating measurement uncertainty, and it is one of the hardest points in audits. Margen builds the budget step by step and shows which source weighs most, which is where improvement pays off. Then it confirms the result with a Monte Carlo simulation.',
+      'ISO/IEC 17025 §7.6 requires evaluating measurement uncertainty. Margen builds the budget step by step and shows which source weighs most, which is where improvement pays off. Then it confirms the result with a Monte Carlo simulation.',
     howItWorks: [
       'Each input quantity has a value, a standard uncertainty and a distribution (normal, rectangular or triangular).',
       'Computes sensitivity coefficients by numerically differentiating the measurement model.',
-      'Combines contributions as u_c = √Σ(cᵢ·uᵢ)² and expands with k = 2 (≈ 95 %).',
+      'Combines contributions as u_c = √Σ(cᵢ·uᵢ)² and expands with k = 2 (≈ 95 % when the output is approximately normal; Monte Carlo checks this).',
       'Simulates 100,000 values from each input distribution (GUM Supplement 1) and compares the interval with the GUM one.',
       'Includes a Type A calculator from replicates.',
     ],
@@ -91,7 +91,7 @@ export const margen: LocalizedModule = {
     glossary: [
       { term: 'Standard uncertainty', definition: 'Uncertainty expressed as a standard deviation.' },
       { term: 'Sensitivity coefficient', definition: 'How much the result changes per unit change in an input.' },
-      { term: 'Coverage factor k', definition: 'Multiplier giving the expanded uncertainty; k = 2 ≈ 95 %.' },
+      { term: 'Coverage factor k', definition: 'Multiplier giving the expanded uncertainty. With k = 2, coverage is ≈ 95 % only when the output is approximately normal (GUM §6.3).' },
       { term: 'Monte Carlo', definition: 'Propagation by simulation: inputs are sampled and the output distribution is obtained.' },
     ],
     verifiedAgainst: {

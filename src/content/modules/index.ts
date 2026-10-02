@@ -13,3 +13,13 @@ export const modules: Record<ModuleSlug, LocalizedModule> = { enlace, qc, custod
 export function isModuleSlug(value: string): value is ModuleSlug {
   return (moduleOrder as string[]).includes(value);
 }
+
+// Código de documento de cada módulo (encabezado «MOD-…»).
+export const moduleCodes: Record<ModuleSlug, string> = {
+  enlace: 'MOD-ENL',
+  qc: 'MOD-QC',
+  custodia: 'MOD-CUS',
+  informe: 'MOD-INF',
+  curva: 'MOD-CUR',
+  margen: 'MOD-MAR',
+};

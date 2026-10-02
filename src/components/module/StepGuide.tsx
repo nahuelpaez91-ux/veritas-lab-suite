@@ -1,12 +1,18 @@
-export function StepGuide({ title, steps }: { title: string; steps: string[] }) {
+import { SectionHead } from './DocHeader';
+
+/** Guía como procedimiento numerado: numerales cuadrados en monoespaciada, filas separadas por filetes. */
+export function StepGuide({ n, title, steps, note }: { n: string; title: string; steps: string[]; note?: string }) {
   return (
-    <section aria-label={title} className="rounded-xl border border-accent/30 bg-accent-soft p-4">
-      <h2 className="text-sm font-semibold uppercase tracking-widest text-accent">{title}</h2>
-      <ol className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <section aria-labelledby="guide-title">
+      <SectionHead n={n} id="guide-title" title={title} note={note} />
+      <ol className="grid border-l border-line sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, i) => (
-          <li key={step} className="flex gap-3 text-sm">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent font-mono text-xs text-accent-ink">
-              {i + 1}
+          <li key={step} className="flex gap-3 border-r border-b border-line bg-surface px-3 py-3 text-sm leading-relaxed">
+            <span
+              aria-hidden="true"
+              className="flex h-7 w-7 shrink-0 items-center justify-center border border-ink font-mono text-xs font-semibold [font-variant-numeric:tabular-nums]"
+            >
+              {String(i + 1).padStart(2, '0')}
             </span>
             <span>{step}</span>
           </li>

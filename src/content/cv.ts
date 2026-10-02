@@ -55,8 +55,8 @@ const availability: Record<Audience, L<string>> = {
     en: 'Availability: on-site in La Rioja and the region (Northwest Argentina / Cuyo) or remote. Immediate start.',
   },
   global: {
-    es: 'Disponibilidad: remoto internacional (UTC−3; solapamiento con las mañanas de Europa y con toda América). Abierto a reubicación. Incorporación inmediata.',
-    en: 'Availability: remote worldwide (UTC−3; overlaps European mornings and all of the Americas). Open to relocation. Immediate start.',
+    es: 'Disponibilidad: remoto internacional (UTC−3: se superpone con la tarde de Europa y la jornada completa de América). Abierto a reubicación. Incorporación inmediata.',
+    en: 'Availability: remote worldwide (UTC−3: overlaps the European afternoon and the full working day across the Americas). Open to relocation. Immediate start.',
   },
 };
 
@@ -113,6 +113,11 @@ const suite: L<string[]> = {
     'GAMP 5-style validation dossier: URS, risk assessment and a traceability matrix generated automatically from the tests (Vitest + Playwright, CI on GitHub Actions).',
     'PostgreSQL schema with a trigger-enforced append-only audit trail, tested with PGlite; Claude API assistant under an AI use policy (draft EU GMP Annex 22).',
   ],
+};
+
+const projectName: L<string> = {
+  es: 'Portfolio de software para laboratorios',
+  en: 'Laboratory software portfolio',
 };
 
 const localBullet: L<string> = {
@@ -182,7 +187,7 @@ const experience: L<CvEntry[]> = {
       title: 'Desarrollador independiente de software y datos',
       meta: 'La Rioja, Argentina (remoto) · 2025 – actualidad',
       bullets: [
-        'Desarrollé Veritas Lab Suite, NormaMina (RAG sobre normativa minera) y proyectos de datos y machine learning para minería, energía y finanzas.',
+        'Desarrollé un portfolio de software para laboratorios, NormaMina (RAG sobre normativa minera) y proyectos de datos y machine learning para minería, energía y finanzas.',
         'Next.js/TypeScript, Python, SQL y Claude API, con tests automatizados, integración continua y despliegue en Vercel.',
       ],
     },
@@ -210,7 +215,7 @@ const experience: L<CvEntry[]> = {
       title: 'Independent software and data developer',
       meta: 'La Rioja, Argentina (remote) · 2025 – present',
       bullets: [
-        'Built Veritas Lab Suite, NormaMina (RAG over mining regulations) and data/machine-learning projects for mining, energy and finance.',
+        'Built a laboratory software portfolio, NormaMina (RAG over mining regulations) and data/machine-learning projects for mining, energy and finance.',
         'Next.js/TypeScript, Python, SQL and Claude API, with automated tests, continuous integration and deployment on Vercel.',
       ],
     },
@@ -281,7 +286,7 @@ export function getCv(lang: Locale, audience: Audience): Cv {
         title: t.projects,
         entries: [
           {
-            title: 'Veritas Lab Suite',
+            title: projectName[lang],
             meta: 'Next.js · TypeScript · PostgreSQL · Claude API',
             link: { label: profile.siteUrl.replace('https://', ''), href: `${profile.siteUrl}/${lang}` },
             bullets: suiteBullets,

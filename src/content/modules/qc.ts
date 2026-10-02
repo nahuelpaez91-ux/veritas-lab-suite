@@ -7,7 +7,7 @@ export const qc: LocalizedModule = {
     tagline:
       'Cartas de Levey-Jennings y multirreglas de Westgard que bloquean la liberación de resultados de una corrida rechazada.',
     whatSolves:
-      'Aplicar las reglas de Westgard a mano es lento y propenso a errores. Usada sola, la regla 1-2s rechaza entre 9 y 18 % de corridas buenas, y las reglas entre niveles se pasan por alto. Este módulo evalúa cada corrida con las multirreglas y la marca como aceptada, en advertencia o rechazada. El sistema no deja liberar resultados de una corrida rechazada hasta documentar la acción correctiva.',
+      'Aplicar las reglas de Westgard a mano es lento y propenso a errores. Usada como regla de rechazo, 1-2s descarta ≈ 9 % de corridas buenas con 2 controles por corrida y ≈ 18 % con 4, y las reglas entre niveles se pasan por alto. Este módulo evalúa cada corrida con las multirreglas y la marca como aceptada, en advertencia o rechazada. El sistema no deja liberar resultados de una corrida rechazada hasta documentar la acción correctiva.',
     howItWorks: [
       'Convierte cada valor de control a unidades z = (x − media) / DE con los valores objetivo del lote.',
       'Evalúa 1-2s (advertencia) y las reglas de rechazo 1-3s, 2-2s, R-4s, 4-1s y 10x, dentro de cada nivel y entre niveles (materiales). Como es habitual en implementaciones por computadora, las reglas de rechazo se evalúan en todas las corridas, sin esperar a que 1-2s dispare la inspección.',
@@ -57,7 +57,7 @@ export const qc: LocalizedModule = {
     area: 'Analytical quality',
     tagline: 'Levey-Jennings charts and Westgard multirules that block the release of results from a rejected run.',
     whatSolves:
-      'Applying Westgard rules by hand is slow and error-prone. Used alone, the 1-2s rule rejects 9–18 % of good runs, and across-level rules get missed. This module evaluates every run with the multirules and marks it accepted, warning or rejected. The system will not release results from a rejected run until the corrective action is documented.',
+      'Applying Westgard rules by hand is slow and error-prone. Used as a rejection rule, 1-2s discards ≈ 9 % of good runs with 2 controls per run and ≈ 18 % with 4, and across-level rules get missed. This module evaluates every run with the multirules and marks it accepted, warning or rejected. The system will not release results from a rejected run until the corrective action is documented.',
     howItWorks: [
       'Converts each control value to z units = (x − mean) / SD using the lot’s target values.',
       'Evaluates 1-2s (warning) and the rejection rules 1-3s, 2-2s, R-4s, 4-1s and 10x, within each level and across levels (materials). As usual in computer implementations, rejection rules are checked on every run instead of waiting for a 1-2s warning.',

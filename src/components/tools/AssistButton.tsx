@@ -104,7 +104,7 @@ export function AssistButton({
       <p className="text-xs text-muted">{t.note}</p>
       {loading && <p className="text-sm text-muted">{t.loading}</p>}
       {draft && (
-        <div data-testid="assist-draft" className="rounded-lg border border-accent/40 bg-accent-soft p-3">
+        <div data-testid="assist-draft" className="border border-dashed border-accent bg-accent-soft p-3">
           <p className="font-mono text-xs font-semibold tracking-wide text-accent">
             {draft.mode === 'ai' ? t.aiLabel : t.offlineLabel}
           </p>

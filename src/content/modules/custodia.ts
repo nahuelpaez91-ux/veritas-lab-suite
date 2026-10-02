@@ -7,7 +7,7 @@ export const custodia: LocalizedModule = {
     tagline:
       'Recepción, estados y liberación de muestras con audit trail encadenado por hash y firma electrónica con re-autenticación.',
     whatSolves:
-      'La integridad de datos aparece en la mayoría de las observaciones regulatorias: registros editables sin rastro, firmas sin significado y resultados liberados sin revisión. Custodia implementa el núcleo de un LIMS. Cada cambio queda en un audit trail que no se puede alterar sin que se note. Cada firma exige contraseña y declara su significado. La liberación se bloquea si el control de calidad no la permite.',
+      'La integridad de datos es una de las observaciones más frecuentes en inspecciones: registros editables sin rastro, firmas sin significado y resultados liberados sin revisión. Custodia implementa un núcleo mínimo de LIMS. Cada cambio queda en un audit trail que no se puede alterar sin que se note. Cada firma exige contraseña y declara su significado. La liberación se bloquea si el control de calidad no la permite.',
     howItWorks: [
       'Cada muestra pasa por los estados recibida → en análisis → revisada → liberada, y cada transición queda auditada.',
       'El audit trail es solo-agregado y a prueba de manipulaciones (tamper-evident): cada registro guarda el hash SHA-256 del anterior. Si alguien edita, inserta, reordena o borra un registro, la verificación marca dónde se rompió la cadena. El truncado del final se detecta guardando aparte el último hash, como hace el esquema de base de datos.',
@@ -58,7 +58,7 @@ export const custodia: LocalizedModule = {
     tagline:
       'Sample receipt, status and release with a hash-chained audit trail and electronic signatures with re-authentication.',
     whatSolves:
-      'Data integrity shows up in most regulatory observations: editable records with no trace, signatures without meaning and results released without review. Custodia implements the core of a LIMS. Every change goes into an audit trail that cannot be altered without detection. Every signature requires a password and states its meaning. Release is blocked when quality control does not allow it.',
+      'Data integrity is one of the most frequent inspection findings: editable records with no trace, signatures without meaning and results released without review. Custodia implements a minimal LIMS core. Every change goes into an audit trail that cannot be altered without detection. Every signature requires a password and states its meaning. Release is blocked when quality control does not allow it.',
     howItWorks: [
       'Each sample moves through received → in analysis → reviewed → released, and every transition is audited.',
       'The audit trail is append-only and tamper-evident: each record stores the SHA-256 hash of the previous one. If anyone edits, inserts, reorders or deletes a record, verification shows where the chain broke. Tail truncation is detected by storing the latest hash separately, as the database schema does.',

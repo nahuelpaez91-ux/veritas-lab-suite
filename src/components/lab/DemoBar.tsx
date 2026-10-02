@@ -12,7 +12,7 @@ export function DemoBar({ dict }: { dict: Dictionary }) {
   return (
     <div
       data-testid="demo-bar"
-      className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-warn/40 bg-warn/10 px-4 py-2 text-xs"
+      className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-dashed border-warn bg-surface px-4 py-2 text-xs"
     >
       <span className="font-mono font-semibold tracking-widest text-warn">{dict.demoBar.env} · A. N. Páez</span>
       <label className="flex flex-wrap items-center gap-2">
@@ -21,7 +21,7 @@ export function DemoBar({ dict }: { dict: Dictionary }) {
           data-testid="user-switcher"
           value={user.id}
           onChange={(e) => setUserId(e.target.value)}
-          className="rounded border border-line bg-surface px-2 py-1"
+          className="border border-muted bg-surface px-2 py-1 font-mono"
         >
           {DEMO_USERS.map((u) => (
             <option key={u.id} value={u.id}>

@@ -61,7 +61,7 @@ export function EnlaceTool({ dict, lang }: ToolProps) {
           }}
           rows={12}
           spellCheck={false}
-          className="mt-1 w-full rounded-md border border-line bg-bg p-2 font-mono text-xs"
+          className="mt-1 w-full border border-muted bg-bg p-2 font-mono text-xs focus:border-accent focus:outline-2 focus:outline-offset-0 focus:outline-accent"
         />
         <p className="mt-1 text-xs text-muted">{t.frames}</p>
         <button

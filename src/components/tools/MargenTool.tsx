@@ -12,6 +12,7 @@ import {
   type MeasurementModel,
   type MonteCarloResult,
 } from '@/lib/science/uncertainty';
+import { chartTick, chartTooltip, figCaption, figTag } from './chartStyle';
 import type { ToolProps } from './registry';
 
 const MODEL: MeasurementModel = (v) => (1000 * v.m * v.P) / v.V;
@@ -140,14 +141,17 @@ export function MargenTool({ dict }: ToolProps) {
               {t.result}: {budget.y.toFixed(2)} mg/L · {t.uc} = {budget.uc.toFixed(3)} mg/L · {t.U} = {budget.U.toFixed(2)} mg/L
             </p>
             <figure>
-              <figcaption className="mb-2 text-sm font-semibold">{t.contributionsChart}</figcaption>
+              <figcaption className={figCaption}>
+                <b className={figTag}>Fig. 2-a</b>
+                {t.contributionsChart}
+              </figcaption>
               <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={budget.rows} layout="vertical" margin={{ left: 8, right: 16 }}>
-                    <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" />
-                    <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10 }} stroke="var(--color-muted)" />
-                    <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} stroke="var(--color-muted)" width={24} />
-                    <Tooltip formatter={(v) => (typeof v === 'number' ? `${v.toFixed(1)} %` : String(v))} />
+                    <CartesianGrid stroke="var(--color-line)" strokeDasharray="1 3" />
+                    <XAxis type="number" domain={[0, 100]} tick={chartTick} stroke="var(--color-line)" />
+                    <YAxis type="category" dataKey="name" tick={{ ...chartTick, fontSize: 12 }} stroke="var(--color-line)" width={24} />
+                    <Tooltip {...chartTooltip} cursor={{ fill: 'var(--color-bg)' }} formatter={(v) => (typeof v === 'number' ? `${v.toFixed(1)} %` : String(v))} />
                     <Bar dataKey="percent" fill="var(--color-accent)" isAnimationActive={false} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -164,34 +168,37 @@ export function MargenTool({ dict }: ToolProps) {
               <>
                 <dl className="grid grid-cols-2 gap-2 text-sm" data-testid="mc-result">
                   <div>
-                    <dt className="text-xs text-muted">{t.mcMean}</dt>
+                    <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted">{t.mcMean}</dt>
                     <dd className="font-mono">{mc.mean.toFixed(2)} mg/L</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-muted">{t.mcSd}</dt>
+                    <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted">{t.mcSd}</dt>
                     <dd className="font-mono">{mc.sd.toFixed(3)} mg/L</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-muted">{t.mcInterval}</dt>
+                    <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted">{t.mcInterval}</dt>
                     <dd className="font-mono">
                       [{mc.low.toFixed(2)}; {mc.high.toFixed(2)}] mg/L
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-muted">{t.gumInterval}</dt>
+                    <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted">{t.gumInterval}</dt>
                     <dd className="font-mono">
                       [{(budget.y - budget.U).toFixed(2)}; {(budget.y + budget.U).toFixed(2)}] mg/L
                     </dd>
                   </div>
                 </dl>
                 <figure>
-                  <figcaption className="mb-2 text-sm font-semibold">{t.histogram}</figcaption>
+                  <figcaption className={figCaption}>
+                    <b className={figTag}>Fig. 2-b</b>
+                    {t.histogram}
+                  </figcaption>
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={mc.histogram.map((h) => ({ x: ((h.x0 + h.x1) / 2).toFixed(2), count: h.count }))}>
-                        <XAxis dataKey="x" tick={{ fontSize: 9 }} stroke="var(--color-muted)" interval={7} />
+                        <XAxis dataKey="x" tick={{ ...chartTick, fontSize: 9 }} stroke="var(--color-line)" interval={7} />
                         <YAxis hide />
-                        <Tooltip />
+                        <Tooltip {...chartTooltip} cursor={{ fill: 'var(--color-bg)' }} />
                         <Bar dataKey="count" fill="var(--color-accent)" isAnimationActive={false} />
                       </BarChart>
                     </ResponsiveContainer>
