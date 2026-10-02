@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { ModuleContent } from '@/content/types';
+import { DemoBar } from '@/components/lab/DemoBar';
 import type { Locale } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/get-dictionary';
 import { Glossary } from './Glossary';
@@ -22,6 +23,7 @@ export function ModuleShell({
 }) {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-8">
+      <DemoBar dict={dict} />
       <div className="flex flex-wrap items-start justify-between gap-4 py-6">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-widest text-accent">{content.area}</p>

@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import '../globals.css';
+import { LabStoreProvider } from '@/components/lab/LabStoreProvider';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { isLocale, locales } from '@/lib/i18n/config';
@@ -40,9 +41,11 @@ export default async function LangLayout({
   return (
     <html lang={lang} className={`${sans.variable} ${mono.variable}`}>
       <body className="min-h-screen antialiased">
-        <SiteHeader lang={lang} dict={dict} />
-        <main>{children}</main>
-        <SiteFooter dict={dict} />
+        <LabStoreProvider>
+          <SiteHeader lang={lang} dict={dict} />
+          <main>{children}</main>
+          <SiteFooter dict={dict} />
+        </LabStoreProvider>
       </body>
     </html>
   );
