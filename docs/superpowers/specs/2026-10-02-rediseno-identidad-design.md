@@ -76,6 +76,23 @@ El sitio publicado se ve como una plantilla:
   - Curva: R² solo no prueba linealidad; para eso está el gráfico de residuos.
 - **Contacto:** «Contame qué se sigue copiando a mano en tu laboratorio…».
 
+## 3b. Nombre (decisión de Andrés, 2026-10-02)
+
+El sitio deja de llamarse «Veritas Lab Suite». Pasa a ser **«Andrés Nahuel Páez · Portfolio»**, en ES y EN.
+
+**Dónde se usa el nombre nuevo:**
+- La marca del encabezado.
+- `meta.title` y `meta.shortTitle`.
+- `siteName` de Open Graph.
+- El título del encabezado de documento de la home: «Portfolio técnico · Andrés Nahuel Páez».
+- El banner y el pie del informe PDF.
+- El README.
+- En el CV, el proyecto principal pasa a llamarse «Portfolio de software para laboratorios» (EN: «Laboratory software portfolio»).
+
+**Lo que no cambia por ahora:**
+- El código de documento queda `ANP-POR-001`.
+- La URL y el nombre del repositorio `veritas-lab-suite`. Un dominio nuevo se decide aparte con Andrés.
+
 ## 4. Alcance
 
 - **Se cambia:**
