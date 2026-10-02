@@ -4,6 +4,7 @@ import type { Locale } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/get-dictionary';
 import { CustodiaTool } from './CustodiaTool';
 import { EnlaceTool } from './EnlaceTool';
+import { InformeTool } from './InformeTool';
 import { QcTool } from './QcTool';
 
 export type ToolProps = { dict: Dictionary; lang: Locale };
@@ -13,4 +14,5 @@ export const toolRegistry: Partial<Record<ModuleSlug, ComponentType<ToolProps>>>
   enlace: EnlaceTool,
   qc: QcTool,
   custodia: CustodiaTool,
+  informe: InformeTool,
 };
