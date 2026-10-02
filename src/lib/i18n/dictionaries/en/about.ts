@@ -1,12 +1,18 @@
 import type { about as esAbout } from '../es/about';
 
 export const about: typeof esAbout = {
-  title: 'About this portfolio',
+  title: 'Who signs this portfolio',
+  eyebrow: 'About · Andrés Nahuel Páez',
   paragraphs: [
-    'I am Andrés Nahuel Páez, from La Rioja, Argentina. I spent more than eight years in administrative and records management and coordination at educational institutions, and today I build software and data solutions.',
-    'I trained as a Geography teacher (statistics, cartography, geology, climatology and hydrology) and hold a degree in Education. That mix of method, data and regulation is what I bring to laboratories.',
-    'This portfolio shows how I work: real laboratory problems, calculations verified against published references, end-to-end traceability, and AI only where it belongs.',
+    'I’m Andrés Nahuel Páez and I live in La Rioja, Argentina. From 2017 to 2025 I worked in school administration: records, deadlines, regulations and coordination. That’s where I learned a record is only as good as its trail.',
+    'I trained as a geography teacher, with statistics, cartography, geology, climatology and hydrology, and later earned a degree in Education. Data that has to add up, and paperwork that has to be in order.',
+    'A school isn’t a laboratory. What carries over is the habit: every record should say who, when and what changed. This portfolio brings that into software, with calculations verified against published references and an end-to-end audit trail. AI explains and drafts; the results are calculated by code with tests.',
   ],
+  territory: {
+    title: 'Where I work from',
+    text: 'A geodetic vertex is a point of known coordinates from which the rest of the land is measured. This one is mine: La Rioja, in northwest Argentina.',
+    availability: 'Remote for all of Argentina and worldwide (UTC−3). On-site in La Rioja, Northwest Argentina and Cuyo.',
+  },
   howTitle: 'How it is built',
   how: [
     'Next.js, React and TypeScript; scientific logic in pure modules with unit tests (Vitest) and end-to-end tests (Playwright).',
@@ -14,10 +20,12 @@ export const about: typeof esAbout = {
     'Demo data lives in your browser; a reference Postgres schema with an audit trail tested in CI.',
     'AI-assisted development (Claude Code), with review and tests for every change.',
   ],
-  otherTitle: 'Other work: data and AI for regulated industries',
+  otherTitle: 'Previous portfolios',
+  otherNote: 'Data and AI for other regulated industries.',
   other: [
     { label: 'Mining, energy and data portfolio', href: 'https://portfolio-andresnahuelpaez.vercel.app' },
     { label: 'Banking and fintech portfolio', href: 'https://andresnahuelpaez-portfolio-banca.vercel.app' },
   ],
   contactTitle: 'Contact',
+  contactText: 'Tell me what still gets copied by hand in your lab, and we’ll see if it’s worth automating.',
 };

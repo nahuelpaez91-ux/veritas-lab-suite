@@ -1,10 +1,16 @@
 export const about = {
-  title: 'Acerca de este portfolio',
+  title: 'Quién firma este portfolio',
+  eyebrow: 'Acerca · Andrés Nahuel Páez',
   paragraphs: [
-    'Soy Andrés Nahuel Páez, de La Rioja, Argentina. Trabajé más de ocho años en gestión administrativa, expedientes y coordinación en instituciones educativas, y hoy desarrollo software y soluciones de datos.',
-    'Me formé como Profesor en Geografía (estadística, cartografía, geología, climatología e hidrología) y como Licenciado en Educación. Esa combinación de método, datos y normativa es la que llevo a los laboratorios.',
-    'Este portfolio muestra cómo trabajo: problemas reales del laboratorio, cálculos verificados contra referencias publicadas, trazabilidad de punta a punta e IA solo donde corresponde.',
+    'Soy Andrés Nahuel Páez y vivo en La Rioja, Argentina. Entre 2017 y 2025 trabajé en la gestión administrativa de escuelas: expedientes, plazos, normativa y coordinación. Ahí aprendí que un registro vale lo que vale su rastro.',
+    'Me formé como Profesor en Geografía, con estadística, cartografía, geología, climatología e hidrología, y después como Licenciado en Educación. Datos que tienen que cerrar y papeles que tienen que estar en regla.',
+    'Una escuela no es un laboratorio. Lo que se traslada es el hábito: que cada registro diga quién, cuándo y qué cambió. Este portfolio lo lleva al software, con cálculos verificados contra referencias publicadas y un audit trail de punta a punta. La IA explica y redacta borradores; los resultados los calcula código con tests.',
   ],
+  territory: {
+    title: 'Desde dónde trabajo',
+    text: 'Un vértice geodésico es un punto de coordenadas conocidas desde el que se mide el resto del terreno. Este es el mío: La Rioja, en el noroeste argentino.',
+    availability: 'Remoto para toda Argentina y el mundo (UTC−3). Presencial en La Rioja, NOA y Cuyo.',
+  },
   howTitle: 'Cómo está hecho',
   how: [
     'Next.js, React y TypeScript; lógica científica en módulos puros con tests (Vitest) y pruebas de punta a punta (Playwright).',
@@ -12,10 +18,12 @@ export const about = {
     'Datos de la demo en tu navegador; esquema Postgres de referencia con audit trail probado en la CI.',
     'Desarrollo asistido por IA (Claude Code), con revisión y pruebas de cada cambio.',
   ],
-  otherTitle: 'Otros trabajos: datos e IA para industrias reguladas',
+  otherTitle: 'Portfolios anteriores',
+  otherNote: 'Datos e IA para otras industrias reguladas.',
   other: [
     { label: 'Portfolio de minería, energía y datos', href: 'https://portfolio-andresnahuelpaez.vercel.app' },
     { label: 'Portfolio de banca y fintech', href: 'https://andresnahuelpaez-portfolio-banca.vercel.app' },
   ],
   contactTitle: 'Contacto',
+  contactText: 'Contame qué se sigue copiando a mano en tu laboratorio y vemos si conviene automatizarlo.',
 };

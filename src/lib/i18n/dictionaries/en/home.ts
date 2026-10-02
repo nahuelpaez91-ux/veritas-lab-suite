@@ -1,39 +1,106 @@
 import type { home as esHome } from '../es/home';
 
 export const home: typeof esHome = {
-  hero: {
-    eyebrow: 'Laboratory software · Data · Quality · Traceability',
-    title: 'I build laboratory software with AI, knowing where not to put it.',
-    subtitle:
-      'Decision-making calculations are deterministic and verified against published references. AI only assists (it explains and drafts), with human review and an audit trail.',
-    ctaFlow: 'Walk through the flow',
-    ctaCv: 'View CV',
-    ctaValidation: 'See validation evidence',
-  },
-  availability: {
-    title: 'Availability',
-    items: [
-      'National: remote anywhere in Argentina (UTC−3).',
-      'Local: on-site or remote in La Rioja, Northwest Argentina and Cuyo.',
-      'Worldwide: remote, with hours compatible with Europe and the Americas.',
+  doc: {
+    label: 'Document header',
+    document: 'Document',
+    title: 'Technical portfolio · Andrés Nahuel Páez',
+    code: 'Code',
+    revision: 'Revision',
+    effective: 'Effective from',
+    marginLabel: 'Document metadata',
+    margin: [
+      { k: 'Author', v: 'A. N. Páez' },
+      { k: 'Origin', v: 'La Rioja, AR' },
+      { k: 'Classification', v: 'Public · educational demo' },
+      { k: 'Language', v: 'ES · EN' },
     ],
   },
+  hero: {
+    eyebrow: 'Andrés Nahuel Páez · La Rioja, Argentina · Laboratory software',
+    title: 'Eight years keeping school records. Now I build audit trails.',
+    titleMark: 'audit trails',
+    subtitle:
+      'I know what happens when a record can’t say who, when or what changed. Here every change does, and no result leaves unsigned.',
+    ctaFlow: 'Follow one sample end to end',
+    ctaValidation: 'Open the validation file',
+    aiLine: 'AI drafts; the results are calculated by code with tests.',
+  },
+  register: {
+    title: 'Verification record',
+    tests: 'Tests passing',
+    modules: 'Working modules',
+    westgard: 'Westgard control limits',
+    westgardValue: '±3 SD',
+    audit: 'Chained audit trail',
+    references: 'References',
+    framework: 'Framework',
+    frameworkValue: '21 CFR 11 · Annex 11',
+    frameworkNote: 'designed with these in mind; not certified',
+    sealLabel: 'ANP seal · Andrés Nahuel Páez · revision',
+    sealNote: 'Revision of the latest test report',
+  },
   flow: {
-    title: 'The complete flow, connected',
-    subtitle: 'A result travels from analyzer to report with no manual transcription, and does not leave if quality control prevents it.',
+    n: '§ 1',
+    title: 'One sample, from analyzer to signed PDF',
+    note: '4 steps · no copying by hand',
+    subtitle:
+      'The result travels from the analyzer to the report without anyone retyping it. If quality control rejects the run, it doesn’t leave.',
+    stepLabel: 'Step',
     steps: [
-      { slug: 'enlace', title: '1 · Enlace', text: 'The analyzer sends ASTM or HL7; the message is validated and loaded.' },
-      { slug: 'qc', title: '2 · Quality control', text: 'Westgard evaluates the run; if rejected, it blocks.' },
-      { slug: 'custodia', title: '3 · Custodia', text: 'Review and approval with electronic signature and audit trail.' },
-      { slug: 'informe', title: '4 · Report', text: 'PDF with signatures and integrity hashes.' },
+      { slug: 'enlace', title: 'Enlace', text: 'The analyzer sends ASTM or HL7. The message is validated and loaded.' },
+      { slug: 'qc', title: 'Quality control', text: 'Westgard evaluates the run. If it rejects it, release is blocked.' },
+      { slug: 'custodia', title: 'Custodia', text: 'Review and approval with an electronic signature. Every change goes into the audit trail.' },
+      { slug: 'informe', title: 'Report', text: 'A PDF with the signatures and the record hash, to check it against the database.' },
     ],
   },
   modules: {
-    title: 'Modules',
-    subtitle: 'Each module runs in the browser, explains its science and links to the test that verifies it.',
+    n: '§ 2',
+    title: 'What gets recorded',
+    note: '6 modules · each with its test',
+    subtitle:
+      'Each module runs in the browser, explains its science and links to the test that verifies it. The verdict comes from the latest test report, not from this text.',
+    reference: 'Reference',
+    verdict: 'Verdict',
+    pass: 'CONFORMING',
+    fail: 'NON-CONFORMING',
+    none: 'NO EVIDENCE',
     open: 'Open module →',
-    comingTitle: 'Upcoming modules (in development)',
-    coming: [
+  },
+  trajectory: {
+    n: '§ 3',
+    title: 'Before the code: records and maps',
+    note: '2017–2025 · La Rioja',
+    text: 'From 2017 to 2025 I worked in school administration in La Rioja: records, deadlines, regulations. That’s where I learned a record is only as good as its trail. Before that I trained as a geography teacher, with statistics, geology and hydrology. Today I bring both into software: calculations verified against published references, and records that hold up to an audit.',
+    pillars: [
+      {
+        title: 'Records and deadlines',
+        text: 'Who signed, when, and under which rule. A school isn’t a lab, but the habit carries over: it’s what ALCOA+ and ISO/IEC 17025 §8.3 ask for.',
+      },
+      {
+        title: 'Maps and data',
+        text: 'Statistics, geology, climatology and hydrology: data that has to add up. Today, scientific Python and GIS.',
+      },
+      {
+        title: 'Software with tests, and AI only as a draft',
+        text: 'Next.js, TypeScript and SQL, with tests and continuous integration. AI (Claude API) drafts; the code calculates the result.',
+      },
+    ],
+  },
+  region: {
+    n: '§ 4',
+    title: 'Made in La Rioja, for any laboratory',
+    note: 'UTC−3',
+    availabilityLabel: 'Availability',
+    availability: [
+      { scope: 'National', text: 'Remote anywhere in Argentina (UTC−3).' },
+      { scope: 'Local', text: 'On-site or remote in La Rioja, Northwest Argentina and Cuyo.' },
+      { scope: 'Worldwide', text: 'Remote. UTC−3 overlaps with the European afternoon and the full working day in the Americas.' },
+    ],
+    roadmapTitle: 'Roadmap',
+    roadmapStatus: 'IN DEVELOPMENT',
+    roadmapNote: 'Not on the site yet. Listed so you can see where this is going, not as finished work.',
+    roadmap: [
       'Stock & cold chain: FEFO reagents, QR labels, temperature excursions and MKT',
       'AI certificate-of-analysis extractor with human review',
       'Cuenca: water quality and arsenic in La Rioja (Argentine Food Code art. 982)',
@@ -42,31 +109,26 @@ export const home: typeof esHome = {
       'Sequence: FASTA/FASTQ, %GC and primer design',
     ],
   },
-  trajectory: {
-    title: 'From territory and administration to the laboratory',
-    text: 'More than eight years managing records, deadlines and regulations at educational institutions taught me what a regulated laboratory demands: every record must be attributable, traceable and auditable. Today I apply that to software.',
-    pillars: [
-      { title: 'Records and regulatory administration', text: 'Version control, traceability and compliance: the basis of ALCOA+ and ISO/IEC 17025 §8.3.' },
-      { title: 'Data science and territory', text: 'Geography teacher with statistics, geology, climatology and hydrology; scientific Python and GIS.' },
-      { title: 'Software with responsible AI', text: 'Next.js, TypeScript, SQL and Claude API, with tests, continuous integration and AI off the critical path.' },
-    ],
-  },
   capabilities: {
-    title: 'What else I can build for your lab',
+    n: '§ 5',
+    title: 'Other work I can take on',
     items: [
-      'Migrate Excel spreadsheets to a system with audit trail, roles and signatures.',
-      'Automatic reports and certificates of analysis from audited data.',
+      'Move Excel spreadsheets into a system with an audit trail, roles and signatures.',
+      'Reports and certificates of analysis generated straight from audited data.',
       'Ingest instrument files and interfaces (CSV, ASTM, HL7) into a database.',
-      'AI assistants over SOPs and regulations, with source citations and human review.',
+      'AI assistants over SOPs and regulations that cite the source and go through human review.',
       'Validation documentation: URS, risk assessment, traceability matrix and protocols.',
     ],
   },
-  credentials: { title: 'Education and credentials', education: 'Education', certs: 'Certifications', verify: 'Verify' },
+  credentials: { n: '§ 6', title: 'Education and credentials', education: 'Education', certs: 'Certifications', verify: 'Verify' },
   contact: {
+    n: '§ 7',
     title: 'Contact',
-    text: 'Does your lab have a painful manual process? Write to me and let’s look at it.',
+    text: 'Tell me what still gets copied by hand in your lab, and we’ll see if it’s worth automating.',
     email: 'Email',
     whatsapp: 'WhatsApp',
     github: 'GitHub',
+    cv: 'CV',
+    cvLink: 'View CV →',
   },
 };
