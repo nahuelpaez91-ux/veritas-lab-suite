@@ -9,10 +9,11 @@ import { downloadText, toCsv } from '@/lib/export/csv';
 import { addQcRun } from '@/lib/lims/actions';
 import { analytesOf, runsFor, targetsFor, violationsFor } from '@/lib/lims/qc';
 import { runStatus, sigmaMetric, zScore } from '@/lib/science/westgard';
+import { AssistButton } from './AssistButton';
 import { LeveyJenningsChart, type LjDatum } from './LeveyJenningsChart';
 import type { ToolProps } from './registry';
 
-export function QcTool({ dict }: ToolProps) {
+export function QcTool({ dict, lang }: ToolProps) {
   const t = dict.tools.qc;
   const { state, run } = useLab();
   const [analyte, setAnalyte] = useState('GLU');
@@ -191,6 +192,31 @@ export function QcTool({ dict }: ToolProps) {
           </table>
         </div>
       </div>
+
+      {view.rows[0] && (
+        <div className={card}>
+          <h2 className="mb-3 font-semibold">
+            {t.aiTitle}: <span className="font-mono">{view.rows[0].run.id}</span>
+          </h2>
+          <AssistButton
+            key={view.rows[0].run.id}
+            dict={dict}
+            lang={lang}
+            tasks={view.rows[0].status === 'reject' ? ['explain_violation', 'draft_capa'] : ['explain_violation']}
+            context={{
+              analyte,
+              runId: view.rows[0].run.id,
+              status: view.rows[0].status,
+              rules: view.rows[0].rules,
+              points: view.rows[0].run.points.map((p) => {
+                const tg = view.targets.find((x) => x.level === p.level);
+                return { level: p.level, value: p.value, z: tg ? Number(zScore(p.value, tg).toFixed(2)) : 0 };
+              }),
+              correctiveAction: view.rows[0].run.correctiveAction,
+            }}
+          />
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <form onSubmit={onAddRun} className={`${card} space-y-3`}>

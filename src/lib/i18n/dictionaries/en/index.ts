@@ -1,4 +1,5 @@
 import type { Dictionary } from '../types';
+import { ai } from './ai';
 import { base } from './base';
 import { curva } from './curva';
 import { custodia } from './custodia';
@@ -9,5 +10,6 @@ import { qc } from './qc';
 
 export const en: Dictionary = {
   ...base,
+  ai,
   tools: { enlace, qc, custodia, informe, curva, margen },
 };
