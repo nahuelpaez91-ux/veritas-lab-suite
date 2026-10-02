@@ -40,6 +40,14 @@ function allBeyond(zs: number[], limit: number): boolean {
 }
 
 export function evaluateWestgard(points: QcPoint[], targets: QcTarget[]): Violation[] {
+  for (const p of points) {
+    if (!Number.isFinite(p.value)) throw new Error('westgard: non-finite control value');
+  }
+  const seenLevels = new Set<string>();
+  for (const t of targets) {
+    if (seenLevels.has(t.level)) throw new Error(`westgard: duplicate target for level ${t.level}`);
+    seenLevels.add(t.level);
+  }
   const targetByLevel = new Map(targets.map((t) => [t.level, t]));
   const zpoints: ZPoint[] = points.map((p) => {
     const target = targetByLevel.get(p.level);
@@ -86,6 +94,35 @@ export function evaluateWestgard(points: QcPoint[], targets: QcTarget[]): Violat
     if (below.length >= 2) push({ rule: '2-2s', runId, levels: below.map((p) => p.level).sort(), severity: 'reject', scope: 'across-levels' });
     if (above.length >= 1 && below.length >= 1) {
       push({ rule: 'R-4s', runId, levels: [...above, ...below].map((p) => p.level).sort(), severity: 'reject', scope: 'across-levels' });
+    }
+  }
+
+  // Reglas 4-1s y 10x entre niveles (entre materiales): secuencia combinada
+  // ordenada por corrida y luego por nivel, deslizando la ventana sobre todos
+  // los puntos z sin importar el nivel.
+  const combined = [...zpoints].sort((a, b) => a.runIndex - b.runIndex || a.level.localeCompare(b.level));
+  for (let i = 0; i < combined.length; i++) {
+    const window = (n: number) => (i + 1 >= n ? combined.slice(i + 1 - n, i + 1) : null);
+    const runId = combined[i].runId;
+    const w4 = window(4);
+    if (w4 && allBeyond(w4.map((p) => p.z), 1)) {
+      push({
+        rule: '4-1s',
+        runId,
+        levels: [...new Set(w4.map((p) => p.level))].sort(),
+        severity: 'reject',
+        scope: 'across-levels',
+      });
+    }
+    const w10 = window(10);
+    if (w10 && allBeyond(w10.map((p) => p.z), 0)) {
+      push({
+        rule: '10x',
+        runId,
+        levels: [...new Set(w10.map((p) => p.level))].sort(),
+        severity: 'reject',
+        scope: 'across-levels',
+      });
     }
   }
 

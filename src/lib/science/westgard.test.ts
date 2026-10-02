@@ -84,4 +84,30 @@ describe('Westgard', () => {
     expect(sigmaMetric(10, -1, 1.5)).toBeCloseTo(6, 10);
     expect(() => sigmaMetric(10, 1, 0)).toThrow();
   });
+
+  it('[QC-URS-12] valores no finitos y objetivos duplicados se rechazan', () => {
+    const pts = pointsFromZ([[0, 0]]);
+    pts[0].value = Number.NaN;
+    expect(() => evaluateWestgard(pts, targets)).toThrow('westgard: non-finite control value');
+
+    const dupTargets: QcTarget[] = [...targets, { analyte: 'GLU', level: 'N1', mean: 101, sd: 2 }];
+    expect(() => evaluateWestgard(pointsFromZ([[0, 0]]), dupTargets)).toThrow(
+      'westgard: duplicate target for level N1',
+    );
+  });
+
+  it('[QC-URS-13] 4-1s y 10x entre niveles (entre materiales)', () => {
+    const pts = pointsFromZ([[1.2, 1.3], [1.1, 1.5]]);
+    const violations = evaluateWestgard(pts, targets);
+    const acrossR2 = violations.filter((v) => v.runId === 'R2' && v.scope === 'across-levels');
+    expect(acrossR2.map((v) => v.rule)).toContain('4-1s');
+
+    const rows: [number, number][] = Array.from({ length: 5 }, () => [0.5, 0.5]);
+    const pts2 = pointsFromZ(rows);
+    const violations2 = evaluateWestgard(pts2, targets);
+    const acrossR5 = violations2.filter((v) => v.runId === 'R5' && v.scope === 'across-levels');
+    expect(acrossR5.map((v) => v.rule)).toContain('10x');
+    const acrossR4 = violations2.filter((v) => v.runId === 'R4' && v.scope === 'across-levels');
+    expect(acrossR4.map((v) => v.rule)).not.toContain('10x');
+  });
 });

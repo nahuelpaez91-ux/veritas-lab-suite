@@ -46,6 +46,11 @@ describe('incertidumbre', () => {
     expect(mc.histogram.reduce((a, h) => a + h.count, 0)).toBe(200_000);
   });
 
+  it('[UNC-URS-06] Monte Carlo valida las entradas', () => {
+    const badInputs: InputQuantity[] = [{ name: 'm', value: 100, u: -1, distribution: 'normal' }];
+    expect(() => monteCarlo(cadmium, badInputs, 2000)).toThrow('monteCarlo: invalid input');
+  });
+
   it('[UNC-URS-05] generador pseudoaleatorio reproducible y normal estándar correcta', () => {
     const a = mulberry32(7);
     const b = mulberry32(7);

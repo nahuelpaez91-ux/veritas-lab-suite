@@ -74,6 +74,8 @@ export function sampleInput(q: InputQuantity, rng: () => number): number {
       const a = q.u * Math.sqrt(6);
       return q.value + (rng() + rng() - 1) * a;
     }
+    default:
+      throw new Error(`sampleInput: unknown distribution ${q.distribution as string}`);
   }
 }
 
@@ -95,6 +97,7 @@ export function monteCarlo(
   bins = 40,
 ): MonteCarloResult {
   if (draws < 1000) throw new Error('monteCarlo: use at least 1000 draws');
+  if (inputs.some((q) => !Number.isFinite(q.value) || !(q.u >= 0))) throw new Error('monteCarlo: invalid input');
   const rng = mulberry32(seed);
   const ys = new Float64Array(draws);
   const v = valuesOf(inputs);

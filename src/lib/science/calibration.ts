@@ -51,6 +51,7 @@ export function fitCalibration(x: number[], y: number[], weighting: Weighting = 
     syy += w[i] * dy * dy;
   }
   if (sxx === 0) throw new Error('calibration: x values must not all be equal');
+  if (syy === 0) throw new Error('calibration: y values must not all be equal');
 
   const slope = sxy / sxx;
   const intercept = yMean - slope * xMean;
@@ -58,7 +59,7 @@ export function fitCalibration(x: number[], y: number[], weighting: Weighting = 
   const residuals = y.map((yi, i) => yi - fitted[i]);
   const ssRes = residuals.reduce((a, r, i) => a + w[i] * r * r, 0);
   const syx = Math.sqrt(ssRes / (n - 2));
-  const r2 = syy === 0 ? 1 : 1 - ssRes / syy;
+  const r2 = 1 - ssRes / syy;
 
   return {
     n,
@@ -79,7 +80,11 @@ export function fitCalibration(x: number[], y: number[], weighting: Weighting = 
   };
 }
 
-export function detectionLimits(fit: CalibrationFit): { lod: number; loq: number } {
+// ICH Q2: LOD = 3,3·σ/S, LOQ = 10·σ/S, con σ estimado como s y/x. Esa estimación
+// de σ (la dispersión de la señal del blanco) solo es válida para regresiones
+// sin ponderar: en una regresión ponderada, s y/x no representa la DE del blanco.
+export function detectionLimits(fit: CalibrationFit): { lod: number; loq: number } | null {
+  if (fit.weighting !== 'none') return null;
   if (fit.slope === 0) throw new Error('calibration: slope is zero');
   const b = Math.abs(fit.slope);
   return { lod: (3.3 * fit.syx) / b, loq: (10 * fit.syx) / b };
@@ -95,6 +100,7 @@ export interface InversePrediction {
 // Miller & Miller: s x0 para regresión sin ponderar. En ponderada no se informa IC.
 export function inversePredict(fit: CalibrationFit, y0: number, replicates = 1): InversePrediction {
   if (!Number.isInteger(replicates) || replicates < 1) throw new Error('calibration: replicates must be ≥ 1');
+  if (fit.slope === 0) throw new Error('calibration: slope is zero');
   const x0 = (y0 - fit.intercept) / fit.slope;
   const outOfRange = x0 < Math.min(...fit.x) || x0 > Math.max(...fit.x);
   if (fit.weighting !== 'none') return { x0, sx0: null, ci95: null, outOfRange };

@@ -32,6 +32,8 @@ function readStrd(path: string) {
     // así no confundir el encabezado con la línea de datos. Tolerancias sin tocar.
     residualSd: num(/^\s*Standard Deviation[ \t]+(\S+)/m),
     r2: num(/^\s*R-Squared[ \t]+(\S+)/m),
+    seB0: num(/^\s*B0\s+\S+\s+(\S+)/m),
+    seB1: num(/^\s*B1\s+\S+\s+(\S+)/m),
     x,
     y,
   };
@@ -52,6 +54,8 @@ describe('calibración', () => {
     expect(rel(fit.intercept, s.b0)).toBeLessThan(1e-9);
     expect(rel(fit.syx, s.residualSd)).toBeLessThan(1e-9);
     expect(Math.abs(fit.r2 - s.r2)).toBeLessThan(1e-9);
+    expect(rel(fit.seIntercept, s.seB0)).toBeLessThan(1e-9);
+    expect(rel(fit.seSlope, s.seB1)).toBeLessThan(1e-9);
   });
 
   it('[CAL-URS-02] pendiente, ordenada, R² y s y/x del ejemplo resuelto', () => {
@@ -65,9 +69,10 @@ describe('calibración', () => {
   });
 
   it('[CAL-URS-03] LOD = 3,3·s/b y LOQ = 10·s/b (ICH Q2)', () => {
-    const { lod, loq } = detectionLimits(fitCalibration(X5, Y5));
-    expect(lod).toBeCloseTo(0.173889, 5);
-    expect(loq).toBeCloseTo(0.526937, 5);
+    const limits = detectionLimits(fitCalibration(X5, Y5));
+    expect(limits).not.toBeNull();
+    expect(limits?.lod).toBeCloseTo(0.173889, 5);
+    expect(limits?.loq).toBeCloseTo(0.526937, 5);
   });
 
   it('[CAL-URS-04] predicción inversa con desvío e IC 95 % y aviso fuera de rango', () => {
@@ -88,6 +93,7 @@ describe('calibración', () => {
     expect(fit.intercept).toBeCloseTo(1, 10);
     expect(fit.r2).toBeCloseTo(1, 10);
     expect(inversePredict(fit, 5).sx0).toBeNull();
+    expect(detectionLimits(fit)).toBeNull();
     expect(() => fitCalibration([0, 1, 2], [1, 2, 3], '1/x')).toThrow();
   });
 
@@ -96,5 +102,8 @@ describe('calibración', () => {
     expect(() => fitCalibration([1, 2], [1, 2])).toThrow();
     expect(() => fitCalibration([2, 2, 2], [1, 2, 3])).toThrow();
     expect(() => fitCalibration([1, 2, Number.NaN], [1, 2, 3])).toThrow();
+    expect(() => fitCalibration([1, 2, 3], [5, 5, 5])).toThrow(
+      'calibration: y values must not all be equal',
+    );
   });
 });

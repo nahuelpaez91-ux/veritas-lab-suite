@@ -1,8 +1,14 @@
 export type Cell = string | number | null | undefined;
 
+const PLAIN_NUMBER = /^[-+]?\d+(\.\d+)?$/;
+
+// Neutraliza inyección de fórmulas (CSV injection) en hojas de cálculo: si la
+// celda empieza con =, +, - o @ y no es un número llano, se antepone un
+// apóstrofo para que el valor se interprete como texto literal.
 function escapeCell(cell: Cell): string {
   if (cell === null || cell === undefined) return '';
-  const s = String(cell);
+  let s = String(cell);
+  if (/^[=+\-@]/.test(s) && !PLAIN_NUMBER.test(s)) s = `'${s}`;
   return /[",\n\r;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
