@@ -270,7 +270,7 @@ export const custodia: LocalizedModule = {
       'La integridad de datos aparece en la mayoría de las observaciones regulatorias: registros editables sin rastro, firmas sin significado y resultados liberados sin revisión. Custodia implementa el núcleo de un LIMS. Cada cambio queda en un audit trail que no se puede alterar sin que se note. Cada firma exige contraseña y declara su significado. La liberación se bloquea si el control de calidad no la permite.',
     howItWorks: [
       'Cada muestra pasa por los estados recibida → en análisis → revisada → liberada, y cada transición queda auditada.',
-      'El audit trail es solo-agregado: cada registro guarda el hash SHA-256 del anterior. Si alguien edita o borra uno, la verificación marca dónde se rompió la cadena.',
+      'El audit trail es solo-agregado y a prueba de manipulaciones (tamper-evident): cada registro guarda el hash SHA-256 del anterior. Si alguien edita, inserta, reordena o borra un registro, la verificación marca dónde se rompió la cadena. El truncado del final se detecta guardando aparte el último hash, como hace el esquema de base de datos.',
       'La firma electrónica pide volver a ingresar la contraseña y registra quién firmó, cuándo y con qué significado (revisado / aprobado). Queda ligada al hash del contenido firmado.',
       'Segregación de funciones: quien revisó una versión no puede aprobarla, y solo el rol validador aprueba.',
       'Antes de aprobar se consulta el estado de las corridas de control: si alguna está rechazada, la muestra no se libera.',
@@ -321,7 +321,7 @@ export const custodia: LocalizedModule = {
       'Data integrity shows up in most regulatory observations: editable records with no trace, signatures without meaning and results released without review. Custodia implements the core of a LIMS. Every change goes into an audit trail that cannot be altered without detection. Every signature requires a password and states its meaning. Release is blocked when quality control does not allow it.',
     howItWorks: [
       'Each sample moves through received → in analysis → reviewed → released, and every transition is audited.',
-      'The audit trail is append-only: each record stores the SHA-256 hash of the previous one. If anyone edits or deletes a record, verification shows where the chain broke.',
+      'The audit trail is append-only and tamper-evident: each record stores the SHA-256 hash of the previous one. If anyone edits, inserts, reorders or deletes a record, verification shows where the chain broke. Tail truncation is detected by storing the latest hash separately, as the database schema does.',
       'The electronic signature asks for the password again and records who signed, when and with what meaning (reviewed / approved). It is bound to the hash of the signed content.',
       'Segregation of duties: whoever reviewed a revision cannot approve it, and only the approver role approves.',
       'Before approval, the control-run status is checked: if any run is rejected, the sample is not released.',
@@ -822,6 +822,8 @@ export const enlace = {
     bad_checksum: 'Checksum de trama inválido',
     not_oru: 'El mensaje no es ORU^R01',
     missing_msh: 'Falta el segmento MSH',
+    frame_sequence: 'Número de trama fuera de secuencia',
+    bad_frame: 'Trama mal formada (descartada)',
   },
 };
 ```
@@ -867,6 +869,8 @@ export const enlace: typeof esEnlace = {
     bad_checksum: 'Invalid frame checksum',
     not_oru: 'The message is not ORU^R01',
     missing_msh: 'Missing MSH segment',
+    frame_sequence: 'Frame number out of sequence',
+    bad_frame: 'Malformed frame (discarded)',
   },
 };
 ```
@@ -1543,6 +1547,7 @@ export const custodia = {
   releaseOk: 'Todas las corridas de control asociadas están aceptadas.',
   blockingRuns: 'Corridas rechazadas',
   missingQc: 'Pruebas sin corrida de control',
+  notFinal: 'Resultados no finales (estado distinto de F/C)',
   signReviewed: 'Firmar: revisado',
   signApproved: 'Firmar: aprobado y liberar',
   rerun: 'Repetir en corrida aceptada',
@@ -1606,6 +1611,7 @@ export const custodia: typeof esCustodia = {
   releaseOk: 'All linked control runs are accepted.',
   blockingRuns: 'Rejected runs',
   missingQc: 'Tests without a control run',
+  notFinal: 'Non-final results (status other than F/C)',
   signReviewed: 'Sign: reviewed',
   signApproved: 'Sign: approved and release',
   rerun: 'Repeat on accepted run',
@@ -1651,7 +1657,7 @@ Registrar `custodia` en `tools` de ambos índices.
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import type { Dictionary } from '@/lib/i18n/get-dictionary';
-import { signSample } from '@/lib/lims/actions';
+import { recordAuthFailure, signSample } from '@/lib/lims/actions';
 import type { SignatureMeaning } from '@/lib/lims/model';
 import { btnPrimary, btnSecondary, input, label } from '@/components/ui/styles';
 import { formatLabError, useLab } from './LabStoreProvider';
@@ -1683,8 +1689,13 @@ export function SignDialog({
     e.preventDefault();
     if (!meaning) return;
     const res = await run((s, _u, at) => signSample(s, sampleId, meaning, user.id, password, at));
-    if (res.ok) onClose(true);
-    else setError(formatLabError(dict, res.error));
+    if (res.ok) {
+      onClose(true);
+      return;
+    }
+    setError(formatLabError(dict, res.error));
+    // 21 CFR Part 11 §11.300(d): los intentos fallidos de re-autenticación quedan auditados
+    if (res.error.code === 'bad_password') await run((s, _u, at) => recordAuthFailure(s, sampleId, user.id, at));
   }
 
   return (
@@ -1999,6 +2010,11 @@ export function CustodiaTool({ dict }: ToolProps) {
                       {release.missingQc.length > 0 && (
                         <li>
                           {t.missingQc}: <span className="font-mono">{release.missingQc.join(', ')}</span>
+                        </li>
+                      )}
+                      {release.notFinal.length > 0 && (
+                        <li>
+                          {t.notFinal}: <span className="font-mono">{release.notFinal.join(', ')}</span>
                         </li>
                       )}
                     </ul>
