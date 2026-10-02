@@ -6,6 +6,7 @@ import { CurvaTool } from './CurvaTool';
 import { CustodiaTool } from './CustodiaTool';
 import { EnlaceTool } from './EnlaceTool';
 import { InformeTool } from './InformeTool';
+import { MargenTool } from './MargenTool';
 import { QcTool } from './QcTool';
 
 export type ToolProps = { dict: Dictionary; lang: Locale };
@@ -17,4 +18,5 @@ export const toolRegistry: Partial<Record<ModuleSlug, ComponentType<ToolProps>>>
   custodia: CustodiaTool,
   informe: InformeTool,
   curva: CurvaTool,
+  margen: MargenTool,
 };
