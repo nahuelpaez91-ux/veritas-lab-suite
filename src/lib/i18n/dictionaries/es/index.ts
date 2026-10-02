@@ -1,4 +1,6 @@
+import { about } from './about';
 import { ai } from './ai';
+import { aiPolicy } from './aiPolicy';
 import { base } from './base';
 import { curva } from './curva';
 import { custodia } from './custodia';
@@ -12,5 +14,7 @@ export const es = {
   ...base,
   ai,
   validation,
+  aiPolicy,
+  about,
   tools: { enlace, qc, custodia, informe, curva, margen },
 };
