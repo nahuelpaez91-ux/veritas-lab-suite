@@ -4,7 +4,7 @@ export const validation = {
     'Evidencia de verificación del software, organizada al estilo GAMP 5: requisitos, riesgos, trazabilidad y ejecución de pruebas. Es un ejercicio de demostración, no una validación formal para uso GxP.',
   scopeTitle: 'Alcance y clasificación',
   scope: [
-    'Sistema: Veritas Lab Suite (demo educativa), software a medida → GAMP 5 categoría 5.',
+    'Sistema: Andrés Nahuel Páez · Portfolio (demo educativa), software a medida → GAMP 5 categoría 5.',
     'Uso previsto: demostrar control de calidad, trazabilidad de muestras, integración de equipos y cálculos metrológicos.',
     'Fuera de alcance: uso con pacientes o productos reales, infraestructura, cualificación de proveedores.',
   ],

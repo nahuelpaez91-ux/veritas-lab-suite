@@ -30,6 +30,6 @@ export const informe: typeof esInforme = {
     recordHash: 'SHA-256 hash of the signed record',
     auditHead: 'Latest audit-trail hash',
     generated: 'Generated',
-    author: 'Veritas Lab Suite · designed and built by Andrés Nahuel Páez',
+    author: 'Andrés Nahuel Páez · Laboratory software portfolio',
   },
 };

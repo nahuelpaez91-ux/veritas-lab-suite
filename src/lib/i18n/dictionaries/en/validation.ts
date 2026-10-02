@@ -6,7 +6,7 @@ export const validation: typeof esValidation = {
     'Software verification evidence organized in GAMP 5 style: requirements, risks, traceability and test execution. It is a demonstration exercise, not a formal validation for GxP use.',
   scopeTitle: 'Scope and classification',
   scope: [
-    'System: Veritas Lab Suite (educational demo), custom software → GAMP 5 category 5.',
+    'System: Andrés Nahuel Páez · Portfolio (educational demo), custom software → GAMP 5 category 5.',
     'Intended use: demonstrate quality control, sample traceability, instrument integration and metrology calculations.',
     'Out of scope: use with real patients or products, infrastructure, supplier qualification.',
   ],

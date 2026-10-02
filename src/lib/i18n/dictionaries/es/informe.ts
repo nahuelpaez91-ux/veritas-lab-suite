@@ -28,6 +28,6 @@ export const informe = {
     recordHash: 'Hash SHA-256 del registro firmado',
     auditHead: 'Último hash del audit trail',
     generated: 'Generado',
-    author: 'Veritas Lab Suite · diseñado y desarrollado por Andrés Nahuel Páez',
+    author: 'Andrés Nahuel Páez · Portfolio de software para laboratorios',
   },
 };

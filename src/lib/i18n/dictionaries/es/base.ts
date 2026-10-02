@@ -1,7 +1,7 @@
 export const base = {
   meta: {
-    title: 'Andrés Nahuel Páez · Software para laboratorios',
-    shortTitle: 'Veritas Lab Suite',
+    title: 'Andrés Nahuel Páez · Portfolio de software para laboratorios',
+    shortTitle: 'Andrés Nahuel Páez · Portfolio',
     description:
       'Portfolio de software para laboratorios: control de calidad Westgard, trazabilidad de muestras con audit trail, integración ASTM/HL7, calibración e incertidumbre. Cálculos verificados contra referencias publicadas.',
   },
@@ -27,7 +27,12 @@ export const base = {
     disclaimer:
       'Demo educativa, no validada para uso GxP. Diseñada considerando 21 CFR Part 11, EU GMP Anexo 11 y ANMAT Disp. 4159/2023 (Anexo 6). Funciona en tu navegador con datos de ejemplo o sintéticos, declarados en cada módulo.',
   },
-  signature: { designed: 'Diseñado y desarrollado por', repo: 'Código fuente' },
+  signature: {
+    signedBy: 'Firmado por',
+    tagline: 'Registros que aguantan una auditoría.',
+    repo: 'Código fuente',
+    vertex: 'Vértice geodésico, La Rioja, Argentina',
+  },
   module: {
     whatIsThis: '¿Qué es esto?',
     whatSolves: 'Qué resuelve',

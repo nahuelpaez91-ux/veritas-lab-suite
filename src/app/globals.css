@@ -1,19 +1,39 @@
 @import "tailwindcss";
 
+/*
+ * Identidad «documento controlado».
+ * Papel, hoja, tinta y lacre (ver docs/superpowers/specs/2026-10-02-rediseno-identidad-design.md).
+ * Los nombres de token se mantienen (bg, surface, ink, muted, line, accent, ok, warn, danger)
+ * para que las utilidades existentes sigan funcionando: accent = lacre.
+ */
 @theme {
-  --color-bg: #f6f8f9;
-  --color-surface: #ffffff;
-  --color-ink: #0f1b24;
-  --color-muted: #5b6b76;
-  --color-line: #dde4e8;
-  --color-accent: #0e7c7b;
-  --color-accent-ink: #ffffff;
-  --color-accent-soft: #e3f3f2;
-  --color-ok: #15803d;
-  --color-warn: #92400e;
-  --color-danger: #b91c1c;
-  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --color-bg: #f4f3ee; /* papel */
+  --color-surface: #fffffc; /* hoja */
+  --color-ink: #15171a; /* tinta */
+  --color-muted: #55595f; /* metadato */
+  --color-line: #bdbbb2;
+  --color-accent: #7a1e2c; /* lacre */
+  --color-accent-ink: #ffffff; /* texto sobre lacre */
+  --color-accent-soft: #f6eaeb; /* tinte de lacre: lacre sobre él = 8.7:1 */
+  --color-ok: #1e5b45; /* conforme */
+  --color-warn: #8a5a00;
+  --color-danger: #b3261e;
+
+  --font-serif: var(--font-source-serif), "Source Serif 4", Georgia, "Times New Roman", serif;
+  /* El cuerpo es serif: font-sans apunta a la serif para que las clases existentes cambien. */
+  --font-sans: var(--font-serif);
+  --font-mono: var(--font-red-hat-mono), "Red Hat Mono", ui-monospace, Consolas, monospace;
+
+  /* Sin radios: documento, no tarjeta. rounded-full (puntos, círculos) se conserva. */
+  --radius: 0;
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
 }
 
 :root {
@@ -23,17 +43,17 @@
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --color-bg: #0b1318;
-    --color-surface: #111c22;
-    --color-ink: #e6eef2;
-    --color-muted: #93a4ae;
-    --color-line: #22313a;
-    --color-accent: #2bb3b1;
-    --color-accent-ink: #04201f;
-    --color-accent-soft: #0f2b2b;
-    --color-ok: #4ade80;
-    --color-warn: #f59e0b;
-    --color-danger: #f87171;
+    --color-bg: #121417;
+    --color-surface: #181b1f;
+    --color-ink: #e8e5dd;
+    --color-muted: #a0a3a8;
+    --color-line: #33373d;
+    --color-accent: #e8909b;
+    --color-accent-ink: #121417;
+    --color-accent-soft: #2b1d21;
+    --color-ok: #86cfae;
+    --color-warn: #e8b860;
+    --color-danger: #ff8a80;
   }
 }
 
@@ -44,8 +64,13 @@
     --color-surface: #ffffff;
     --color-ink: #000000;
     --color-muted: #333333;
-    --color-line: #cccccc;
-    --color-accent: #0e5e5d;
+    --color-line: #bbbbbb;
+    --color-accent: #7a1e2c;
+    --color-accent-ink: #ffffff;
+    --color-accent-soft: #ffffff;
+    --color-ok: #1e5b45;
+    --color-warn: #6b4600;
+    --color-danger: #9a1f19;
   }
 
   @page {
@@ -61,7 +86,18 @@ html {
 body {
   background: var(--color-bg);
   color: var(--color-ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 
 dialog::backdrop {

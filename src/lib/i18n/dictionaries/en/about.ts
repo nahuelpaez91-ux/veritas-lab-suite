@@ -5,7 +5,7 @@ export const about: typeof esAbout = {
   paragraphs: [
     'I am Andrés Nahuel Páez, from La Rioja, Argentina. I spent more than eight years in administrative and records management and coordination at educational institutions, and today I build software and data solutions.',
     'I trained as a Geography teacher (statistics, cartography, geology, climatology and hydrology) and hold a degree in Education. That mix of method, data and regulation is what I bring to laboratories.',
-    'Veritas Lab Suite shows how I work: real laboratory problems, calculations verified against published references, end-to-end traceability, and AI only where it belongs.',
+    'This portfolio shows how I work: real laboratory problems, calculations verified against published references, end-to-end traceability, and AI only where it belongs.',
   ],
   howTitle: 'How it is built',
   how: [

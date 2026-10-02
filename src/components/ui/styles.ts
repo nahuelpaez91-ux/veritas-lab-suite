@@ -1,12 +1,14 @@
-export const card = 'rounded-xl border border-line bg-surface p-4';
+// Estilo «documento controlado»: sin radios ni sombras, bordes de 1 px, metadatos en monoespaciada.
+export const card = 'border border-line bg-surface p-4';
 export const btnPrimary =
-  'inline-flex items-center justify-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-ink hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40';
+  'inline-flex items-center justify-center gap-2 border border-ink bg-ink px-4 py-2 font-mono text-sm font-medium tracking-wide text-surface transition-colors hover:border-accent hover:bg-accent hover:text-accent-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-ink disabled:hover:bg-ink disabled:hover:text-surface';
 export const btnSecondary =
-  'inline-flex items-center justify-center gap-2 rounded-md border border-line bg-surface px-3 py-1.5 text-sm hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-40';
+  'inline-flex items-center justify-center gap-2 border border-ink bg-transparent px-3 py-1.5 font-mono text-sm tracking-wide text-ink transition-colors hover:border-accent hover:bg-accent hover:text-accent-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-ink disabled:hover:bg-transparent disabled:hover:text-ink';
 export const input =
-  'w-full rounded-md border border-line bg-bg px-2 py-1.5 text-sm focus:border-accent focus:outline-none';
-export const label = 'block text-sm font-medium';
-export const table = 'w-full border-collapse text-left text-sm [&_th]:border-b [&_th]:border-line [&_th]:px-2 [&_th]:py-1.5 [&_th]:font-semibold [&_td]:border-b [&_td]:border-line [&_td]:px-2 [&_td]:py-1.5';
+  'w-full border border-muted bg-surface px-2 py-1.5 text-sm text-ink focus:border-accent focus:outline-2 focus:outline-offset-0 focus:outline-accent';
+export const label = 'block text-sm font-semibold';
+export const table =
+  'w-full border-collapse text-left text-sm [font-variant-numeric:tabular-nums] [&_th]:border-b [&_th]:border-ink [&_th]:px-2 [&_th]:py-1.5 [&_th]:font-mono [&_th]:text-[0.6875rem] [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-[0.1em] [&_th]:text-muted [&_td]:border-b [&_td]:border-line [&_td]:px-2 [&_td]:py-1.5 [&_td]:align-top';
 export const tableWrap = 'overflow-x-auto';
-export const h2 = 'text-xl font-semibold';
+export const h2 = 'text-xl font-semibold tracking-tight';
 export const h3 = 'text-base font-semibold';

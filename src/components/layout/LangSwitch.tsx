@@ -13,7 +13,7 @@ export function LangSwitch({ lang, label }: { lang: Locale; label: string }) {
       href={target}
       hrefLang={other}
       aria-label={label}
-      className="rounded border border-line px-2 py-0.5 font-mono text-xs uppercase hover:border-accent hover:text-accent"
+      className="border border-ink px-2 py-0.5 font-mono text-xs uppercase tracking-wider hover:border-accent hover:bg-accent hover:text-accent-ink"
     >
       {other}
     </Link>

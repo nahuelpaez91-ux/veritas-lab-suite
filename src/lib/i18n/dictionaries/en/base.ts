@@ -2,8 +2,8 @@ import type { base as esBase } from '../es/base';
 
 export const base: typeof esBase = {
   meta: {
-    title: 'Andrés Nahuel Páez · Laboratory software',
-    shortTitle: 'Veritas Lab Suite',
+    title: 'Andrés Nahuel Páez · Laboratory software portfolio',
+    shortTitle: 'Andrés Nahuel Páez · Portfolio',
     description:
       'Laboratory software portfolio: Westgard quality control, sample traceability with audit trail, ASTM/HL7 integration, calibration and measurement uncertainty. Calculations verified against published references.',
   },
@@ -29,7 +29,12 @@ export const base: typeof esBase = {
     disclaimer:
       'Educational demo, not validated for GxP use. Designed with 21 CFR Part 11, EU GMP Annex 11 and ANMAT Disp. 4159/2023 (Annex 6) in mind. Runs in your browser with example or synthetic data, declared in each module.',
   },
-  signature: { designed: 'Designed and built by', repo: 'Source code' },
+  signature: {
+    signedBy: 'Signed by',
+    tagline: 'Records that hold up to an audit.',
+    repo: 'Source code',
+    vertex: 'Geodetic vertex, La Rioja, Argentina',
+  },
   module: {
     whatIsThis: 'What is this?',
     whatSolves: 'What it solves',

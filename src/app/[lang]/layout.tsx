@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
+import { Red_Hat_Mono, Source_Serif_4 } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import '../globals.css';
@@ -10,8 +10,14 @@ import { profile } from '@/content/profile';
 import { isLocale, locales } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
 
-const sans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-plex-sans' });
-const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono' });
+// Fuente variable (400–700 en el eje wght) con eje óptico opsz para títulos y texto.
+const serif = Source_Serif_4({
+  subsets: ['latin'],
+  axes: ['opsz'],
+  variable: '--font-source-serif',
+  display: 'swap',
+});
+const mono = Red_Hat_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-red-hat-mono', display: 'swap' });
 
 export const dynamicParams = false;
 
@@ -31,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       title: dict.meta.title,
       description: dict.meta.description,
-      siteName: 'Veritas Lab Suite',
+      siteName: 'Andrés Nahuel Páez · Portfolio',
       locale: lang === 'es' ? 'es_AR' : 'en_US',
       type: 'website',
     },
@@ -49,7 +55,7 @@ export default async function LangLayout({
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang);
   return (
-    <html lang={lang} className={`${sans.variable} ${mono.variable}`}>
+    <html lang={lang} className={`${serif.variable} ${mono.variable}`}>
       <body className="min-h-screen antialiased">
         <LabStoreProvider>
           <SiteHeader lang={lang} dict={dict} />

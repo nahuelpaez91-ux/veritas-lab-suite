@@ -1,8 +1,8 @@
-# Veritas Lab Suite
+# Andrés Nahuel Páez · Portfolio de software para laboratorios
 
 [![CI](https://github.com/nahuelpaez91-ux/veritas-lab-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/nahuelpaez91-ux/veritas-lab-suite/actions/workflows/ci.yml)
 
-Portfolio de software para laboratorios de **Andrés Nahuel Páez**: control de calidad, trazabilidad de muestras, integración de equipos y cálculos metrológicos, verificados contra referencias publicadas.
+Software para laboratorios de **Andrés Nahuel Páez**: control de calidad, trazabilidad de muestras, integración de equipos y cálculos metrológicos, verificados contra referencias publicadas.
 
 **Demo:** https://veritas-lab-suite.vercel.app · **Validación:** `/es/validacion` · **CV:** `/es/cv/nacional`
 
