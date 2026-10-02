@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { VertexMark } from '@/components/brand/VertexMark';
 import { Signature } from '@/components/layout/Signature';
@@ -54,11 +55,25 @@ export default async function AboutPage({ params }: { params: Params }) {
   const t = dict.about;
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-      <header className="border-b border-ink pb-6">
-        <p className="font-mono text-xs tracking-[0.02em] text-accent">{t.eyebrow}</p>
-        <h1 className="mt-3 text-[2.375rem] font-semibold leading-[1.05] tracking-[-0.02em] [font-variation-settings:'opsz'_60] [text-wrap:balance] md:text-[3.25rem]">
-          {t.title}
-        </h1>
+      <header className="grid gap-6 border-b border-ink pb-6 md:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] md:items-end md:gap-10">
+        <div>
+          <p className="font-mono text-xs tracking-[0.02em] text-accent">{t.eyebrow}</p>
+          <h1 className="mt-3 text-[2.375rem] font-semibold leading-[1.05] tracking-[-0.02em] [font-variation-settings:'opsz'_60] [text-wrap:balance] md:text-[3.25rem]">
+            {t.title}
+          </h1>
+        </div>
+        <figure className="max-w-[26rem]">
+          <Image
+            src="/foto/andres-nahuel-paez-mit.webp"
+            width={800}
+            height={600}
+            alt={t.photoAlt}
+            unoptimized
+            priority
+            className="aspect-[4/3] w-full border border-ink bg-surface object-cover p-1"
+          />
+          <figcaption className="mt-2 font-mono text-[0.6875rem] leading-snug text-muted">{t.photoCaption}</figcaption>
+        </figure>
       </header>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-14">

@@ -3,6 +3,8 @@ import type { about as esAbout } from '../es/about';
 export const about: typeof esAbout = {
   title: 'Who signs this portfolio',
   eyebrow: 'About · Andrés Nahuel Páez',
+  photoAlt: 'Andrés Nahuel Páez on the MIT campus in Cambridge, with the Great Dome behind him',
+  photoCaption: 'A. N. Páez · MIT campus, Cambridge (USA)',
   paragraphs: [
     'I’m Andrés Nahuel Páez and I live in La Rioja, Argentina. From 2017 to 2025 I worked in school administration: records, deadlines, regulations and coordination. That’s where I learned a record is only as good as its trail.',
     'I trained as a geography teacher, with statistics, cartography, geology, climatology and hydrology, and later earned a degree in Education. Data that has to add up, and paperwork that has to be in order.',

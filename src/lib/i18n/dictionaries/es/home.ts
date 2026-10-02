@@ -7,6 +7,9 @@ export const home = {
     revision: 'Revisión',
     effective: 'Vigente desde',
     marginLabel: 'Metadatos del documento',
+    photoLabel: 'Foto de legajo',
+    photoAlt: 'Andrés Nahuel Páez en el campus del MIT, en Cambridge',
+    photoCaption: 'A. N. Páez · campus del MIT, Cambridge (EE. UU.)',
     margin: [
       { k: 'Autor', v: 'A. N. Páez' },
       { k: 'Origen', v: 'La Rioja, AR' },
@@ -118,7 +121,15 @@ export const home = {
       'Documentación de validación: URS, análisis de riesgo, matriz de trazabilidad y protocolos.',
     ],
   },
-  credentials: { n: '§ 6', title: 'Formación y credenciales', education: 'Formación', certs: 'Certificaciones', verify: 'Verificar' },
+  credentials: {
+    n: '§ 6',
+    title: 'Formación y credenciales',
+    education: 'Formación',
+    certs: 'Certificaciones',
+    verify: 'Verificar',
+    all: 'Ver todos los títulos y certificados',
+    allNote: 'Imagen y PDF de cada documento',
+  },
   contact: {
     n: '§ 7',
     title: 'Contacto',

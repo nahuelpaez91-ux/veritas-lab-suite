@@ -9,6 +9,9 @@ export const home: typeof esHome = {
     revision: 'Revision',
     effective: 'Effective from',
     marginLabel: 'Document metadata',
+    photoLabel: 'ID photo',
+    photoAlt: 'Andrés Nahuel Páez on the MIT campus in Cambridge',
+    photoCaption: 'A. N. Páez · MIT campus, Cambridge (USA)',
     margin: [
       { k: 'Author', v: 'A. N. Páez' },
       { k: 'Origin', v: 'La Rioja, AR' },
@@ -120,7 +123,15 @@ export const home: typeof esHome = {
       'Validation documentation: URS, risk assessment, traceability matrix and protocols.',
     ],
   },
-  credentials: { n: '§ 6', title: 'Education and credentials', education: 'Education', certs: 'Certifications', verify: 'Verify' },
+  credentials: {
+    n: '§ 6',
+    title: 'Education and credentials',
+    education: 'Education',
+    certs: 'Certifications',
+    verify: 'Verify',
+    all: 'See all degrees and certificates',
+    allNote: 'Image and PDF of every document',
+  },
   contact: {
     n: '§ 7',
     title: 'Contact',

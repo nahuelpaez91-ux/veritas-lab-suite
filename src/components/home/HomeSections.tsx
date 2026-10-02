@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Seal } from '@/components/brand/Seal';
@@ -22,6 +23,7 @@ const moduleCode: Record<ModuleSlug, string> = {
 };
 
 const DOC_CODE = 'ANP-POR-001';
+const PHOTO = '/foto/andres-nahuel-paez-mit-carnet.webp';
 
 const ctaPrimary =
   'inline-flex items-center justify-center gap-2 border border-ink bg-ink px-4 py-3 font-mono text-[0.8125rem] font-medium tracking-wide text-surface transition-colors hover:border-accent hover:bg-accent hover:text-accent-ink';
@@ -94,6 +96,19 @@ export function HeroSheet({ lang, dict }: P) {
 
       <div className="grid lg:grid-cols-[8.5rem_minmax(0,1fr)_20rem]">
         <aside aria-label={d.marginLabel} className="hidden border-r border-line px-4 py-9 lg:block">
+          <figure className="mb-7">
+            <p className={metaLabel}>{d.photoLabel}</p>
+            <Image
+              src={PHOTO}
+              width={480}
+              height={480}
+              alt={d.photoAlt}
+              unoptimized
+              priority
+              className="mt-2 aspect-square w-full border border-ink bg-bg object-cover p-[3px]"
+            />
+            <figcaption className="mt-2 font-mono text-[0.625rem] leading-snug text-muted">{d.photoCaption}</figcaption>
+          </figure>
           <dl className="grid gap-5 font-mono text-[0.6875rem] leading-snug text-muted">
             {d.margin.map((m) => (
               <div key={m.k}>
@@ -105,7 +120,26 @@ export function HeroSheet({ lang, dict }: P) {
         </aside>
 
         <div className="px-5 py-9 sm:px-8 md:py-12 lg:px-10">
-          <p className="font-mono text-xs leading-relaxed tracking-[0.02em] text-accent">{t.eyebrow}</p>
+          <div className="flex items-center gap-4 lg:block">
+            <figure className="w-[5.5rem] shrink-0 lg:hidden">
+              <Image
+                src={PHOTO}
+                width={480}
+                height={480}
+                alt={d.photoAlt}
+                unoptimized
+                priority
+                className="aspect-square w-full border border-ink bg-bg object-cover p-[2px]"
+              />
+              <figcaption className="sr-only">{d.photoCaption}</figcaption>
+            </figure>
+            <div>
+              <p className="font-mono text-xs leading-relaxed tracking-[0.02em] text-accent">{t.eyebrow}</p>
+              <p aria-hidden="true" className="mt-1.5 font-mono text-[0.625rem] leading-snug text-muted lg:hidden">
+                {d.photoCaption}
+              </p>
+            </div>
+          </div>
           <h1
             id="hero-title"
             className="mt-4 text-[2.375rem] font-semibold leading-[1.04] tracking-[-0.02em] [font-variation-settings:'opsz'_60] [text-wrap:balance] sm:text-5xl lg:text-[3.6rem]"
@@ -319,6 +353,15 @@ export function Credentials({ lang, dict }: P) {
   return (
     <section aria-labelledby="credentials-title" className="mt-24">
       <SectionHead id="credentials-title" n={t.n} title={t.title} />
+      <Link
+        href={`/${lang}/credenciales`}
+        className="group mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border border-ink bg-surface px-5 py-4 transition-colors hover:border-accent hover:bg-accent-soft"
+      >
+        <span className="text-xl font-semibold leading-snug decoration-accent underline-offset-4 group-hover:text-accent group-hover:underline">
+          {t.all} <span aria-hidden="true">→</span>
+        </span>
+        <span className="font-mono text-xs text-muted">{t.allNote}</span>
+      </Link>
       <div className="mt-8 grid gap-10 md:grid-cols-2">
         <div>
           <h3 className={`${metaLabel} text-[0.6875rem]`}>{t.education}</h3>

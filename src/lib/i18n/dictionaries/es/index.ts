@@ -4,6 +4,7 @@ import { aiPolicy } from './aiPolicy';
 import { base } from './base';
 import { curva } from './curva';
 import { custodia } from './custodia';
+import { credentials } from './credentials';
 import { cv } from './cv';
 import { enlace } from './enlace';
 import { home } from './home';
@@ -20,5 +21,6 @@ export const es = {
   about,
   home,
   cv,
+  credentials,
   tools: { enlace, qc, custodia, informe, curva, margen },
 };

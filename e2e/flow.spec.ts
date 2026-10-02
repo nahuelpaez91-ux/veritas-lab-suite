@@ -60,7 +60,7 @@ test('flujo completo: analizador → control de calidad → firmas → informe P
 });
 
 test('las páginas principales cargan en ambos idiomas', async ({ page }) => {
-  for (const path of ['/es', '/en', '/es/validacion', '/en/ia', '/es/acerca', '/en/cv/global', '/es/modulos/curva', '/en/modulos/margen']) {
+  for (const path of ['/es', '/en', '/es/validacion', '/en/ia', '/es/acerca', '/es/credenciales', '/en/credenciales', '/en/cv/global', '/es/modulos/curva', '/en/modulos/margen']) {
     const res = await page.goto(path);
     expect(res?.status(), path).toBe(200);
     await expect(page.locator('h1').first()).toBeVisible();

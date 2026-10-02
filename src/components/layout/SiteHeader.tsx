@@ -5,11 +5,12 @@ import type { Dictionary } from '@/lib/i18n/get-dictionary';
 import { LangSwitch } from './LangSwitch';
 
 export function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
-  const links = [
+  const links: { href: string; label: string; short?: string }[] = [
     { href: `/${lang}#modulos`, label: dict.nav.modules },
     { href: `/${lang}/validacion`, label: dict.nav.validation },
-    { href: `/${lang}/ia`, label: dict.nav.ai },
+    { href: `/${lang}/ia`, label: dict.nav.ai, short: dict.nav.aiShort },
     { href: `/${lang}/cv/${lang === 'en' ? 'global' : 'nacional'}`, label: dict.nav.cv },
+    { href: `/${lang}/credenciales`, label: dict.nav.credentials },
     { href: `/${lang}/acerca`, label: dict.nav.about },
   ];
   return (
@@ -19,14 +20,22 @@ export function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           <Seal variant="compact" decorative className="h-8 w-8 shrink-0 text-accent" />
           <span>{dict.meta.shortTitle}</span>
         </Link>
-        <nav aria-label={dict.nav.label} className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink sm:gap-x-4 sm:text-[0.8125rem]">
+        <nav aria-label={dict.nav.label} className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[0.6875rem] text-ink sm:gap-x-4 sm:text-[0.8125rem]">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
+              aria-label={l.short ? l.label : undefined}
               className="py-1 underline-offset-4 hover:text-accent hover:underline hover:decoration-accent"
             >
-              {l.label}
+              {l.short ? (
+                <>
+                  <span className="sm:hidden">{l.short}</span>
+                  <span className="hidden sm:inline">{l.label}</span>
+                </>
+              ) : (
+                l.label
+              )}
             </Link>
           ))}
           <LangSwitch lang={lang} label={dict.nav.language} />

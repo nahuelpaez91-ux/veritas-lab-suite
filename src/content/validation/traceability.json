@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T18:13:55.245Z",
-  "commit": "b48245d",
+  "generatedAt": "2026-10-02T20:53:01.252Z",
+  "commit": "bb772a6",
   "tests": [
     {
       "ids": [
@@ -16,22 +16,6 @@
       ],
       "title": "JSON canónico rechaza objetos no planos y números no finitos",
       "file": "src/lib/crypto.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "AI-URS-01"
-      ],
-      "title": "el modo sin conexión explica cada regla, se declara sin IA y no cambia la decisión",
-      "file": "src/lib/ai/offline.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "AI-URS-02"
-      ],
-      "title": "el prompt entrega la decisión ya calculada como dato y pide un borrador acotado",
-      "file": "src/lib/ai/offline.test.ts",
       "status": "passed"
     },
     {
@@ -60,18 +44,18 @@
     },
     {
       "ids": [
-        "EXP-URS-01"
+        "AI-URS-01"
       ],
-      "title": "CSV con escape de comillas, comas, saltos de línea y celdas vacías",
-      "file": "src/lib/export/csv.test.ts",
+      "title": "el modo sin conexión explica cada regla, se declara sin IA y no cambia la decisión",
+      "file": "src/lib/ai/offline.test.ts",
       "status": "passed"
     },
     {
       "ids": [
-        "EXP-URS-02"
+        "AI-URS-02"
       ],
-      "title": "neutraliza fórmulas pero no números negativos",
-      "file": "src/lib/export/csv.test.ts",
+      "title": "el prompt entrega la decisión ya calculada como dato y pide un borrador acotado",
+      "file": "src/lib/ai/offline.test.ts",
       "status": "passed"
     },
     {
@@ -208,78 +192,6 @@
       ],
       "title": "semilla: 20 corridas en control; GLU-R021 rechazada por 2-2s; CHOL-R021 aceptada",
       "file": "src/lib/lims/seed.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-01"
-      ],
-      "title": "interpreta registros H, P, O, R y L del ejemplo",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-02"
-      ],
-      "title": "checksum LIS1-A: suma de bytes módulo 256 en hexadecimal",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-03"
-      ],
-      "title": "quita tramas STX/ETX, valida checksums y detecta tramas corruptas",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-04"
-      ],
-      "title": "reporta errores de estructura y conserva valores no numéricos",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-07"
-      ],
-      "title": "tramas con checksum inválido se descartan y se controla la secuencia",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-08"
-      ],
-      "title": "el código de prueba es el componente 4 de R.3",
-      "file": "src/lib/lis/astm.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-05"
-      ],
-      "title": "interpreta MSH, PID, OBR y OBX; mapea LOINC a código local",
-      "file": "src/lib/lis/hl7.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-06"
-      ],
-      "title": "valida el tipo de mensaje y detecta el formato automáticamente",
-      "file": "src/lib/lis/hl7.test.ts",
-      "status": "passed"
-    },
-    {
-      "ids": [
-        "ENL-URS-09"
-      ],
-      "title": "HL7 con marco MLLP y varios pacientes",
-      "file": "src/lib/lis/hl7.test.ts",
       "status": "passed"
     },
     {
@@ -496,6 +408,94 @@
       ],
       "title": "4-1s y 10x entre niveles (entre materiales)",
       "file": "src/lib/science/westgard.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "EXP-URS-01"
+      ],
+      "title": "CSV con escape de comillas, comas, saltos de línea y celdas vacías",
+      "file": "src/lib/export/csv.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "EXP-URS-02"
+      ],
+      "title": "neutraliza fórmulas pero no números negativos",
+      "file": "src/lib/export/csv.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-01"
+      ],
+      "title": "interpreta registros H, P, O, R y L del ejemplo",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-02"
+      ],
+      "title": "checksum LIS1-A: suma de bytes módulo 256 en hexadecimal",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-03"
+      ],
+      "title": "quita tramas STX/ETX, valida checksums y detecta tramas corruptas",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-04"
+      ],
+      "title": "reporta errores de estructura y conserva valores no numéricos",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-07"
+      ],
+      "title": "tramas con checksum inválido se descartan y se controla la secuencia",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-08"
+      ],
+      "title": "el código de prueba es el componente 4 de R.3",
+      "file": "src/lib/lis/astm.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-05"
+      ],
+      "title": "interpreta MSH, PID, OBR y OBX; mapea LOINC a código local",
+      "file": "src/lib/lis/hl7.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-06"
+      ],
+      "title": "valida el tipo de mensaje y detecta el formato automáticamente",
+      "file": "src/lib/lis/hl7.test.ts",
+      "status": "passed"
+    },
+    {
+      "ids": [
+        "ENL-URS-09"
+      ],
+      "title": "HL7 con marco MLLP y varios pacientes",
+      "file": "src/lib/lis/hl7.test.ts",
       "status": "passed"
     }
   ]
