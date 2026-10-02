@@ -1,0 +1,28 @@
+import type { curva as esCurva } from '../es/curva';
+
+export const curva: typeof esCurva = {
+  data: 'Standards: concentration x and signal y, one pair per line (separated by comma, space or semicolon; decimal point)',
+  weighting: 'Weighting',
+  weights: { none: 'Unweighted', '1/x': '1/x', '1/x2': '1/x²' },
+  slope: 'Slope (b)',
+  intercept: 'Intercept (a)',
+  r2: 'R²',
+  syx: 's y/x',
+  lod: 'LOD (3.3·s/b)',
+  loq: 'LOQ (10·s/b)',
+  chart: 'Calibration curve',
+  residuals: 'Residuals (y − ŷ)',
+  inverse: 'Concentration of an unknown sample',
+  y0: 'Measured signal (y₀)',
+  replicates: 'Replicates (m)',
+  x0: 'Estimated concentration (x₀)',
+  sx0: 's x₀',
+  ci: '95 % CI',
+  ciWeighted: 'The inverse-prediction CI is reported for unweighted regression only.',
+  lodWeighted: 'unweighted only',
+  outOfRange: 'Outside the calibrated range: do not extrapolate.',
+  parseError: 'Check the data: each line needs two numbers, with at least 3 points and distinct x values (x > 0 when weighting).',
+  export: 'Export data and residuals (CSV)',
+  points: 'Points',
+  fit: 'Fitted line',
+};

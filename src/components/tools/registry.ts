@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 import type { ModuleSlug } from '@/content/types';
 import type { Locale } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/get-dictionary';
+import { CurvaTool } from './CurvaTool';
 import { CustodiaTool } from './CustodiaTool';
 import { EnlaceTool } from './EnlaceTool';
 import { InformeTool } from './InformeTool';
@@ -15,4 +16,5 @@ export const toolRegistry: Partial<Record<ModuleSlug, ComponentType<ToolProps>>>
   qc: QcTool,
   custodia: CustodiaTool,
   informe: InformeTool,
+  curva: CurvaTool,
 };
