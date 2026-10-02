@@ -44,9 +44,9 @@ export const home: typeof esHome = {
   },
   trajectory: {
     title: 'From territory and administration to the laboratory',
-    text: 'Nine years managing records, deadlines and regulations taught me what a regulated laboratory demands: every record must be attributable, traceable and auditable. Today I apply that to software.',
+    text: 'More than eight years managing records, deadlines and regulations at educational institutions taught me what a regulated laboratory demands: every record must be attributable, traceable and auditable. Today I apply that to software.',
     pillars: [
-      { title: 'Document control and regulation', text: 'Version control, traceability and compliance: the basis of ALCOA+ and ISO/IEC 17025 §8.3.' },
+      { title: 'Records and regulatory administration', text: 'Version control, traceability and compliance: the basis of ALCOA+ and ISO/IEC 17025 §8.3.' },
       { title: 'Data science and territory', text: 'Geography teacher with statistics, geology, climatology and hydrology; scientific Python and GIS.' },
       { title: 'Software with responsible AI', text: 'Next.js, TypeScript, SQL and Claude API, with tests, continuous integration and AI off the critical path.' },
     ],

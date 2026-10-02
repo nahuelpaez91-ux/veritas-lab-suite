@@ -166,6 +166,18 @@ El flujo integrado es la pieza central de la home:
 - El CV ES/EN está listo en HTML y PDF y fue revisado por Andrés.
 - Lighthouse ≥ 90 en performance y accesibilidad. Funciona a 400 px de ancho.
 
+## 8b. Diferido de la Fase 1 (decisión 2026-10-02)
+
+Estos ítems del spec no entraron en la Fase 1. Quedan para la Fase 2:
+
+- **Control de calidad:** gráfico de Youden.
+- **Custodia:** alícuotas.
+- **Calibración:** dataset NIST Pontius (cuadrático). La Fase 1 verifica contra Norris y contra un ejemplo resuelto.
+- **Asistente:** salida estructurada validada con zod. Hoy es texto plano con barandas en el prompt.
+- **Validación:** dossier como PDF separado. Hoy se usa «Imprimir / guardar como PDF» desde la página.
+- **i18n:** se implementó con diccionarios propios tipados en lugar de next-intl. Es más simple y sin middleware.
+- **Lighthouse ≥ 90:** se mide después del primer deploy (T36).
+
 ## 9. Plan de ejecución
 
 Este spec abarca tres fases. El primer plan de implementación cubre **solo la Fase 1**. Las fases 2 y 3 tendrán cada una su propio plan cuando la Fase 1 esté publicada y confirmada.

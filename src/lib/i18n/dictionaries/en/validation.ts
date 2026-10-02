@@ -30,7 +30,7 @@ export const validation: typeof esValidation = {
   oq: 'Automated tests run on {date} against commit {commit}: {passed} passed, {failed} failed, {total} total.',
   notRun: 'The test report has not been generated yet (run npm run traceability).',
   changeTitle: 'Change control',
-  change: 'Every change is recorded in Git history with its commit, and continuous integration runs the full suite before publishing.',
+  change: 'Every change is recorded in Git history with its commit. Continuous integration (GitHub Actions) runs unit, type and end-to-end tests on every change, and publishing re-runs the unit tests and the traceability matrix before building.',
   changeLink: 'View change history',
   print: 'Print or save as PDF',
   passed: 'passed',

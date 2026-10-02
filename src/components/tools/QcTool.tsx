@@ -251,6 +251,7 @@ export function QcTool({ dict, lang }: ToolProps) {
               data-testid="corrective-action"
               className={`${input} mt-1`}
               rows={2}
+              maxLength={500}
               placeholder={t.correctivePlaceholder}
               value={corrective}
               onChange={(e) => setCorrective(e.target.value)}

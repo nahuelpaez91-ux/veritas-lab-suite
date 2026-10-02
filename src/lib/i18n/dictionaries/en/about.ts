@@ -3,7 +3,7 @@ import type { about as esAbout } from '../es/about';
 export const about: typeof esAbout = {
   title: 'About this portfolio',
   paragraphs: [
-    'I am Andrés Nahuel Páez, from La Rioja, Argentina. I spent nine years in document control, records management and coordination at educational institutions, and today I build software and data solutions.',
+    'I am Andrés Nahuel Páez, from La Rioja, Argentina. I spent more than eight years in administrative and records management and coordination at educational institutions, and today I build software and data solutions.',
     'I trained as a Geography teacher (statistics, cartography, geology, climatology and hydrology) and hold a degree in Education. That mix of method, data and regulation is what I bring to laboratories.',
     'Veritas Lab Suite shows how I work: real laboratory problems, calculations verified against published references, end-to-end traceability, and AI only where it belongs.',
   ],

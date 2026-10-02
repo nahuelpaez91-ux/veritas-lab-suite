@@ -6,6 +6,7 @@ import '../globals.css';
 import { LabStoreProvider } from '@/components/lab/LabStoreProvider';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { SiteHeader } from '@/components/layout/SiteHeader';
+import { profile } from '@/content/profile';
 import { isLocale, locales } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
 
@@ -23,8 +24,17 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   if (!isLocale(lang)) return {};
   const dict = getDictionary(lang);
   return {
+    metadataBase: new URL(profile.siteUrl),
     title: { default: dict.meta.title, template: `%s · ${dict.meta.shortTitle}` },
     description: dict.meta.description,
+    alternates: { languages: { es: '/es', en: '/en' } },
+    openGraph: {
+      title: dict.meta.title,
+      description: dict.meta.description,
+      siteName: 'Veritas Lab Suite',
+      locale: lang === 'es' ? 'es_AR' : 'en_US',
+      type: 'website',
+    },
   };
 }
 

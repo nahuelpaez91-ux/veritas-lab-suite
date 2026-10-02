@@ -42,9 +42,9 @@ export const home = {
   },
   trajectory: {
     title: 'Del territorio y la gestión al laboratorio',
-    text: 'Nueve años gestionando expedientes, plazos y normativa me enseñaron lo que exige un laboratorio regulado: que cada registro sea atribuible, trazable y auditable. Hoy lo aplico al software.',
+    text: 'Más de ocho años gestionando expedientes, plazos y normativa en instituciones educativas me enseñaron lo que exige un laboratorio regulado: que cada registro sea atribuible, trazable y auditable. Hoy lo aplico al software.',
     pillars: [
-      { title: 'Gestión documental y normativa', text: 'Control de versiones, trazabilidad y cumplimiento: la base de ALCOA+ y de ISO/IEC 17025 §8.3.' },
+      { title: 'Gestión de expedientes y normativa', text: 'Control de versiones, trazabilidad y cumplimiento: la base de ALCOA+ y de ISO/IEC 17025 §8.3.' },
       { title: 'Ciencia de datos y territorio', text: 'Profesor en Geografía con estadística, geología, climatología e hidrología; Python científico y GIS.' },
       { title: 'Software con IA responsable', text: 'Next.js, TypeScript, SQL y Claude API, con tests, integración continua y la IA fuera del camino crítico.' },
     ],

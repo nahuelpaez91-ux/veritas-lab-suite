@@ -25,6 +25,11 @@ const bodySchema = z.object({
 const hits = new Map<string, { count: number; resetAt: number }>();
 function rateLimited(ip: string): boolean {
   const now = Date.now();
+  if (hits.size > 1000) {
+    for (const [key, entry] of hits) {
+      if (entry.resetAt < now) hits.delete(key);
+    }
+  }
   const h = hits.get(ip);
   if (!h || h.resetAt < now) {
     hits.set(ip, { count: 1, resetAt: now + 10 * 60_000 });
@@ -63,6 +68,7 @@ export async function POST(req: Request) {
       .flatMap((block) => (block.type === 'text' ? [block.text] : []))
       .join('\n')
       .trim();
+    if (!text || response.stop_reason === 'max_tokens') return NextResponse.json({ error: 'empty_output' }, { status: 502 });
     const [promptHash, outputHash] = await Promise.all([
       sha256Hex(canonicalJson({ system: ASSIST_SYSTEM, user: userPrompt })),
       sha256Hex(text),

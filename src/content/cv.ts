@@ -41,8 +41,8 @@ const headline: L<string> = {
 };
 
 const summary: L<string> = {
-  es: 'Desarrollador de software y datos orientado a laboratorios. Construyo herramientas con cálculos deterministas verificados contra referencias publicadas (NIST StRD, EURACHEM/GUM, reglas de Westgard), audit trail encadenado por hash, firma electrónica con re-autenticación e integración de equipos por ASTM E1394 y HL7 v2. Uso IA (Claude API) solo fuera del camino crítico, con revisión humana y registro. Aporto más de 9 años de gestión documental, expedientes y cumplimiento normativo, y formación en estadística, geología e hidrología.',
-  en: 'Software and data developer focused on laboratories. I build tools with deterministic calculations verified against published references (NIST StRD, EURACHEM/GUM, Westgard rules), hash-chained audit trails, electronic signatures with re-authentication, and instrument integration via ASTM E1394 and HL7 v2. I use AI (Claude API) only off the critical path, with human review and logging. I bring 9+ years of document control, records management and regulatory compliance, plus training in statistics, geology and hydrology.',
+  es: 'Desarrollador de software y datos orientado a laboratorios. Construyo herramientas con cálculos deterministas verificados contra referencias publicadas (NIST StRD, EURACHEM/GUM, reglas de Westgard), audit trail encadenado por hash, firma electrónica con re-autenticación e integración de equipos por ASTM E1394 y HL7 v2. Uso IA (Claude API) solo fuera del camino crítico, con revisión humana y registro. Aporto más de 8 años de gestión administrativa y de expedientes en instituciones educativas (información sensible, plazos y normativa), y formación en estadística, geología e hidrología.',
+  en: 'Software and data developer focused on laboratories. I build tools with deterministic calculations verified against published references (NIST StRD, EURACHEM/GUM, Westgard rules), hash-chained audit trails, electronic signatures with re-authentication, and instrument integration via ASTM E1394 and HL7 v2. I use AI (Claude API) only off the critical path, with human review and logging. I bring 8+ years of administrative and records management at educational institutions (sensitive files, deadlines and regulations), plus training in statistics, geology and hydrology.',
 };
 
 const availability: Record<Audience, L<string>> = {
@@ -66,8 +66,8 @@ const regulatory: Record<Audience, L<string>> = {
     en: 'ANMAT Disp. 4159/2023 (Annex 6: computerized systems) · ISO/IEC 17025 · ISO 15189 · ALCOA+ · GAMP 5 · 21 CFR Part 11 — applied in personal projects.',
   },
   local: {
-    es: 'ANMAT Disp. 4159/2023 (Anexo 6) · ISO/IEC 17025 · ISO 15189 · ALCOA+ · GAMP 5 · Código Alimentario Argentino (art. 982, agua de consumo) — aplicados en proyectos propios.',
-    en: 'ANMAT Disp. 4159/2023 (Annex 6) · ISO/IEC 17025 · ISO 15189 · ALCOA+ · GAMP 5 · Argentine Food Code (art. 982, drinking water) — applied in personal projects.',
+    es: 'ANMAT Disp. 4159/2023 (Anexo 6) · ISO/IEC 17025 · ISO 15189 · ALCOA+ · GAMP 5 — aplicados en proyectos propios · Código Alimentario Argentino (art. 982, agua de consumo): próximo módulo.',
+    en: 'ANMAT Disp. 4159/2023 (Annex 6) · ISO/IEC 17025 · ISO 15189 · ALCOA+ · GAMP 5 — applied in personal projects · Argentine Food Code (art. 982, drinking water): upcoming module.',
   },
   global: {
     es: 'FDA 21 CFR Part 11 · EU GMP Anexo 11 y borrador del Anexo 22 (IA) · GAMP 5 · ALCOA+ · ISO/IEC 17025 · ISO 15189 — aplicados en proyectos propios.',
