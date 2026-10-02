@@ -2,8 +2,18 @@ import { parseNumeric, parseTimestamp } from './common';
 import { loincFor, localCodeForLoinc } from './loinc';
 import type { ParseIssue, ParseOutcome, ParsedResult } from './types';
 
+// Quita el marco MLLP (vertical tab inicial, file separator + CR final) si está presente.
+function stripMllp(raw: string): string {
+  let text = raw;
+  if (text.startsWith('\x0b')) text = text.slice(1);
+  text = text.replace(/\x1c\r?$/, '');
+  return text;
+}
+
 export function parseHl7(raw: string): ParseOutcome {
-  const segments = raw.split(/\r\n|\r|\n/).filter((s) => s.trim() !== '');
+  const segments = stripMllp(raw)
+    .split(/\r\n|\r|\n/)
+    .filter((s) => s.trim() !== '');
   const issues: ParseIssue[] = [];
   const results: ParsedResult[] = [];
 
@@ -30,6 +40,7 @@ export function parseHl7(raw: string): ParseOutcome {
       case 'PID':
         patientId = (f[3] ?? '').split(component)[0];
         patientName = (f[5] ?? '').split(component).filter(Boolean).join(', ');
+        specimenId = '';
         break;
       case 'OBR':
         specimenId = (f[3] || f[2] || '').split(component)[0];
@@ -44,9 +55,12 @@ export function parseHl7(raw: string): ParseOutcome {
         const isLoinc = system === 'LN';
         const testCode = isLoinc ? (localCodeForLoinc(code) ?? code) : code;
         if (!testCode) issues.push({ line: lineNo, severity: 'warning', code: 'no_test_code' });
+        const valueType = f[2] ?? '';
         const rawValue = f[5] ?? '';
         const value = parseNumeric(rawValue);
-        if (value === null) issues.push({ line: lineNo, severity: 'warning', code: 'non_numeric', detail: rawValue });
+        if (value === null && (valueType === 'NM' || valueType === '')) {
+          issues.push({ line: lineNo, severity: 'warning', code: 'non_numeric', detail: rawValue });
+        }
         results.push({
           specimenId,
           patientId,

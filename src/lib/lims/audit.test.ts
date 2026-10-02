@@ -29,4 +29,13 @@ describe('audit trail', () => {
     const log = await threeEntries();
     expect(await verifyChain([log[0], log[2]])).toEqual({ valid: false, brokenAt: 3 });
   });
+
+  it('[CUS-URS-15] con la cabeza esperada se detecta el truncado del final', async () => {
+    const log = await threeEntries();
+    const head = { seq: log[2].seq, hash: log[2].hash };
+    const truncated = log.slice(0, 2);
+    expect(await verifyChain(truncated)).toEqual({ valid: true }); // la cola truncada es, por sí sola, una cadena válida
+    expect(await verifyChain(truncated, head)).toEqual({ valid: false, brokenAt: head.seq });
+    expect(await verifyChain(log, head)).toEqual({ valid: true });
+  });
 });

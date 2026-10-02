@@ -74,6 +74,9 @@ export async function importResults(
     }
     const sample = getSample(next, p.specimenId);
     if (sample.status === 'released' || sample.status === 'rejected') throw new LabError('invalid_transition', [sample.id]);
+    if (p.patientId && sample.patientId !== '—' && p.patientId !== sample.patientId) {
+      throw new LabError('patient_mismatch', [sample.id, p.patientId]);
+    }
 
     const row: ResultRow = {
       id: `${p.specimenId}:${p.testCode}`,
@@ -85,11 +88,13 @@ export async function importResults(
       units: p.units,
       referenceRange: p.referenceRange,
       flag: p.flag,
+      status: p.status,
       runId: latestRun(next, p.testCode)?.id ?? '',
       source,
       completedAt: p.completedAt,
     };
     const before = next.results.find((r) => r.id === row.id);
+    const correction = Boolean(before) && row.status === 'C';
     next = {
       ...next,
       results: before ? next.results.map((r) => (r.id === row.id ? row : r)) : [...next.results, row],
@@ -99,6 +104,7 @@ export async function importResults(
         action: before ? 'result.updated' : 'result.imported',
         entity: 'result',
         entityId: row.id,
+        reason: correction ? 'result corrected' : undefined,
         before,
         after: row,
       }),
@@ -135,7 +141,7 @@ export async function addQcRun(
     analyte: input.analyte,
     index,
     at,
-    points: input.points,
+    points: input.points.map((p) => ({ ...p })),
     correctiveAction: corrective,
     createdBy: actor.id,
   };
@@ -171,8 +177,8 @@ export async function rerunSample(state: LabState, sampleId: string, reason: str
         entity: 'result',
         entityId: r.id,
         reason,
-        before: { runId: r.runId },
-        after: { runId: run.id },
+        before: { runId: r.runId, value: r.value, rawValue: r.rawValue, completedAt: r.completedAt },
+        after: { runId: run.id, value: updated.value, rawValue: updated.rawValue, completedAt: updated.completedAt },
       }),
     };
   }
@@ -204,7 +210,7 @@ export async function signSample(
     );
     if (reviewer?.userId === user.id) throw new LabError('same_person');
     const check = checkRelease(state, sampleId);
-    if (!check.ok) throw new LabError('release_blocked', [...check.blockingRuns, ...check.missingQc]);
+    if (!check.ok) throw new LabError('release_blocked', [...check.blockingRuns, ...check.missingQc, ...check.notFinal]);
   }
 
   const recordHash = await sha256Hex(canonicalJson({ sample: { id: sample.id, revision: sample.revision }, results }));
@@ -221,9 +227,23 @@ export async function signSample(
   const next: LabState = {
     ...state,
     signatures: [...state.signatures, signature],
-    audit: await appendAudit(state.audit, { at, actor: user.id, action: `signature.${meaning}`, entity: 'sample', entityId: sampleId, after: signature }),
+    audit: await appendAudit(state.audit, { at, actor: user.id, action: `signature.${meaning}`, entity: 'sample', entityId: sampleId, after: { ...signature } }),
   };
   return transition(next, sample, meaning === 'reviewed' ? 'reviewed' : 'released', user, at, `signature ${meaning}`);
+}
+
+export async function recordAuthFailure(state: LabState, sampleId: string, userId: string, at: string): Promise<LabState> {
+  return {
+    ...state,
+    audit: await appendAudit(state.audit, {
+      at,
+      actor: userId,
+      action: 'auth.failed',
+      entity: 'sample',
+      entityId: sampleId,
+      reason: 'signature re-authentication failed',
+    }),
+  };
 }
 
 export async function recordAiDraft(

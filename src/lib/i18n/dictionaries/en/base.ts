@@ -62,6 +62,7 @@ export const base: typeof esBase = {
     duplicate_sample: 'A sample with that ID already exists',
     invalid_run: 'Invalid control run: enter one numeric value per level',
     reason_required: 'A documented reason or corrective action is required',
+    patient_mismatch: 'The result belongs to a different patient than the sample',
     invalid_sample: 'Sample ID, patient ID and name are required',
   },
   runStatus: { accept: 'Accepted', warning: 'Warning', reject: 'Rejected' },

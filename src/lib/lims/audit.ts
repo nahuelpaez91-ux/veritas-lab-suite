@@ -32,12 +32,23 @@ export async function appendAudit(log: AuditEntry[], input: AuditInput): Promise
 
 export type ChainCheck = { valid: true } | { valid: false; brokenAt: number };
 
-export async function verifyChain(log: AuditEntry[]): Promise<ChainCheck> {
+// La cadena es a prueba de alteraciones: detecta la modificación, inserción, reordenamiento y
+// borrado de cualquier registro, excepto el truncado de la cola (eliminar los últimos N registros
+// deja una cadena interna perfectamente válida). En producción, la cabeza (seq + hash del último
+// registro) debe persistirse aparte del log para detectar también ese caso — ver
+// supabase/migrations/0002_rls.sql — y pasarse aquí como `expectedHead`.
+export async function verifyChain(log: AuditEntry[], expectedHead?: { seq: number; hash: string }): Promise<ChainCheck> {
   let prev = GENESIS_HASH;
   for (const entry of log) {
     const { hash, ...rest } = entry;
     if (entry.prevHash !== prev || (await hashOf(rest)) !== hash) return { valid: false, brokenAt: entry.seq };
     prev = hash;
+  }
+  if (expectedHead) {
+    const tail = log[log.length - 1];
+    if (!tail || tail.seq !== expectedHead.seq || tail.hash !== expectedHead.hash) {
+      return { valid: false, brokenAt: expectedHead.seq };
+    }
   }
   return { valid: true };
 }

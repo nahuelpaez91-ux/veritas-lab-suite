@@ -61,6 +61,7 @@ export const base = {
     invalid_run: 'Corrida de control inválida: cargá un valor numérico por nivel',
     reason_required: 'Se requiere un motivo o acción correctiva documentada',
     invalid_sample: 'Completá el ID de muestra, el ID de paciente y el nombre',
+    patient_mismatch: 'El resultado pertenece a otro paciente que el de la muestra',
   },
   runStatus: { accept: 'Aceptada', warning: 'Advertencia', reject: 'Rechazada' },
   sampleStatus: {

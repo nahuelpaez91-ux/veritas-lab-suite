@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { parseAstm } from '@/lib/lis/astm';
 import { ASTM_EXAMPLE } from '@/lib/lis/examples';
-import { addQcRun, importResults, recordAiDraft, registerSample, rerunSample, signSample } from './actions';
+import { addQcRun, importResults, recordAiDraft, recordAuthFailure, registerSample, rerunSample, signSample } from './actions';
 import { verifyChain } from './audit';
 import type { LabState } from './model';
 import { buildSeedState } from './seed';
@@ -106,5 +106,51 @@ describe('acciones LIMS', () => {
       AT,
     );
     expect(s.audit.at(-1)).toMatchObject({ action: 'ai.draft_approved', actor: 'u-validador', entityId: 'GLU-R021' });
+  });
+
+  it('[CUS-URS-12] un resultado de otro paciente no se asocia a la muestra', async () => {
+    const s = await imported();
+    const parsed = parseAstm(ASTM_EXAMPLE).results.map((r) => (r.specimenId === ID ? { ...r, patientId: 'PAC-9999' } : r));
+    await expect(importResults(s, parsed, 'astm', analyst, AT)).rejects.toMatchObject({
+      code: 'patient_mismatch',
+      details: [ID, 'PAC-9999'],
+    });
+  });
+
+  it('[CUS-URS-13] resultados no finales (P, X) bloquean la liberación', async () => {
+    const rawNotFinal = [
+      'H|\\^&|||cobas-demo^1.0|||||||P|1|20260929083000',
+      'P|1|PAC-0001|||Pérez^Juana',
+      'O|1|M-2026-0101||^^^GLU\\^^^CHOL|R||20260929080000',
+      'R|1|^^^GLU|112|mg/dL|70 to 110|H||P||||20260929081500',
+      'R|2|^^^CHOL|185|mg/dL|<200|N||F||||20260929081600',
+      'L|1|N',
+    ].join('\r');
+    const seed = await buildSeedState();
+    let s = await importResults(seed, parseAstm(rawNotFinal).results, 'astm', analyst, AT);
+    s = await addQcRun(
+      s,
+      { analyte: 'GLU', points: [{ level: 'N1', value: 95.3 }, { level: 'N2', value: 249 }], correctiveAction: 'Recalibración' },
+      analyst,
+      AT,
+    );
+    s = await signSample(s, ID, 'reviewed', analyst.id, analyst.password, AT);
+    await expect(signSample(s, ID, 'approved', validator.id, validator.password, AT)).rejects.toMatchObject({
+      code: 'release_blocked',
+      details: expect.arrayContaining(['GLU']),
+    });
+  });
+
+  it('[CUS-URS-14] los intentos de firma fallidos quedan auditados', async () => {
+    let s = await imported();
+    s = await recordAuthFailure(s, ID, analyst.id, AT);
+    expect(s.audit.at(-1)).toMatchObject({
+      actor: analyst.id,
+      action: 'auth.failed',
+      entity: 'sample',
+      entityId: ID,
+      reason: 'signature re-authentication failed',
+    });
+    expect(await verifyChain(s.audit)).toEqual({ valid: true });
   });
 });

@@ -25,6 +25,7 @@ export interface ResultRow {
   units: string;
   referenceRange: string;
   flag: string;
+  status: string;
   runId: string; // '' si no hay corrida de control para el analito
   source: 'astm' | 'hl7' | 'manual';
   completedAt: string | null;
@@ -73,7 +74,8 @@ export type LabErrorCode =
   | 'duplicate_sample'
   | 'invalid_run'
   | 'reason_required'
-  | 'invalid_sample';
+  | 'invalid_sample'
+  | 'patient_mismatch';
 
 export class LabError extends Error {
   readonly code: LabErrorCode;

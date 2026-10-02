@@ -33,4 +33,19 @@ describe('HL7 v2', () => {
     expect(parseMessage(HL7_EXAMPLE).format).toBe('hl7');
     expect(parseMessage(ASTM_EXAMPLE).format).toBe('astm');
   });
+
+  it('[ENL-URS-09] HL7 con marco MLLP y varios pacientes', () => {
+    const mllp = `\x0b${HL7_EXAMPLE}\x1c\r`;
+    const out = parseHl7(mllp);
+    expect(out.issues).toEqual([]);
+    expect(out.results).toHaveLength(2);
+
+    const secondPatient = [
+      HL7_EXAMPLE,
+      'PID|2||PAC-0004^^^LAB||Diaz^Ana',
+      'OBX|1|NM|2345-7^Glucose^LN||90|mg/dL|70-110|N|||F|||20260929084500',
+    ].join('\r');
+    const out2 = parseHl7(secondPatient);
+    expect(out2.issues.map((i) => i.code)).toContain('result_before_order');
+  });
 });

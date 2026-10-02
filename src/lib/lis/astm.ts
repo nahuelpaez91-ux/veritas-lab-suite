@@ -16,14 +16,28 @@ function stripFrames(raw: string): { text: string; issues: ParseIssue[] } {
   const issues: ParseIssue[] = [];
   let text = '';
   let frameNo = 0;
+  let expectedSeq = 1;
+  const matchedStarts = new Set<number>();
   for (const m of raw.matchAll(FRAME_RE)) {
     frameNo++;
+    matchedStarts.add(m.index);
     const [, fn, body, end, checksum] = m;
-    const expected = astmChecksum(fn + body + end);
-    if (expected !== checksum.toUpperCase()) {
-      issues.push({ line: frameNo, severity: 'error', code: 'bad_checksum', detail: `${checksum} ≠ ${expected}` });
+    const actualSeq = Number(fn);
+    if (actualSeq !== expectedSeq) {
+      issues.push({ line: frameNo, severity: 'warning', code: 'frame_sequence', detail: `${fn} ≠ ${expectedSeq}` });
     }
-    text += body; // ETB: el registro continúa en la trama siguiente; ETX: el cuerpo ya termina en CR
+    expectedSeq = (actualSeq + 1) % 8;
+    const expectedChecksum = astmChecksum(fn + body + end);
+    if (expectedChecksum !== checksum.toUpperCase()) {
+      issues.push({ line: frameNo, severity: 'error', code: 'bad_checksum', detail: `${checksum} ≠ ${expectedChecksum}` });
+    } else {
+      text += body; // ETB: el registro continúa en la trama siguiente; ETX: el cuerpo ya termina en CR
+    }
+  }
+  for (let i = 0; i < raw.length; i++) {
+    if (raw[i] === '\x02' && !matchedStarts.has(i)) {
+      issues.push({ line: frameNo, severity: 'error', code: 'bad_frame' });
+    }
   }
   return { text, issues };
 }
@@ -70,7 +84,7 @@ export function parseAstm(raw: string): ParseOutcome {
           issues.push({ line: lineNo, severity: 'error', code: 'result_before_order' });
           break;
         }
-        const testCode = (f[2] ?? '').split(component).filter(Boolean).pop() ?? '';
+        const testCode = (f[2] ?? '').split(component)[3] ?? '';
         if (!testCode) issues.push({ line: lineNo, severity: 'warning', code: 'no_test_code' });
         const rawValue = f[3] ?? '';
         const value = parseNumeric(rawValue);

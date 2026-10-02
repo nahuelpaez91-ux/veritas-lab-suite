@@ -7,3 +7,12 @@ it('[CRY-URS-01] SHA-256 estándar y JSON canónico con claves ordenadas', async
     '{"a":{"c":"x","d":[1,{"e":3,"f":2}]},"b":1}',
   );
 });
+
+it('[CRY-URS-02] JSON canónico rechaza objetos no planos y números no finitos', () => {
+  expect(() => canonicalJson(new Date())).toThrow('canonicalJson: only plain objects, arrays and primitives');
+  expect(() => canonicalJson(Number.NaN)).toThrow('canonicalJson: only plain objects, arrays and primitives');
+  expect(() => canonicalJson({ a: new Date() })).toThrow('canonicalJson: only plain objects, arrays and primitives');
+  expect(() => canonicalJson([Number.POSITIVE_INFINITY])).toThrow(
+    'canonicalJson: only plain objects, arrays and primitives',
+  );
+});

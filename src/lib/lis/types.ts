@@ -21,6 +21,8 @@ export type ParseIssueCode =
   | 'non_numeric'
   | 'unknown_record'
   | 'bad_checksum'
+  | 'frame_sequence'
+  | 'bad_frame'
   | 'not_oru'
   | 'missing_msh';
 

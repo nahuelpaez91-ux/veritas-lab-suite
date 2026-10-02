@@ -52,4 +52,28 @@ describe('ASTM E1394', () => {
     expect(noHeader.issues.map((i) => i.code)).toEqual(expect.arrayContaining(['missing_header', 'non_numeric']));
     expect(noHeader.results[0]).toMatchObject({ rawValue: '<5', value: null });
   });
+
+  it('[ENL-URS-07] tramas con checksum inválido se descartan y se controla la secuencia', () => {
+    const goodGlu = 'R|1|^^^GLU|90|mg/dL|70 to 110|N||F||||20260929081500';
+    const goodChol = 'R|2|^^^CHOL|180|mg/dL|<200|N||F||||20260929081600';
+    const corruptGlu = frame(4, goodGlu).replace(/[0-9A-F]{2}\r\n$/, '00\r\n');
+    const raw = [
+      frame(1, 'H|\\^&'),
+      frame(2, 'P|1|PAC-9|||A^B'),
+      frame(3, 'O|1|M-9||^^^GLU\\^^^CHOL'),
+      corruptGlu,
+      frame(1, goodChol), // número de trama fuera de secuencia (se esperaba 5)
+    ].join('');
+    const out = parseAstm(raw);
+    expect(out.issues.map((i) => i.code)).toEqual(expect.arrayContaining(['bad_checksum', 'frame_sequence']));
+    expect(out.results.map((r) => r.testCode)).toEqual(['CHOL']);
+  });
+
+  it('[ENL-URS-08] el código de prueba es el componente 4 de R.3', () => {
+    const raw = ['H|\\^&', 'P|1|PAC-1|||A^B', 'O|1|M-1||^^^GLU', 'R|1|^^^GLU^1|100|mg/dL|70 to 110|N||F||||20260929081500'].join(
+      '\r',
+    );
+    const out = parseAstm(raw);
+    expect(out.results[0]).toMatchObject({ testCode: 'GLU', loinc: '2345-7' });
+  });
 });
